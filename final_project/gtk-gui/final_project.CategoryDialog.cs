@@ -83,6 +83,7 @@ namespace final_project
 			this.Show();
 			this.buttonCancel.Clicked += new global::System.EventHandler(this.Cancelled);
 			this.buttonOk.Clicked += new global::System.EventHandler(this.buttonOkClicked);
+			this.buttonOk.Pressed += new global::System.EventHandler(this.check);
 		}
 	}
 }

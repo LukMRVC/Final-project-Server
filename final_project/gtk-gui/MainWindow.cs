@@ -39,7 +39,7 @@ public partial class MainWindow
 
 	private global::Gtk.MenuBar menubar7;
 
-	private global::Gtk.Statusbar statusbar3;
+	private global::Gtk.Statusbar statusbar;
 
 	private global::Gtk.HBox hbox4;
 
@@ -114,11 +114,11 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.menubar7]));
 		w2.Position = 0;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.statusbar3 = new global::Gtk.Statusbar();
-		this.statusbar3.Name = "statusbar3";
-		this.statusbar3.Spacing = 6;
-		this.hbox2.Add(this.statusbar3);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.statusbar3]));
+		this.statusbar = new global::Gtk.Statusbar();
+		this.statusbar.Name = "statusbar";
+		this.statusbar.Spacing = 6;
+		this.hbox2.Add(this.statusbar);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.statusbar]));
 		w3.Position = 1;
 		this.vbox3.Add(this.hbox2);
 		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox2]));
