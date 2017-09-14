@@ -54,4 +54,11 @@ public partial class MainWindow : Gtk.Window
 		dcd.Dispose();
 
 	}
+
+	protected void BtnStartListeningClicked(object sender, EventArgs e)
+	{
+		this.server.startListening();
+	}
+
+
 }

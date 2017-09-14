@@ -45,6 +45,8 @@ public partial class MainWindow
 
 	private global::Gtk.Statusbar statusbar4;
 
+	private global::Gtk.Button BtnStartListening;
+
 	protected virtual void Build()
 	{
 		global::Stetic.Gui.Initialize(this);
@@ -141,6 +143,17 @@ public partial class MainWindow
 		w6.Position = 1;
 		w6.Expand = false;
 		w6.Fill = false;
+		// Container child vbox3.Gtk.Box+BoxChild
+		this.BtnStartListening = new global::Gtk.Button();
+		this.BtnStartListening.CanFocus = true;
+		this.BtnStartListening.Name = "BtnStartListening";
+		this.BtnStartListening.UseUnderline = true;
+		this.BtnStartListening.Label = global::Mono.Unix.Catalog.GetString("Start Listening");
+		this.vbox3.Add(this.BtnStartListening);
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.BtnStartListening]));
+		w7.Position = 2;
+		w7.Expand = false;
+		w7.Fill = false;
 		this.Add(this.vbox3);
 		if ((this.Child != null))
 		{
@@ -153,5 +166,6 @@ public partial class MainWindow
 		this.CategoryAction.Activated += new global::System.EventHandler(this.addCategory);
 		this.databaseInfoMenuAction.Activated += new global::System.EventHandler(this.databaseConnectionFormAction);
 		this.PipojitAction.Activated += new global::System.EventHandler(this.connectToDatabaseAction);
+		this.BtnStartListening.Clicked += new global::System.EventHandler(this.BtnStartListeningClicked);
 	}
 }

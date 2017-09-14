@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Net;
 using Gtk;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace final_project
 {
@@ -22,9 +21,21 @@ namespace final_project
 		private MainWindow win;
 		public string databaseConnectionString;
 		private MySqlConnection connection;
+		private static HttpListener listener;
 
 		public Server() 
 		{
+			try
+			{
+                listener = new HttpListener();
+				listener.Prefixes.Add("http://localhost:8080/");
+			}
+			catch (PlatformNotSupportedException ex)
+			{
+				this.showMessage(MessageType.Error, "Tato platforma není podporována, prosím upgradujte systém\n" + ex.ToString());
+				this.quit();
+			}
+            
 			this.win = new MainWindow(this);
 			win.Show();
 			if (!string.IsNullOrEmpty(Properties.Settings.Default.databaseConnectionString))
@@ -32,6 +43,7 @@ namespace final_project
 				this.connect(Properties.Settings.Default.databaseConnectionString);
 
 			}
+
 		}
 
 		public async Task<bool> connect(string databaseConnectionString)
@@ -88,5 +100,37 @@ namespace final_project
 		{
 			
 		}
+
+		public void startListening() {
+			listener.Start();
+			IAsyncResult result = listener.BeginGetContext(ContextCallback, null);
+			showMessage(MessageType.Info, "Naslouchání na portu 8080");
+		}
+
+		public static void ContextCallback(IAsyncResult result) {
+			var context = listener.EndGetContext(result);
+			listener.BeginGetContext(ContextCallback, null);
+			var request = context.Request;
+			var response = context.Response;
+			System.Threading.Thread.Sleep(5000);
+			response.ContentType = "text/html; charset=utf-8";
+			string responseString = "<HTML><BODY><h1>Hello, World!</h1></body></html>";
+			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+			response.ContentLength64 = buffer.Length;
+			System.IO.Stream output = response.OutputStream;
+			output.Write(buffer, 0, buffer.Length);
+			output.Close();
+		}
+
+		public void showMessage(MessageType type, string message)
+		{
+			MessageDialog dlg = new MessageDialog(win, DialogFlags.Modal, type, ButtonsType.Ok, @message);
+			dlg.Run();
+			dlg.Destroy();
+			dlg.Dispose();
+		}
+
 	}
+
+
 }
