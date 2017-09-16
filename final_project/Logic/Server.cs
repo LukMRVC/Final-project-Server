@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Gtk;
 using MySql.Data.MySqlClient;
@@ -40,7 +41,8 @@ namespace final_project
 			win.Show();
 			if (!string.IsNullOrEmpty(Properties.Settings.Default.databaseConnectionString))
 			{
-				this.connect(Properties.Settings.Default.databaseConnectionString);
+				this.databaseConnectionString = Properties.Settings.Default.databaseConnectionString;
+				this.connect(this.databaseConnectionString);
 
 			}
 
@@ -53,6 +55,7 @@ namespace final_project
                 this.connection = new MySqlConnection(databaseConnectionString);
 				await this.connection.OpenAsync();
 				this.win.statbar.Push(1, "Navázáno spojení s databází");
+				win.updateMenu(this.getCategories());
 				return true;
             }
 			catch (MySqlException  ex)
@@ -67,9 +70,8 @@ namespace final_project
 			try
 			{
 				MySqlCommand cmd = new MySqlCommand("INSERT INTO category (name) VALUES('" + name + "');", this.connection);
-				MySqlDataReader reader = cmd.ExecuteReader();
+				cmd.ExecuteNonQuery();
 				this.win.statbar.Push(1, "Vytvořena kategorie " + name);
-				reader.Close();
 			}
 			catch (Exception ex)
 			{
@@ -78,8 +80,7 @@ namespace final_project
 				cmd.Connection = this.connection;
 				cmd.CommandText = "CREATE TABLE IF NOT EXISTS category(id int not null auto_increment primary key, " +
 					"name varchar(200) not null) DEFAULT CHARACTER SET=utf8 DEFAULT COLLATE utf8_czech_ci;";
-				MySqlDataReader reader = cmd.ExecuteReader();
-				reader.Close();
+				cmd.ExecuteNonQuery();
 				this.addCategory(name);
 			}
 		}
@@ -128,6 +129,17 @@ namespace final_project
 			dlg.Run();
 			dlg.Destroy();
 			dlg.Dispose();
+		}
+
+		private string[] getCategories() {
+			var command = new MySqlCommand("SELECT name FROM category", this.connection);
+			var reader = command.ExecuteReader();
+			List<string> categories = new List<string>();
+			while (reader.Read()) {
+				categories.Add(reader[0].ToString());
+			}
+			reader.Close();
+			return categories.ToArray();
 		}
 
 	}

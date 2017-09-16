@@ -17,6 +17,7 @@ namespace final_project
 			global::Stetic.Gui.Initialize(this);
 			// Widget final_project.CategoryDialog
 			this.Name = "final_project.CategoryDialog";
+			this.Title = global::Mono.Unix.Catalog.GetString("window1");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child final_project.CategoryDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;

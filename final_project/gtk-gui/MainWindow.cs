@@ -25,7 +25,7 @@ public partial class MainWindow
 
 	private global::Gtk.Action CategoryAction;
 
-	private global::Gtk.Action addMenuAction;
+	private global::Gtk.Action PridatAction;
 
 	private global::Gtk.Action connectionMenuAction;
 
@@ -44,6 +44,8 @@ public partial class MainWindow
 	private global::Gtk.HBox hbox4;
 
 	private global::Gtk.Statusbar statusbar4;
+
+	private global::Gtk.Button BtnMenuDesigner;
 
 	private global::Gtk.Button BtnStartListening;
 
@@ -83,9 +85,9 @@ public partial class MainWindow
 		this.CategoryAction = new global::Gtk.Action("CategoryAction", global::Mono.Unix.Catalog.GetString("Kategorie"), null, null);
 		this.CategoryAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Tabulka");
 		w1.Add(this.CategoryAction, null);
-		this.addMenuAction = new global::Gtk.Action("addMenuAction", global::Mono.Unix.Catalog.GetString("Přidat do..."), null, null);
-		this.addMenuAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Upravit");
-		w1.Add(this.addMenuAction, null);
+		this.PridatAction = new global::Gtk.Action("PridatAction", global::Mono.Unix.Catalog.GetString("Přidat do..."), null, null);
+		this.PridatAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Upravit");
+		w1.Add(this.PridatAction, null);
 		this.connectionMenuAction = new global::Gtk.Action("connectionMenuAction", global::Mono.Unix.Catalog.GetString("Připojení k databázi"), null, null);
 		this.connectionMenuAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Připojení k databázi");
 		w1.Add(this.connectionMenuAction, null);
@@ -109,7 +111,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='newMenuAction1' action='newMenuAction1'><menuitem name='CategoryAction' action='CategoryAction'/></menu><menu name='addMenuAction' action='addMenuAction'/><menu name='connectionMenuAction' action='connectionMenuAction'><menuitem name='databaseInfoMenuAction' action='databaseInfoMenuAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='newMenuAction1' action='newMenuAction1'><menuitem name='CategoryAction' action='CategoryAction'/></menu><menu name='PridatAction' action='PridatAction'/><menu name='connectionMenuAction' action='connectionMenuAction'><menuitem name='databaseInfoMenuAction' action='databaseInfoMenuAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu></menubar></ui>");
 		this.menubar7 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget("/menubar7")));
 		this.menubar7.Name = "menubar7";
 		this.hbox2.Add(this.menubar7);
@@ -138,11 +140,22 @@ public partial class MainWindow
 		this.hbox4.Add(this.statusbar4);
 		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.statusbar4]));
 		w5.Position = 0;
-		this.vbox3.Add(this.hbox4);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox4]));
+		// Container child hbox4.Gtk.Box+BoxChild
+		this.BtnMenuDesigner = new global::Gtk.Button();
+		this.BtnMenuDesigner.CanFocus = true;
+		this.BtnMenuDesigner.Name = "BtnMenuDesigner";
+		this.BtnMenuDesigner.UseUnderline = true;
+		this.BtnMenuDesigner.Relief = ((global::Gtk.ReliefStyle)(1));
+		this.BtnMenuDesigner.Label = global::Mono.Unix.Catalog.GetString("Návrhář jídelního lístku");
+		this.hbox4.Add(this.BtnMenuDesigner);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.BtnMenuDesigner]));
+		w6.PackType = ((global::Gtk.PackType)(1));
 		w6.Position = 1;
-		w6.Expand = false;
-		w6.Fill = false;
+		this.vbox3.Add(this.hbox4);
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox4]));
+		w7.Position = 1;
+		w7.Expand = false;
+		w7.Fill = false;
 		// Container child vbox3.Gtk.Box+BoxChild
 		this.BtnStartListening = new global::Gtk.Button();
 		this.BtnStartListening.CanFocus = true;
@@ -150,10 +163,9 @@ public partial class MainWindow
 		this.BtnStartListening.UseUnderline = true;
 		this.BtnStartListening.Label = global::Mono.Unix.Catalog.GetString("Start Listening");
 		this.vbox3.Add(this.BtnStartListening);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.BtnStartListening]));
-		w7.Position = 2;
-		w7.Expand = false;
-		w7.Fill = false;
+		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.BtnStartListening]));
+		w8.Position = 2;
+		w8.Expand = false;
 		this.Add(this.vbox3);
 		if ((this.Child != null))
 		{
@@ -166,6 +178,7 @@ public partial class MainWindow
 		this.CategoryAction.Activated += new global::System.EventHandler(this.addCategory);
 		this.databaseInfoMenuAction.Activated += new global::System.EventHandler(this.databaseConnectionFormAction);
 		this.PipojitAction.Activated += new global::System.EventHandler(this.connectToDatabaseAction);
+		this.BtnMenuDesigner.Clicked += new global::System.EventHandler(this.BtnMenuDesignerClick);
 		this.BtnStartListening.Clicked += new global::System.EventHandler(this.BtnStartListeningClicked);
 	}
 }

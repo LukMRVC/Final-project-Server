@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Gtk;
 using System.Threading.Tasks;
 using final_project;
@@ -15,7 +16,6 @@ public partial class MainWindow : Gtk.Window
 		this.server = s;
 		Build();
 		this.statbar = this.statusbar;
-
 	}
 
 	protected void OnDeleteEvent(object sender, DeleteEventArgs a)
@@ -60,5 +60,20 @@ public partial class MainWindow : Gtk.Window
 		this.server.startListening();
 	}
 
+	public void updateMenu(string[] categories) {
+		for (int i = 0; i < categories.Length; ++i) {
+			MenuItem item = new MenuItem(categories[0]);
+		}
+      /*  this.databaseInfoMenuAction = new global::Gtk.Action("databaseInfoMenuAction", global::Mono.Unix.Catalog.GetString("Informace k připojení"), null, null);
+		this.databaseInfoMenuAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Informace k připojení");
+		w1.Add(this.databaseInfoMenuAction, null);*/
 
+		
+	}
+
+	protected void BtnMenuDesignerClick(object sender, EventArgs e)
+	{
+		MenuDesigner designer = new MenuDesigner();
+		designer.Show();
+	}
 }
