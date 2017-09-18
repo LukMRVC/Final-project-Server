@@ -1,12 +1,19 @@
 ﻿using System;
+using Gtk;
+using System.Collections.Generic;
 namespace final_project
 {
     public partial class MenuDesigner : Gtk.Window
     {
+		private List<string> tabCaptions;
+		Gtk.TreeStore foodTreeStore;
+
         public MenuDesigner() :
                 base(Gtk.WindowType.Toplevel)
         {
             this.Build();
+			tabCaptions = new List<string>();
+
             Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
             categoryColumn.Title = "Jídlo";
 
@@ -40,7 +47,7 @@ namespace final_project
             weightColumn.AddAttribute(weightCellText, "text", 2);
             priceColumn.AddAttribute(priceCellText, "text", 3);
 
-            Gtk.TreeStore foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
+            foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
 
             Gtk.TreeIter iter = foodTreeStore.AppendValues("Burgery");
 
@@ -60,13 +67,38 @@ namespace final_project
             {
 				Gtk.TreeIter iterator;
 				foodTreeStore.GetIterFromString(out iterator, e.Path.ToString());
-				Console.WriteLine(foodTreeStore.GetValue(iterator, 0));
+				if (foodTreeStore.GetValue(iterator, 1) != null)
+				{
+					bool exists = false;
+					string label = foodTreeStore.GetValue(iterator, 0).ToString();
+					foreach (string caption in tabCaptions) {
+						if (caption == label) {
+							exists = true;
+							break;				
+						}
+					}
+					if (!exists) {
+                    	this.notebook1.AppendPage(new Gtk.TextView(), new CloseableTab(label, this.notebook1));
+						tabCaptions.Add(label);
+						this.notebook1.ShowAll();
+					}
+				}
             };
-
 
         }
 
-        
+		protected void BtnCategoryClicked(object sender, EventArgs e)
+		{
+			CategoryDialog dlg = new CategoryDialog(this, true);
+			string name = null;
+			if (dlg.Run() == (int)ResponseType.Ok) {
+				name = dlg.name;
+				dlg.Destroy();
+				dlg.Dispose();
+			}
+			Gtk.TreeIter iter = this.foodTreeStore.AppendValues(name);
+			this.treeview.ShowAll();
 
-    }
+		}
+	}
 }

@@ -77,9 +77,9 @@
     <Compile Include="Logic\Server.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
-    <Compile Include="gtk-gui\final_project.Window.cs" />
     <Compile Include="UI\MenuDesigner.cs" />
     <Compile Include="gtk-gui\final_project.MenuDesigner.cs" />
+    <Compile Include="UI\CloseableTab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -16,15 +16,13 @@ namespace final_project
 
 		private global::Gtk.VButtonBox buttonBox;
 
-		private global::Gtk.Button button206;
+		private global::Gtk.Button BtnCategory;
 
 		private global::Gtk.Button button207;
 
 		private global::Gtk.Button button208;
 
 		private global::Gtk.Label pageLabel1;
-
-		private global::Gtk.Label pageLabel2;
 
 		protected virtual void Build()
 		{
@@ -71,13 +69,13 @@ namespace final_project
 			this.buttonBox.BorderWidth = ((uint)(10));
 			this.buttonBox.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(3));
 			// Container child buttonBox.Gtk.ButtonBox+ButtonBoxChild
-			this.button206 = new global::Gtk.Button();
-			this.button206.CanFocus = true;
-			this.button206.Name = "button206";
-			this.button206.UseUnderline = true;
-			this.button206.Label = global::Mono.Unix.Catalog.GetString("Vytvořit kategorii");
-			this.buttonBox.Add(this.button206);
-			global::Gtk.ButtonBox.ButtonBoxChild w4 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.button206]));
+			this.BtnCategory = new global::Gtk.Button();
+			this.BtnCategory.CanFocus = true;
+			this.BtnCategory.Name = "BtnCategory";
+			this.BtnCategory.UseUnderline = true;
+			this.BtnCategory.Label = global::Mono.Unix.Catalog.GetString("Vytvořit kategorii");
+			this.buttonBox.Add(this.BtnCategory);
+			global::Gtk.ButtonBox.ButtonBoxChild w4 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.BtnCategory]));
 			w4.Expand = false;
 			w4.Fill = false;
 			// Container child buttonBox.Gtk.ButtonBox+ButtonBoxChild
@@ -111,15 +109,6 @@ namespace final_project
 			this.pageLabel1.LabelProp = global::Mono.Unix.Catalog.GetString("Návrhář");
 			this.notebook1.SetTabLabel(this.hpaned1, this.pageLabel1);
 			this.pageLabel1.ShowAll();
-			// Notebook tab
-			global::Gtk.Label w9 = new global::Gtk.Label();
-			w9.Visible = true;
-			this.notebook1.Add(w9);
-			this.pageLabel2 = new global::Gtk.Label();
-			this.pageLabel2.Name = "pageLabel2";
-			this.pageLabel2.LabelProp = global::Mono.Unix.Catalog.GetString("page2");
-			this.notebook1.SetTabLabel(w9, this.pageLabel2);
-			this.pageLabel2.ShowAll();
 			w1.Add(this.notebook1);
 			this.scrolledwindow1.Add(w1);
 			this.Add(this.scrolledwindow1);
@@ -131,6 +120,7 @@ namespace final_project
 			this.DefaultHeight = 519;
 			this.pageLabel1.HasDefault = true;
 			this.Show();
+			this.BtnCategory.Clicked += new global::System.EventHandler(this.BtnCategoryClicked);
 		}
 	}
 }

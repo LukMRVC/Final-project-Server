@@ -1,7 +1,7 @@
 
 namespace final_project
 {
-	public partial class Window
+	public partial class CloseableTab
 	{
 		private void Build()
 		{
