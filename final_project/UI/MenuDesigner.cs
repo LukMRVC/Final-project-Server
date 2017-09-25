@@ -5,15 +5,18 @@ namespace final_project
 {
     public partial class MenuDesigner : Gtk.Window
     {
+		//List of tabs in notebook, because deleting tabs was kinda broken
 		private List<string> tabCaptions;
-		Gtk.TreeStore foodTreeStore;
+		private Gtk.TreeStore foodTreeStore;
+		private Dictionary<Gtk.TreePath, string> treeModelValues;
+		string json = "";
 
         public MenuDesigner() :
                 base(Gtk.WindowType.Toplevel)
         {
             this.Build();
 			tabCaptions = new List<string>();
-
+			treeModelValues = new Dictionary<Gtk.TreePath, string>();
             Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
             categoryColumn.Title = "Jídlo";
 
@@ -56,6 +59,7 @@ namespace final_project
             foodTreeStore.AppendValues(iter, "Chickenburger", "Houska, maso, sýr", "150g", "50 Kč");
 
             foodTreeStore.AppendValues(subIter, "Cheeseburger", "Houska, maso, sýr", "150g", "50 Kč");
+			foodTreeStore.AppendValues(subIter, "Veganburger", "S/ója, sračky a tak", "150g", "150 Kč");
 
             iter = foodTreeStore.AppendValues("Snídaně");
 
@@ -99,6 +103,44 @@ namespace final_project
 			Gtk.TreeIter iter = this.foodTreeStore.AppendValues(name);
 			this.treeview.ShowAll();
 
+		}
+
+		protected void OnDeleteEvent(object o, DeleteEventArgs args)
+		{
+			Gtk.TreeIter iter;
+			foodTreeStore.GetIterFirst(out iter);
+            buildTreeJson(iter);
+			serializeToJson();
+			using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"C:\Users\Lukas\Documents\Projects\Server\test.txt", false)) 
+			{
+				writer.Write(json);
+				writer.Close();
+			}
+			this.Destroy();
+			args.RetVal = true;
+		}
+
+		private void buildTreeJson(Gtk.TreeIter iter) {
+			Gtk.TreeIter childIter;
+			do
+			{
+				treeModelValues.Add(foodTreeStore.GetPath(iter), foodTreeStore.GetValue(iter, 0).ToString());
+
+				if (foodTreeStore.IterHasChild(iter) )
+				{
+					foodTreeStore.IterChildren(out childIter, iter);
+                    buildTreeJson(childIter);
+				}
+			} while (foodTreeStore.IterNext(ref iter));
+		}
+
+		private string serializeToJson() {
+			string json = "";
+			foreach (var path in treeModelValues.Keys)
+			{
+				path.ToString().Equals("0:0:0"); 
+			}
+			return json;
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace final_project
 
 		private global::Gtk.HPaned hpaned1;
 
-		private global::Gtk.ScrolledWindow GtkScrolledWindow;
+		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 
 		private global::Gtk.TreeView treeview;
 
@@ -46,20 +46,23 @@ namespace final_project
 			this.notebook1.CurrentPage = 0;
 			// Container child notebook1.Gtk.Notebook+NotebookChild
 			this.hpaned1 = new global::Gtk.HPaned();
+			this.hpaned1.WidthRequest = 100;
+			this.hpaned1.CanDefault = true;
 			this.hpaned1.CanFocus = true;
 			this.hpaned1.Name = "hpaned1";
-			this.hpaned1.Position = 509;
+			this.hpaned1.Position = 500;
+			this.hpaned1.BorderWidth = ((uint)(5));
 			// Container child hpaned1.Gtk.Paned+PanedChild
-			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
-			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
-			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
-			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
+			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow();
+			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
 			this.treeview = new global::Gtk.TreeView();
 			this.treeview.CanFocus = true;
 			this.treeview.Name = "treeview";
-			this.GtkScrolledWindow.Add(this.treeview);
-			this.hpaned1.Add(this.GtkScrolledWindow);
-			global::Gtk.Paned.PanedChild w3 = ((global::Gtk.Paned.PanedChild)(this.hpaned1[this.GtkScrolledWindow]));
+			this.GtkScrolledWindow1.Add(this.treeview);
+			this.hpaned1.Add(this.GtkScrolledWindow1);
+			global::Gtk.Paned.PanedChild w3 = ((global::Gtk.Paned.PanedChild)(this.hpaned1[this.GtkScrolledWindow1]));
 			w3.Resize = false;
 			// Container child hpaned1.Gtk.Paned+PanedChild
 			this.buttonBox = new global::Gtk.VButtonBox();
@@ -102,6 +105,8 @@ namespace final_project
 			w6.Fill = false;
 			this.hpaned1.Add(this.buttonBox);
 			this.notebook1.Add(this.hpaned1);
+			global::Gtk.Notebook.NotebookChild w8 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1[this.hpaned1]));
+			w8.TabFill = false;
 			// Notebook tab
 			this.pageLabel1 = new global::Gtk.Label();
 			this.pageLabel1.CanDefault = true;
@@ -120,6 +125,7 @@ namespace final_project
 			this.DefaultHeight = 519;
 			this.pageLabel1.HasDefault = true;
 			this.Show();
+			this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 			this.BtnCategory.Clicked += new global::System.EventHandler(this.BtnCategoryClicked);
 		}
 	}

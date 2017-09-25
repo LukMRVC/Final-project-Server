@@ -113,7 +113,6 @@ namespace final_project
 			listener.BeginGetContext(ContextCallback, null);
 			var request = context.Request;
 			var response = context.Response;
-			System.Threading.Thread.Sleep(5000);
 			response.ContentType = "text/html; charset=utf-8";
 			string responseString = "<HTML><BODY><h1>Hello, World!</h1></body></html>";
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);

@@ -501,6 +501,7 @@
     <property name="MemberName" />
     <property name="Title" translatable="yes">MenuDesigner</property>
     <property name="WindowPosition">CenterOnParent</property>
+    <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
         <property name="MemberName" />
@@ -518,10 +519,13 @@
                 <child>
                   <widget class="Gtk.HPaned" id="hpaned1">
                     <property name="MemberName" />
+                    <property name="WidthRequest">100</property>
+                    <property name="CanDefault">True</property>
                     <property name="CanFocus">True</property>
-                    <property name="Position">509</property>
+                    <property name="Position">500</property>
+                    <property name="BorderWidth">5</property>
                     <child>
-                      <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+                      <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
                         <property name="MemberName" />
                         <property name="ShadowType">In</property>
                         <child>
@@ -589,6 +593,9 @@
                       </widget>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="TabFill">False</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="Gtk.Label" id="pageLabel1">
