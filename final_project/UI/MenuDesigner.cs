@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Gtk;
 using System.Collections.Generic;
 namespace final_project
@@ -9,6 +10,7 @@ namespace final_project
 		private List<string> tabCaptions;
 		private Gtk.TreeStore foodTreeStore;
 		private Dictionary<Gtk.TreePath, string> treeModelValues;
+		private Dictionary<string, string> rebuildTreeValues;
 		string json = "";
 
         public MenuDesigner() :
@@ -17,6 +19,8 @@ namespace final_project
             this.Build();
 			tabCaptions = new List<string>();
 			treeModelValues = new Dictionary<Gtk.TreePath, string>();
+
+
             Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
             categoryColumn.Title = "Jídlo";
 
@@ -28,7 +32,6 @@ namespace final_project
 
             Gtk.TreeViewColumn priceColumn = new Gtk.TreeViewColumn();
             priceColumn.Title = "Cena";
-
 
             Gtk.CellRendererText categoryCellText = new Gtk.CellRendererText();
             Gtk.CellRendererText compositionCellText = new Gtk.CellRendererText();
@@ -52,7 +55,7 @@ namespace final_project
 
             foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
 
-            Gtk.TreeIter iter = foodTreeStore.AppendValues("Burgery");
+          /*  Gtk.TreeIter iter = foodTreeStore.AppendValues("Burgery");
 
             Gtk.TreeIter subIter = foodTreeStore.AppendValues(iter, "Bezmase");
 
@@ -63,33 +66,50 @@ namespace final_project
 
             iter = foodTreeStore.AppendValues("Snídaně");
 
-            foodTreeStore.AppendValues(iter, "Vajíčka", "Vajíčka", "200g", "30Kč");
+            foodTreeStore.AppendValues(iter, "Vajíčka", "Vajíčka", "200g", "30Kč");*/
 
             this.treeview.Model = foodTreeStore;
 
-			this.treeview.RowActivated += (sender , e) =>
-            {
+			try
+			{
+				rebuildTreeValues = System.IO.File.ReadLines("test.csv").Select(line => line.Split(';')).ToDictionary(line => line[0], line => line[1]);
+				rebuildTree();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Fuck up");
+			}
+
+			appendEventHandlers();
+        }
+
+		private void appendEventHandlers()
+		{
+		this.treeview.RowActivated += (sender, e) =>
+			{
 				Gtk.TreeIter iterator;
 				foodTreeStore.GetIterFromString(out iterator, e.Path.ToString());
 				if (foodTreeStore.GetValue(iterator, 1) != null)
 				{
 					bool exists = false;
 					string label = foodTreeStore.GetValue(iterator, 0).ToString();
-					foreach (string caption in tabCaptions) {
-						if (caption == label) {
+					foreach (string caption in tabCaptions)
+					{
+						if (caption == label)
+						{
 							exists = true;
-							break;				
+							break;
 						}
 					}
-					if (!exists) {
-                    	this.notebook1.AppendPage(new Gtk.TextView(), new CloseableTab(label, this.notebook1));
+					if (!exists)
+					{
+						this.notebook1.AppendPage(new Gtk.TextView(), new CloseableTab(label, this.notebook1));
 						tabCaptions.Add(label);
 						this.notebook1.ShowAll();
 					}
 				}
-            };
-
-        }
+			};
+		}
 
 		protected void BtnCategoryClicked(object sender, EventArgs e)
 		{
@@ -109,18 +129,17 @@ namespace final_project
 		{
 			Gtk.TreeIter iter;
 			foodTreeStore.GetIterFirst(out iter);
-            buildTreeJson(iter);
-			serializeToJson();
-			using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"C:\Users\Lukas\Documents\Projects\Server\test.txt", false)) 
-			{
-				writer.Write(json);
-				writer.Close();
-			}
+            getTreeValues(iter);
+			String csv = String.Join(
+				Environment.NewLine,
+				treeModelValues.Select(d => d.Key + ";" + d.Value + ";")
+			);
+			System.IO.File.WriteAllText("test.csv", csv);
 			this.Destroy();
 			args.RetVal = true;
 		}
 
-		private void buildTreeJson(Gtk.TreeIter iter) {
+		private void getTreeValues(Gtk.TreeIter iter) {
 			Gtk.TreeIter childIter;
 			do
 			{
@@ -129,18 +148,87 @@ namespace final_project
 				if (foodTreeStore.IterHasChild(iter) )
 				{
 					foodTreeStore.IterChildren(out childIter, iter);
-                    buildTreeJson(childIter);
+					getTreeValues(childIter);
 				}
 			} while (foodTreeStore.IterNext(ref iter));
 		}
 
-		private string serializeToJson() {
-			string json = "";
-			foreach (var path in treeModelValues.Keys)
+		// n is used for string position so that I can call this function in recursion
+		/*private void rebuildTree( int n ) {
+			int pathIndex = 0;
+			foreach (var pathString in rebuildTreeValues.Keys)
 			{
-				path.ToString().Equals("0:0:0"); 
+				if (n == 0)
+				{
+					if ((int)Char.GetNumericValue(pathString[n]) == pathIndex)
+					{
+						foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
+						++pathIndex;
+					}
+				}
+				else
+				{
+					if ((int)Char.GetNumericValue(pathString[n]) == pathIndex)
+					{
+						TreeIter iter;
+						foodTreeStore.GetIterFromString(out iter, pathString);
+						foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
+						++pathIndex;
+					}
+				}
 			}
-			return json;
+									
+
+		}*/
+
+		private void rebuildTree() {
+			int pathIndex;
+			//path prefix for appending
+			string prefix = "";
+			int firstPos = 0;
+			int last = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;
+			try
+			{
+				for (int i = 0; i < last; i += 2) {
+					pathIndex = 0;
+					foreach (string pathString in rebuildTreeValues.Keys)
+					{
+						if (i == 0)
+						{
+							if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
+							{
+								foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
+								++pathIndex;
+							}
+						}
+						else
+						{
+							//exception would be thrown otherwise
+							if (pathString.Length > i) {
+								// this is because path 0:1 and 1:0 are different.
+								if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
+									pathIndex = 0;
+								}
+								if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
+								{
+									TreeIter iter;
+									foodTreeStore.GetIterFromString(out iter, (string.IsNullOrEmpty(prefix)) ? pathString[i - 2].ToString() : prefix + pathString[i - 2].ToString() );
+									foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
+									++pathIndex;
+									firstPos = (int)Char.GetNumericValue(pathString[i-2]);
+								}
+							}
+						}
+					}
+					if (i >= 2)
+						prefix += "0:";
+
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
 		}
 	}
 }
