@@ -39,6 +39,7 @@ namespace final_project
             
 			this.win = new MainWindow(this);
 			win.Show();
+			//tries to reload connection from property
 			if (!string.IsNullOrEmpty(Properties.Settings.Default.databaseConnectionString))
 			{
 				this.databaseConnectionString = Properties.Settings.Default.databaseConnectionString;
@@ -48,6 +49,7 @@ namespace final_project
 
 		}
 
+		//connects to mySql database, with connection string
 		public async Task<bool> connect(string databaseConnectionString)
         {
             try
@@ -55,7 +57,8 @@ namespace final_project
                 this.connection = new MySqlConnection(databaseConnectionString);
 				await this.connection.OpenAsync();
 				this.win.statbar.Push(1, "Navázáno spojení s databází");
-				win.updateMenu(this.getCategories());
+				//Obsolete method
+				//win.updateMenu(this.getCategories());
 				return true;
             }
 			catch (MySqlException  ex)
@@ -66,6 +69,7 @@ namespace final_project
 
         }
 
+		//adds category to mySql database, of course, this one will be replaced as well
 		public void addCategory(string name) {
 			try
 			{
@@ -102,14 +106,17 @@ namespace final_project
 			
 		}
 
+		//starts HTTPListener on port 8080, responses are handled asynchronously in a static method
 		public void startListening() {
 			listener.Start();
 			IAsyncResult result = listener.BeginGetContext(ContextCallback, null);
 			showMessage(MessageType.Info, "Naslouchání na portu 8080");
 		}
 
+		//static method for handling requests
 		public static void ContextCallback(IAsyncResult result) {
 			var context = listener.EndGetContext(result);
+			//starts new listening
 			listener.BeginGetContext(ContextCallback, null);
 			var request = context.Request;
 			var response = context.Response;
@@ -122,6 +129,7 @@ namespace final_project
 			output.Close();
 		}
 
+		//Show message dialog with given message type and message
 		public void showMessage(MessageType type, string message)
 		{
 			MessageDialog dlg = new MessageDialog(win, DialogFlags.Modal, type, ButtonsType.Ok, @message);

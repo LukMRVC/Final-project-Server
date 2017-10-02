@@ -60,6 +60,9 @@ public partial class MainWindow : Gtk.Window
 		this.server.startListening();
 	}
 
+
+	//Obsolete 
+	/*
 	public void updateMenu(string[] categories) {
 		for (int i = 0; i < categories.Length; ++i) {
 			MenuItem item = new MenuItem(categories[0]);
@@ -69,7 +72,7 @@ public partial class MainWindow : Gtk.Window
 		w1.Add(this.databaseInfoMenuAction, null);*/
 
 		
-	}
+	//}
 
 	protected void BtnMenuDesignerClick(object sender, EventArgs e)
 	{

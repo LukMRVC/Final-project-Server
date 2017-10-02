@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Gtk;
 using System.Collections.Generic;
@@ -8,10 +8,12 @@ namespace final_project
     {
 		//List of tabs in notebook, because deleting tabs was kinda broken
 		private List<string> tabCaptions;
+		//treeview store/model
 		private Gtk.TreeStore foodTreeStore;
 		private Dictionary<Gtk.TreePath, string> treeModelValues;
+		//values from CSV will be stored here
 		private Dictionary<string, string> rebuildTreeValues;
-		string json = "";
+		//string json = "";
 
         public MenuDesigner() :
                 base(Gtk.WindowType.Toplevel)
@@ -19,7 +21,6 @@ namespace final_project
             this.Build();
 			tabCaptions = new List<string>();
 			treeModelValues = new Dictionary<Gtk.TreePath, string>();
-
 
             Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
             categoryColumn.Title = "Jídlo";
@@ -70,6 +71,7 @@ namespace final_project
 
             this.treeview.Model = foodTreeStore;
 
+			//tries to read and serialize csv file with treeview info to rebuild treeview
 			try
 			{
 				rebuildTreeValues = System.IO.File.ReadLines("test.csv").Select(line => line.Split(';')).ToDictionary(line => line[0], line => line[1]);
@@ -83,16 +85,20 @@ namespace final_project
 			appendEventHandlers();
         }
 
+
 		private void appendEventHandlers()
 		{
+		// appends new page to notebook with the same label as row that was clicked	
 		this.treeview.RowActivated += (sender, e) =>
 			{
 				Gtk.TreeIter iterator;
 				foodTreeStore.GetIterFromString(out iterator, e.Path.ToString());
+				//checks if valid row was clicked
 				if (foodTreeStore.GetValue(iterator, 1) != null)
 				{
 					bool exists = false;
 					string label = foodTreeStore.GetValue(iterator, 0).ToString();
+					//checks if tab with same name is already opened
 					foreach (string caption in tabCaptions)
 					{
 						if (caption == label)
@@ -111,6 +117,7 @@ namespace final_project
 			};
 		}
 
+
 		protected void BtnCategoryClicked(object sender, EventArgs e)
 		{
 			CategoryDialog dlg = new CategoryDialog(this, true);
@@ -125,6 +132,8 @@ namespace final_project
 
 		}
 
+		//Upon closing this window, values and all information that was needed will be stored 
+		//in a CSV file
 		protected void OnDeleteEvent(object o, DeleteEventArgs args)
 		{
 			Gtk.TreeIter iter;
@@ -153,43 +162,19 @@ namespace final_project
 			} while (foodTreeStore.IterNext(ref iter));
 		}
 
-		// n is used for string position so that I can call this function in recursion
-		/*private void rebuildTree( int n ) {
-			int pathIndex = 0;
-			foreach (var pathString in rebuildTreeValues.Keys)
-			{
-				if (n == 0)
-				{
-					if ((int)Char.GetNumericValue(pathString[n]) == pathIndex)
-					{
-						foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
-						++pathIndex;
-					}
-				}
-				else
-				{
-					if ((int)Char.GetNumericValue(pathString[n]) == pathIndex)
-					{
-						TreeIter iter;
-						foodTreeStore.GetIterFromString(out iter, pathString);
-						foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
-						++pathIndex;
-					}
-				}
-			}
-									
-
-		}*/
-
 		private void rebuildTree() {
 			int pathIndex;
 			//path prefix for appending
 			string prefix = "";
 			int firstPos = 0;
-			int last = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;
+			//counter is used for appending correct prefix to tree depth
+			int counter = 1;
+			//gets biggest string length, so that i know tree depth
+			int depth = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;
 			try
 			{
-				for (int i = 0; i < last; i += 2) {
+				for (int i = 0; i < depth; i += 2) {
+					//last TreePath index number
 					pathIndex = 0;
 					foreach (string pathString in rebuildTreeValues.Keys)
 					{
@@ -209,6 +194,7 @@ namespace final_project
 								if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
 									pathIndex = 0;
 								}
+								//Get parent TreeIter and appends new Node to it
 								if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
 								{
 									TreeIter iter;
@@ -220,9 +206,8 @@ namespace final_project
 							}
 						}
 					}
-					if (i >= 2)
+					if (i == 2)
 						prefix += "0:";
-
 				}
 			}
 			catch (Exception ex)
