@@ -522,7 +522,7 @@
                     <property name="WidthRequest">100</property>
                     <property name="CanDefault">True</property>
                     <property name="CanFocus">True</property>
-                    <property name="Position">500</property>
+                    <property name="Position">1</property>
                     <property name="BorderWidth">5</property>
                     <child>
                       <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
@@ -563,12 +563,13 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="Gtk.Button" id="button207">
+                          <widget class="Gtk.Button" id="btnSubcategory">
                             <property name="MemberName" />
                             <property name="CanFocus">True</property>
                             <property name="Type">TextOnly</property>
                             <property name="Label" translatable="yes">Vytvořit podkategorii</property>
                             <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnBtnSubcategoryClicked" />
                           </widget>
                           <packing>
                             <property name="Position">1</property>

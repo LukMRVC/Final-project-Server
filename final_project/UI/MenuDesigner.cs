@@ -56,7 +56,7 @@ namespace final_project
 
             foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
 
-          /*  Gtk.TreeIter iter = foodTreeStore.AppendValues("Burgery");
+            /*Gtk.TreeIter iter = foodTreeStore.AppendValues("Burgery");
 
             Gtk.TreeIter subIter = foodTreeStore.AppendValues(iter, "Bezmase");
 
@@ -118,19 +118,7 @@ namespace final_project
 		}
 
 
-		protected void BtnCategoryClicked(object sender, EventArgs e)
-		{
-			CategoryDialog dlg = new CategoryDialog(this, true);
-			string name = null;
-			if (dlg.Run() == (int)ResponseType.Ok) {
-				name = dlg.name;
-				dlg.Destroy();
-				dlg.Dispose();
-			}
-			Gtk.TreeIter iter = this.foodTreeStore.AppendValues(name);
-			this.treeview.ShowAll();
 
-		}
 
 		//Upon closing this window, values and all information that was needed will be stored 
 		//in a CSV file
@@ -164,11 +152,7 @@ namespace final_project
 
 		private void rebuildTree() {
 			int pathIndex;
-			//path prefix for appending
-			string prefix = "";
 			int firstPos = 0;
-			//counter is used for appending correct prefix to tree depth
-			int counter = 1;
 			//gets biggest string length, so that i know tree depth
 			int depth = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;
 			try
@@ -193,21 +177,22 @@ namespace final_project
 								// this is because path 0:1 and 1:0 are different.
 								if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
 									pathIndex = 0;
+
 								}
 								//Get parent TreeIter and appends new Node to it
 								if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
 								{
 									TreeIter iter;
-									foodTreeStore.GetIterFromString(out iter, (string.IsNullOrEmpty(prefix)) ? pathString[i - 2].ToString() : prefix + pathString[i - 2].ToString() );
+									//findParentNode(i, pathString)
+									foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
 									foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
 									++pathIndex;
 									firstPos = (int)Char.GetNumericValue(pathString[i-2]);
+
 								}
 							}
 						}
 					}
-					if (i == 2)
-						prefix += "0:";
 				}
 			}
 			catch (Exception ex)
@@ -215,5 +200,42 @@ namespace final_project
 				Console.WriteLine(ex.ToString());
 			}
 		}
+
+
+
+		protected void OnBtnSubcategoryClicked(object sender, EventArgs e)
+		{
+			Gtk.TreePath path;
+			Gtk.TreeIter node;
+			Gtk.TreeViewColumn column;
+			this.treeview.GetCursor(out path, out column);
+			this.foodTreeStore.GetIter(out node, path);
+			CategoryDialog dlg = new CategoryDialog(this, true);
+			string name = null;
+			if (dlg.Run() == (int)ResponseType.Ok)
+			{
+				name = dlg.name;
+				dlg.Destroy();
+				dlg.Dispose();
+			}
+			this.foodTreeStore.AppendValues(node, name);
+			this.treeview.ShowAll();
+
+		}
+
+		protected void BtnCategoryClicked(object sender, EventArgs e)
+		{
+			CategoryDialog dlg = new CategoryDialog(this, true);
+			string name = null;
+			if (dlg.Run() == (int)ResponseType.Ok)
+			{
+				name = dlg.name;
+				dlg.Destroy();
+				dlg.Dispose();
+			}
+			this.foodTreeStore.AppendValues(name);
+			this.treeview.ShowAll();
+		}
 	}
+
 }

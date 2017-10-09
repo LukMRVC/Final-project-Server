@@ -18,7 +18,7 @@ namespace final_project
 
 		private global::Gtk.Button BtnCategory;
 
-		private global::Gtk.Button button207;
+		private global::Gtk.Button btnSubcategory;
 
 		private global::Gtk.Button button208;
 
@@ -50,7 +50,7 @@ namespace final_project
 			this.hpaned1.CanDefault = true;
 			this.hpaned1.CanFocus = true;
 			this.hpaned1.Name = "hpaned1";
-			this.hpaned1.Position = 500;
+			this.hpaned1.Position = 1;
 			this.hpaned1.BorderWidth = ((uint)(5));
 			// Container child hpaned1.Gtk.Paned+PanedChild
 			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow();
@@ -82,13 +82,13 @@ namespace final_project
 			w4.Expand = false;
 			w4.Fill = false;
 			// Container child buttonBox.Gtk.ButtonBox+ButtonBoxChild
-			this.button207 = new global::Gtk.Button();
-			this.button207.CanFocus = true;
-			this.button207.Name = "button207";
-			this.button207.UseUnderline = true;
-			this.button207.Label = global::Mono.Unix.Catalog.GetString("Vytvořit podkategorii");
-			this.buttonBox.Add(this.button207);
-			global::Gtk.ButtonBox.ButtonBoxChild w5 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.button207]));
+			this.btnSubcategory = new global::Gtk.Button();
+			this.btnSubcategory.CanFocus = true;
+			this.btnSubcategory.Name = "btnSubcategory";
+			this.btnSubcategory.UseUnderline = true;
+			this.btnSubcategory.Label = global::Mono.Unix.Catalog.GetString("Vytvořit podkategorii");
+			this.buttonBox.Add(this.btnSubcategory);
+			global::Gtk.ButtonBox.ButtonBoxChild w5 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnSubcategory]));
 			w5.Position = 1;
 			w5.Expand = false;
 			w5.Fill = false;
@@ -127,6 +127,7 @@ namespace final_project
 			this.Show();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 			this.BtnCategory.Clicked += new global::System.EventHandler(this.BtnCategoryClicked);
+			this.btnSubcategory.Clicked += new global::System.EventHandler(this.OnBtnSubcategoryClicked);
 		}
 	}
 }
