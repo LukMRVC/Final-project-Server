@@ -4,6 +4,7 @@ using System.Net;
 using Gtk;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace final_project
 {
@@ -23,6 +24,12 @@ namespace final_project
 		public string databaseConnectionString;
 		private MySqlConnection connection;
 		private static HttpListener listener;
+		public bool isConnected {			
+			get;
+			private set;
+
+		}
+
 
 		public Server() 
 		{
@@ -36,7 +43,8 @@ namespace final_project
 				this.showMessage(MessageType.Error, "Tato platforma není podporována, prosím upgradujte systém\n" + ex.ToString());
 				this.quit();
 			}
-            
+
+			this.isConnected = false;
 			this.win = new MainWindow(this);
 			win.Show();
 			//tries to reload connection from property
@@ -57,13 +65,13 @@ namespace final_project
                 this.connection = new MySqlConnection(databaseConnectionString);
 				await this.connection.OpenAsync();
 				this.win.statbar.Push(1, "Navázáno spojení s databází");
-				//Obsolete method
-				//win.updateMenu(this.getCategories());
+				this.isConnected = true;
 				return true;
             }
-			catch (MySqlException  ex)
+			catch (MySqlException)
             {
 				this.win.statbar.Push(1, "Spojení s databází nebylo úspěšně");
+				this.isConnected = false;
 				return false;
             }
 
@@ -77,7 +85,7 @@ namespace final_project
 				cmd.ExecuteNonQuery();
 				this.win.statbar.Push(1, "Vytvořena kategorie " + name);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				//CREATE TABLE IF NOT EXISTS category(id int not null auto_increment primary key, name varchar(200) not null) DEFAULT CHARACTER SET=UTF8 DEFAULT COLLATE utf8_czech_ci
 				MySqlCommand cmd = new MySqlCommand();
@@ -104,6 +112,47 @@ namespace final_project
 		private void quit() 
 		{
 			
+		}
+
+		public void saveMenuData() {
+			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
+			try
+			{
+				MySqlCommand cmd = new MySqlCommand();
+				cmd.CommandText = "INSERT INTO menu (path, name) VALUES ";
+				foreach (string[] line in data) {					cmd.CommandText += "('" + line[0] + "', '" + line[1] + "'),";
+				}
+				cmd.CommandText = cmd.CommandText.Remove( cmd.CommandText.Length - 1 );
+				cmd.CommandText += ";";
+				cmd.Connection = this.connection;
+				cmd.ExecuteNonQuery();
+			}
+			catch (MySqlException)
+			{
+				//Create table menu if not exists
+				MySqlCommand cmd = new MySqlCommand();
+				cmd.Connection = this.connection;
+				cmd.CommandText = "CREATE TABLE IF NOT EXISTS menu(id int not null auto_increment primary key, " +
+				"path varchar(200) not null, name varchar(200) not null) DEFAULT CHARACTER SET=utf8 DEFAULT COLLATE utf8_czech_ci;";
+				cmd.ExecuteNonQuery();
+                saveMenuData();
+			}
+			Console.WriteLine("Zapis do databaze probehl");
+
+		}
+
+		public IEnumerable<string> getMenuData(){			List<string> data = new List<string>();
+			try
+			{
+				var command = new MySqlCommand("SELECT path, name FROM menu", this.connection);
+				MySqlDataReader reader = command.ExecuteReader();
+				while (reader.Read()) {
+					data.Add(reader[0].ToString() + ";" + reader[1].ToString());	
+				}				}
+			catch (Exception)
+			{
+				throw new DatabaseNotConnectedException("No database connection found!");			}
+			return data;
 		}
 
 		//starts HTTPListener on port 8080, responses are handled asynchronously in a static method
@@ -150,6 +199,8 @@ namespace final_project
 		}
 
 	}
+
+
 
 
 }

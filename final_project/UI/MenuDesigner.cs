@@ -13,77 +13,84 @@ namespace final_project
 		private Dictionary<Gtk.TreePath, string> treeModelValues;
 		//values from CSV will be stored here
 		private Dictionary<string, string> rebuildTreeValues;
-		//string json = "";
 
-        public MenuDesigner() :
+
+		public MenuDesigner( IEnumerable<string> csvDdata) :
                 base(Gtk.WindowType.Toplevel)
         {
             this.Build();
-			tabCaptions = new List<string>();
-			treeModelValues = new Dictionary<Gtk.TreePath, string>();
-
-            Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
-            categoryColumn.Title = "Jídlo";
-
-            Gtk.TreeViewColumn compositionColumn = new Gtk.TreeViewColumn();
-            compositionColumn.Title = "Složení";
-
-            Gtk.TreeViewColumn weightColumn = new Gtk.TreeViewColumn();
-            weightColumn.Title = "Váha";
-
-            Gtk.TreeViewColumn priceColumn = new Gtk.TreeViewColumn();
-            priceColumn.Title = "Cena";
-
-            Gtk.CellRendererText categoryCellText = new Gtk.CellRendererText();
-            Gtk.CellRendererText compositionCellText = new Gtk.CellRendererText();
-            Gtk.CellRendererText weightCellText = new Gtk.CellRendererText();
-            Gtk.CellRendererText priceCellText = new Gtk.CellRendererText();
-
-            categoryColumn.PackStart(categoryCellText, true);
-            compositionColumn.PackStart(compositionCellText, true);
-            weightColumn.PackStart(weightCellText, true);
-            priceColumn.PackStart(priceCellText, true);
-
-            this.treeview.AppendColumn(categoryColumn);
-            this.treeview.AppendColumn(compositionColumn);
-            this.treeview.AppendColumn(weightColumn);
-            this.treeview.AppendColumn(priceColumn);
-
-            categoryColumn.AddAttribute(categoryCellText, "text", 0);
-            compositionColumn.AddAttribute(compositionCellText, "text", 1);
-            weightColumn.AddAttribute(weightCellText, "text", 2);
-            priceColumn.AddAttribute(priceCellText, "text", 3);
-
-            foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
-
-            /*Gtk.TreeIter iter = foodTreeStore.AppendValues("Burgery");
-
-            Gtk.TreeIter subIter = foodTreeStore.AppendValues(iter, "Bezmase");
-
-            foodTreeStore.AppendValues(iter, "Chickenburger", "Houska, maso, sýr", "150g", "50 Kč");
-
-            foodTreeStore.AppendValues(subIter, "Cheeseburger", "Houska, maso, sýr", "150g", "50 Kč");
-			foodTreeStore.AppendValues(subIter, "Veganburger", "S/ója, sračky a tak", "150g", "150 Kč");
-
-            iter = foodTreeStore.AppendValues("Snídaně");
-
-            foodTreeStore.AppendValues(iter, "Vajíčka", "Vajíčka", "200g", "30Kč");*/
-
-            this.treeview.Model = foodTreeStore;
-
+			this.initiliaze();
+			this.buildTreeView();
+           
 			//tries to read and serialize csv file with treeview info to rebuild treeview
 			try
 			{
-				rebuildTreeValues = System.IO.File.ReadLines("test.csv").Select(line => line.Split(';')).ToDictionary(line => line[0], line => line[1]);
-				rebuildTree();
+				rebuildTreeValues = csvDdata.Select(line => line.Split(';')).ToDictionary(line => line[0], line => line[1]);
+            	rebuildTree();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
+				
 				Console.WriteLine("Fuck up");
 			}
 
 			appendEventHandlers();
         }
+
+		public MenuDesigner() : base(Gtk.WindowType.Toplevel) {
+			this.Build();
+			this.initiliaze();
+			this.buildTreeView();
+			appendEventHandlers();
+
+		}
+
+		private void initiliaze() { 
+			tabCaptions = new List<string>();
+			treeModelValues = new Dictionary<Gtk.TreePath, string>();
+
+		}
+
+		private void buildTreeView() { 
+            this.hpaned1.Position = 475;
+			Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
+			categoryColumn.Title = "Jídlo";
+
+            Gtk.TreeViewColumn compositionColumn = new Gtk.TreeViewColumn();
+			compositionColumn.Title = "Složení";
+
+            Gtk.TreeViewColumn weightColumn = new Gtk.TreeViewColumn();
+			weightColumn.Title = "Váha";
+
+            Gtk.TreeViewColumn priceColumn = new Gtk.TreeViewColumn();
+			priceColumn.Title = "Cena";
+
+            Gtk.CellRendererText categoryCellText = new Gtk.CellRendererText();
+			Gtk.CellRendererText compositionCellText = new Gtk.CellRendererText();
+			Gtk.CellRendererText weightCellText = new Gtk.CellRendererText();
+			Gtk.CellRendererText priceCellText = new Gtk.CellRendererText();
+
+			categoryColumn.PackStart(categoryCellText, true);
+            compositionColumn.PackStart(compositionCellText, true);
+            weightColumn.PackStart(weightCellText, true);
+            priceColumn.PackStart(priceCellText, true);
+
+
+			this.treeview.AppendColumn(categoryColumn);
+            this.treeview.AppendColumn(compositionColumn);
+            this.treeview.AppendColumn(weightColumn);
+            this.treeview.AppendColumn(priceColumn);
+
+			categoryColumn.AddAttribute(categoryCellText, "text", 0);
+			compositionColumn.AddAttribute(compositionCellText, "text", 1);
+			weightColumn.AddAttribute(weightCellText, "text", 2);
+			priceColumn.AddAttribute(priceCellText, "text", 3);
+
+			foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
+
+			this.treeview.Model = foodTreeStore;
+
+		}
 
 
 		private void appendEventHandlers()
@@ -117,9 +124,6 @@ namespace final_project
 			};
 		}
 
-
-
-
 		//Upon closing this window, values and all information that was needed will be stored 
 		//in a CSV file
 		protected void OnDeleteEvent(object o, DeleteEventArgs args)
@@ -131,7 +135,7 @@ namespace final_project
 				Environment.NewLine,
 				treeModelValues.Select(d => d.Key + ";" + d.Value + ";")
 			);
-			System.IO.File.WriteAllText("test.csv", csv);
+			System.IO.File.WriteAllText(Constants.CSV_FILE_NAME, csv);
 			this.Destroy();
 			args.RetVal = true;
 		}
@@ -155,49 +159,41 @@ namespace final_project
 			int firstPos = 0;
 			//gets biggest string length, so that i know tree depth
 			int depth = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;
-			try
-			{
-				for (int i = 0; i < depth; i += 2) {
-					//last TreePath index number
-					pathIndex = 0;
-					foreach (string pathString in rebuildTreeValues.Keys)
+			for (int i = 0; i < depth; i += 2) {
+				//last TreePath index number
+				pathIndex = 0;
+				foreach (string pathString in rebuildTreeValues.Keys)
+				{
+					if (i == 0)
 					{
-						if (i == 0)
+						if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
 						{
+							foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
+							++pathIndex;
+						}
+					}
+					else
+					{
+						//exception would be thrown otherwise
+						if (pathString.Length > i) {
+							// this is because path 0:1 and 1:0 are different.
+							if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
+								pathIndex = 0;
+
+							}
+							//Get parent TreeIter and appends new Node to it
 							if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
 							{
-								foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
+								TreeIter iter;
+								foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
+								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
 								++pathIndex;
-							}
-						}
-						else
-						{
-							//exception would be thrown otherwise
-							if (pathString.Length > i) {
-								// this is because path 0:1 and 1:0 are different.
-								if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
-									pathIndex = 0;
+								firstPos = (int)Char.GetNumericValue(pathString[i-2]);
 
-								}
-								//Get parent TreeIter and appends new Node to it
-								if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
-								{
-									TreeIter iter;
-									//findParentNode(i, pathString)
-									foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
-									foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
-									++pathIndex;
-									firstPos = (int)Char.GetNumericValue(pathString[i-2]);
-
-								}
 							}
 						}
 					}
 				}
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.ToString());
 			}
 		}
 
@@ -209,6 +205,14 @@ namespace final_project
 			Gtk.TreeIter node;
 			Gtk.TreeViewColumn column;
 			this.treeview.GetCursor(out path, out column);
+			if (path == null)
+			{
+				var message = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Musíte vybrat řádek!");
+				message.Run();
+				message.Destroy();
+				message.Dispose();
+				return;
+			}
 			this.foodTreeStore.GetIter(out node, path);
 			CategoryDialog dlg = new CategoryDialog(this, true);
 			string name = null;
@@ -217,6 +221,9 @@ namespace final_project
 				name = dlg.name;
 				dlg.Destroy();
 				dlg.Dispose();
+			}
+			if (string.IsNullOrWhiteSpace(name) || name == "") {
+				return;
 			}
 			this.foodTreeStore.AppendValues(node, name);
 			this.treeview.ShowAll();
@@ -230,11 +237,35 @@ namespace final_project
 			if (dlg.Run() == (int)ResponseType.Ok)
 			{
 				name = dlg.name;
-				dlg.Destroy();
-				dlg.Dispose();
 			}
 			this.foodTreeStore.AppendValues(name);
 			this.treeview.ShowAll();
+			dlg.Destroy();
+			dlg.Dispose();
+		}
+
+		protected void OnBtnDeleteRowClicked(object sender, EventArgs e)
+		{
+			var dialog = new MessageDialog(this, DialogFlags.Modal, MessageType.Question, ButtonsType.YesNo, "Jste si jistí že chcete smazat vybraný řádek?");
+			if (dialog.Run() == (int)ResponseType.Yes) {				TreePath path;
+				TreeViewColumn column;
+				TreeIter iter;
+				this.treeview.GetCursor(out path, out column);
+				if (path == null)
+				{
+					var message = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Musíte vybrat řádek!");
+					message.Run();
+					message.Destroy();
+					message.Dispose();
+				}
+				else
+				{
+    	            this.foodTreeStore.GetIter(out iter, path);
+	                this.foodTreeStore.Remove(ref iter);
+				}
+			}
+			dialog.Destroy();
+			dialog.Dispose();
 		}
 	}
 

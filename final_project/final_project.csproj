@@ -85,6 +85,10 @@
     <Compile Include="UI\MenuDesigner.cs" />
     <Compile Include="gtk-gui\final_project.MenuDesigner.cs" />
     <Compile Include="UI\CloseableTab.cs" />
+    <Compile Include="Logic\Constants.cs" />
+    <Compile Include="Logic\DatabaseNotConnectedException.cs" />
+    <Compile Include="UI\Dialogs\MenuDesignerWarningDialog.cs" />
+    <Compile Include="gtk-gui\final_project.MenuDesignerWarningDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

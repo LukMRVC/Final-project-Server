@@ -20,7 +20,7 @@ namespace final_project
 
 		private global::Gtk.Button btnSubcategory;
 
-		private global::Gtk.Button button208;
+		private global::Gtk.Button btnDeleteRow;
 
 		private global::Gtk.Label pageLabel1;
 
@@ -58,6 +58,7 @@ namespace final_project
 			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
 			this.treeview = new global::Gtk.TreeView();
+			this.treeview.WidthRequest = 200;
 			this.treeview.CanFocus = true;
 			this.treeview.Name = "treeview";
 			this.GtkScrolledWindow1.Add(this.treeview);
@@ -86,20 +87,20 @@ namespace final_project
 			this.btnSubcategory.CanFocus = true;
 			this.btnSubcategory.Name = "btnSubcategory";
 			this.btnSubcategory.UseUnderline = true;
-			this.btnSubcategory.Label = global::Mono.Unix.Catalog.GetString("Vytvořit podkategorii");
+			this.btnSubcategory.Label = global::Mono.Unix.Catalog.GetString("Přidat řádek");
 			this.buttonBox.Add(this.btnSubcategory);
 			global::Gtk.ButtonBox.ButtonBoxChild w5 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnSubcategory]));
 			w5.Position = 1;
 			w5.Expand = false;
 			w5.Fill = false;
 			// Container child buttonBox.Gtk.ButtonBox+ButtonBoxChild
-			this.button208 = new global::Gtk.Button();
-			this.button208.CanFocus = true;
-			this.button208.Name = "button208";
-			this.button208.UseUnderline = true;
-			this.button208.Label = global::Mono.Unix.Catalog.GetString("Přidat jídlo");
-			this.buttonBox.Add(this.button208);
-			global::Gtk.ButtonBox.ButtonBoxChild w6 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.button208]));
+			this.btnDeleteRow = new global::Gtk.Button();
+			this.btnDeleteRow.CanFocus = true;
+			this.btnDeleteRow.Name = "btnDeleteRow";
+			this.btnDeleteRow.UseUnderline = true;
+			this.btnDeleteRow.Label = global::Mono.Unix.Catalog.GetString("Smazat řádek");
+			this.buttonBox.Add(this.btnDeleteRow);
+			global::Gtk.ButtonBox.ButtonBoxChild w6 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnDeleteRow]));
 			w6.Position = 2;
 			w6.Expand = false;
 			w6.Fill = false;
@@ -128,6 +129,7 @@ namespace final_project
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 			this.BtnCategory.Clicked += new global::System.EventHandler(this.BtnCategoryClicked);
 			this.btnSubcategory.Clicked += new global::System.EventHandler(this.OnBtnSubcategoryClicked);
+			this.btnDeleteRow.Clicked += new global::System.EventHandler(this.OnBtnDeleteRowClicked);
 		}
 	}
 }
