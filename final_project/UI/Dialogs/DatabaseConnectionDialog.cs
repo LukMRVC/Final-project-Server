@@ -24,11 +24,10 @@ namespace final_project
 			this.Build();
             this.Parent = parent;
 			this.Modal = modal;
-			this.entryArr = new Gtk.Entry[4];
+			this.entryArr = new Gtk.Entry[3];
             this.entryArr[0] = this.hostEntry;
             this.entryArr[1] = this.usernameEntry;
-            this.entryArr[2] = this.passwordEntry;
-            this.entryArr[3] = this.databaseEntry;
+            this.entryArr[2] = this.databaseEntry;
 		}
 
 

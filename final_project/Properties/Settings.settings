@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<SettingsFile GeneratedClassNamespace="final_project.Properties" GeneratedClassName="Settings">
-	<Profiles />
-	<Settings>
-		<Setting name="databaseConnectionString" type="System.String" scope="User">
-			<Value Profile="(Default)" />
-		</Setting>
-	</Settings>
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="final_project.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="databaseConnectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
 </SettingsFile>

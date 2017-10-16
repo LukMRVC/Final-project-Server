@@ -61,32 +61,26 @@ public partial class MainWindow : Gtk.Window
 		this.server.startListening();
 	}
 
-
-	//Obsolete 
-	/*
-	public void updateMenu(string[] categories) {
-		for (int i = 0; i < categories.Length; ++i) {
-			MenuItem item = new MenuItem(categories[0]);
-		}
-      /*  this.databaseInfoMenuAction = new global::Gtk.Action("databaseInfoMenuAction", global::Mono.Unix.Catalog.GetString("Informace k připojení"), null, null);
-		this.databaseInfoMenuAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Informace k připojení");
-		w1.Add(this.databaseInfoMenuAction, null);*/
-
-
-	//}
-
 	protected void BtnMenuDesignerClick(object sender, EventArgs e)
 	{
 		MenuDesigner designer;
 		try
 		{
 			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
-			designer = new MenuDesigner(data);		}
+			designer = new MenuDesigner(data);
+			designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
+			{
+				this.server.saveMenuData();
+			};		}
 		catch (Exception)
 		{
 			try
 			{
 				designer = new MenuDesigner(this.server.getMenuData());
+				designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
+				{
+					this.server.saveMenuData();
+				};
 			}
 			catch (DatabaseNotConnectedException)
 			{
@@ -101,6 +95,10 @@ public partial class MainWindow : Gtk.Window
 				if (response == 2)
 				{
 					designer = new MenuDesigner();
+					designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
+					{
+						this.server.saveMenuData();
+					};
 				}
 				else if (response == 1)
 				{					var filedlg = new FileChooserDialog("Choose file", this, FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
@@ -112,28 +110,26 @@ public partial class MainWindow : Gtk.Window
 					{
 						var data = System.IO.File.ReadLines(filedlg.Filename);
 						designer = new MenuDesigner(data);
+						designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
+						{
+							this.server.saveMenuData();
+						};
 					}
 					filedlg.Destroy();
 					filedlg.Dispose();
 
 				}
-				else {					this.databaseConnectionFormAction(this, EventArgs.Empty);
+				else if(response == 0){					this.databaseConnectionFormAction(this, EventArgs.Empty);
 					this.connectToDatabaseAction(this, EventArgs.Empty);
+					designer = new MenuDesigner(this.server.getMenuData());
+					designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
+					{
+						this.server.saveMenuData();
+					};
 				}
-
 				dlg.Destroy();
 				dlg.Dispose();
 			}
-
 		}
-
-		//designer.Show();
-		/*designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) => {			this.server.saveMenuData();
-		};*/
-	}
-
-	public static string[] getMenuDataFromDatabase(){
-		
-		return new string[2];
 	}
 }

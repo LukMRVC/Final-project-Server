@@ -221,13 +221,9 @@ namespace final_project
 				name = dlg.name;
 				dlg.Destroy();
 				dlg.Dispose();
+                this.foodTreeStore.AppendValues(node, name);
+				this.treeview.ShowAll();
 			}
-			if (string.IsNullOrWhiteSpace(name) || name == "") {
-				return;
-			}
-			this.foodTreeStore.AppendValues(node, name);
-			this.treeview.ShowAll();
-
 		}
 
 		protected void BtnCategoryClicked(object sender, EventArgs e)

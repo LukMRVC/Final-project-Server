@@ -5,6 +5,7 @@ using Gtk;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
 using System.Linq;
+using final_project.Model;
 
 namespace final_project
 {
@@ -14,6 +15,17 @@ namespace final_project
 		{
 			Application.Init();
 			Server server = new Server();
+			using (var context = new MenuDbContext()) {
+				var food = new Food
+				{
+					Name = "Burger",
+					Price = 50,
+					Path = "0",
+				};
+				context.Menu.Add(food);
+				context.SaveChanges();
+			
+			}
 			Application.Run();
 		}
 	}
