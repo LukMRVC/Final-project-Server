@@ -93,6 +93,8 @@
     <Compile Include="gtk-gui\final_project.MenuDesignerWarningDialog.cs" />
     <Compile Include="Model\MenuDbContext.cs" />
     <Compile Include="Model\Food.cs" />
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\Order.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

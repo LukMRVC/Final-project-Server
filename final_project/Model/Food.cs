@@ -1,31 +1,41 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 namespace final_project.Model
 {
-	public class Food
+	[Table("Menu")]
+	public class Food : Base
 	{
-		public int Id
-		{
-			get;
-			set;
+
+		//Zajistí vztah M:N u Objednávek a Jídla
+		public Food() {
+			this.Order = new HashSet<Order>();
 		}
 
-		public string Name
-		{
-			get;
-			set;
-		}
+		public string Name { get; set; }
 
-		public int Price
-		{
-			get;
-			set;
-		}
+		public decimal Price { get; set; }
 
-		public string Path 
-		{
-			get;
-			set;
-		}
+		public int Gram { get; set; }
+
+		public int EnergyKj { get; set; }
+
+		public int EnergyKcal { get; set; }
+
+		public decimal Protein { get; set; }
+
+		public decimal TotalFat { get; set; }
+
+		public decimal SaturatedFat { get; set; }
+
+		public decimal Carbohydrates { get; set; }
+
+		public decimal Sugar { get; set; }
+
+		public decimal Salt { get; set; }
+
+		public decimal Fiber { get; set; }
+
+		public ICollection<Order> Order { get; set; }
 
 	}
 }

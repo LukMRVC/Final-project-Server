@@ -15,17 +15,6 @@ namespace final_project
 		{
 			Application.Init();
 			Server server = new Server();
-			using (var context = new MenuDbContext()) {
-				var food = new Food
-				{
-					Name = "Burger",
-					Price = 50,
-					Path = "0",
-				};
-				context.Menu.Add(food);
-				context.SaveChanges();
-			
-			}
 			Application.Run();
 		}
 	}
@@ -36,6 +25,7 @@ namespace final_project
 		public string databaseConnectionString;
 		private MySqlConnection connection;
 		private static HttpListener listener;
+		private MenuDbContext database;
 		public bool isConnected {			
 			get;
 			private set;
@@ -56,6 +46,8 @@ namespace final_project
 				this.quit();
 			}
 
+			database = new MenuDbContext();
+			database.Database.Initialize(true);
 			this.isConnected = false;
 			this.win = new MainWindow(this);
 			win.Show();
