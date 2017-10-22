@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Gtk;
 
 namespace final_project
@@ -30,12 +31,12 @@ namespace final_project
             this.entryArr[2] = this.databaseEntry;
 		}
 
-
+		//connectionString="server=localhost;port=3306;database=EFTest;uid=golden;password=password;charset=utf8" 
 		private void buildConnectionString()
 		{
 			string connString = "server=";
 			connString += this.host;
-			connString += ";user=";
+			connString += ";uid=";
 			connString += this.username;
 			connString += ";password=";
 			connString += this.password;
@@ -84,6 +85,7 @@ namespace final_project
 			this.password = passwordEntry.Text;
 		    this.database = databaseEntry.Text;
             this.buildConnectionString();
+         
 		}
 
 		protected void buttonOkPressed(object sender, EventArgs e)
@@ -104,6 +106,9 @@ namespace final_project
 			this.password = passwordEntry.Text;
 			this.database = databaseEntry.Text;
             this.buildConnectionString();
+           
 		}
+
+
 	}
 }

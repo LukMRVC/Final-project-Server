@@ -174,14 +174,14 @@ namespace final_project
 					}
 					else
 					{
-						//exception would be thrown otherwise
+						//Exception would be thrown otherwise
 						if (pathString.Length > i) {
 							// this is because path 0:1 and 1:0 are different.
 							if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
 								pathIndex = 0;
 
 							}
-							//Get parent TreeIter and appends new Node to it
+							//Gets parent TreeIter and appends new Node to it
 							if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
 							{
 								TreeIter iter;
@@ -225,6 +225,7 @@ namespace final_project
 				this.treeview.ShowAll();
 			}
 		}
+
 
 		protected void BtnCategoryClicked(object sender, EventArgs e)
 		{

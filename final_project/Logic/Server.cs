@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Net;
+
 using Gtk;
-using MySql.Data.MySqlClient;
-using System.Threading.Tasks;
 using System.Linq;
 using final_project.Model;
 
@@ -23,15 +23,9 @@ namespace final_project
 	{
 		private MainWindow win;
 		public string databaseConnectionString;
-		private MySqlConnection connection;
 		private static HttpListener listener;
 		private MenuDbContext database;
-		public bool isConnected {			
-			get;
-			private set;
-
-		}
-
+		public bool isConnected { get; private set; }
 
 		public Server() 
 		{
@@ -42,64 +36,53 @@ namespace final_project
 			}
 			catch (PlatformNotSupportedException ex)
 			{
-				this.showMessage(MessageType.Error, "Tato platforma není podporována, prosím upgradujte systém\n" + ex.ToString());
+				this.showMessage(MessageType.Error, @"Tato platforma není podporována, prosím upgradujte systém" + ex.ToString());
 				this.quit();
 			}
-
-			database = new MenuDbContext();
-			database.Database.Initialize(true);
-			this.isConnected = false;
-			this.win = new MainWindow(this);
-			win.Show();
-			//tries to reload connection from property
-			if (!string.IsNullOrEmpty(Properties.Settings.Default.databaseConnectionString))
+            this.win = new MainWindow(this);
+			try
 			{
-				this.databaseConnectionString = Properties.Settings.Default.databaseConnectionString;
-				this.connect(this.databaseConnectionString);
-
+				database = new MenuDbContext();
+				database.Database.Initialize(true);
+				//ChangeCollation();
+				this.win.statbar.Push(0, @"Připojeno k databázi");
+				this.isConnected = true;
 			}
+			catch (Exception) {				connect();
+			}
+
+			win.Show();
 
 		}
 
-		//connects to mySql database, with connection string
-		public async Task<bool> connect(string databaseConnectionString)
+		/*public void ChangeCollation() { 
+			string con = System.Configuration.ConfigurationManager.ConnectionStrings["MenuDbContext"].ConnectionString;
+			string []sub = con.Split(';');
+			string dbName = "";
+			foreach (string word in sub) {				if (word.Contains("database=")){					dbName = word.Substring(word.IndexOf('=')+1).ToLower();
+					break;
+				}
+			}
+
+			database.Database.ExecuteSqlCommand("ALTER DATABASE "+ dbName +" COLLATE utf8_czech_ci");
+		}*/
+
+		public void connect()
         {
-            try
-            {
-                this.connection = new MySqlConnection(databaseConnectionString);
-				await this.connection.OpenAsync();
-				this.win.statbar.Push(1, "Navázáno spojení s databází");
-				this.isConnected = true;
-				return true;
-            }
-			catch (MySqlException)
-            {
-				this.win.statbar.Push(1, "Spojení s databází nebylo úspěšně");
-				this.isConnected = false;
-				return false;
-            }
-
-        }
-
-		//adds category to mySql database, of course, this one will be replaced as well
-		public void addCategory(string name) {
 			try
 			{
-				MySqlCommand cmd = new MySqlCommand("INSERT INTO category (name) VALUES('" + name + "');", this.connection);
-				cmd.ExecuteNonQuery();
-				this.win.statbar.Push(1, "Vytvořena kategorie " + name);
+				database.Database.Connection.ConnectionString = Properties.Settings.Default.databaseConnectionString;
+				database.Database.Initialize(true);
+				this.win.statbar.Push(0, @"Připojeno k databázi");
+            	this.isConnected = true;
 			}
 			catch (Exception)
 			{
-				//CREATE TABLE IF NOT EXISTS category(id int not null auto_increment primary key, name varchar(200) not null) DEFAULT CHARACTER SET=UTF8 DEFAULT COLLATE utf8_czech_ci
-				MySqlCommand cmd = new MySqlCommand();
-				cmd.Connection = this.connection;
-				cmd.CommandText = "CREATE TABLE IF NOT EXISTS category(id int not null auto_increment primary key, " +
-					"name varchar(200) not null) DEFAULT CHARACTER SET=utf8 DEFAULT COLLATE utf8_czech_ci;";
-				cmd.ExecuteNonQuery();
-				this.addCategory(name);
+				this.isConnected = false;
+                this.win.statbar.Push(0, @"Nenalezeno připojení k databázi");
 			}
-		}
+
+        }
 
         public  void start() 
 		{
@@ -110,7 +93,7 @@ namespace final_project
 		{
 			this.quit();
 			this.start();
-			await this.connect(this.databaseConnectionString);
+			this.connect();
 		}
 
 		private void quit() 
@@ -118,44 +101,22 @@ namespace final_project
 			
 		}
 
+
 		public void saveMenuData() {
 			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
-			try
-			{
-				MySqlCommand cmd = new MySqlCommand();
-				cmd.CommandText = "INSERT INTO menu (path, name) VALUES ";
-				foreach (string[] line in data) {					cmd.CommandText += "('" + line[0] + "', '" + line[1] + "'),";
-				}
-				cmd.CommandText = cmd.CommandText.Remove( cmd.CommandText.Length - 1 );
-				cmd.CommandText += ";";
-				cmd.Connection = this.connection;
-				cmd.ExecuteNonQuery();
+			foreach (string[] line in data) {				database.Menu.Add(new Food { Path = line[0], Name = line[1] });
 			}
-			catch (MySqlException)
-			{
-				//Create table menu if not exists
-				MySqlCommand cmd = new MySqlCommand();
-				cmd.Connection = this.connection;
-				cmd.CommandText = "CREATE TABLE IF NOT EXISTS menu(id int not null auto_increment primary key, " +
-				"path varchar(200) not null, name varchar(200) not null) DEFAULT CHARACTER SET=utf8 DEFAULT COLLATE utf8_czech_ci;";
-				cmd.ExecuteNonQuery();
-                saveMenuData();
-			}
-			Console.WriteLine("Zapis do databaze probehl");
-
+			database.SaveChangesAsync();
 		}
 
-		public IEnumerable<string> getMenuData(){			List<string> data = new List<string>();
-			try
+		public IEnumerable<string> getMenuData(){
+			var data = from f in database.Menu.AsEnumerable() select new { f.Path, f.Name }.ToString();
+			/*try
 			{
-				var command = new MySqlCommand("SELECT path, name FROM menu", this.connection);
-				MySqlDataReader reader = command.ExecuteReader();
-				while (reader.Read()) {
-					data.Add(reader[0].ToString() + ";" + reader[1].ToString());	
-				}				}
+							}
 			catch (Exception)
 			{
-				throw new DatabaseNotConnectedException("No database connection found!");			}
+				throw new DatabaseNotConnectedException("No database connection found!");			}*/
 			return data;
 		}
 
@@ -191,20 +152,6 @@ namespace final_project
 			dlg.Dispose();
 		}
 
-		private string[] getCategories() {
-			var command = new MySqlCommand("SELECT name FROM category", this.connection);
-			var reader = command.ExecuteReader();
-			List<string> categories = new List<string>();
-			while (reader.Read()) {
-				categories.Add(reader[0].ToString());
-			}
-			reader.Close();
-			return categories.ToArray();
-		}
-
 	}
-
-
-
 
 }

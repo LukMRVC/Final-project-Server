@@ -6,12 +6,14 @@ namespace final_project.Model
 	public class Food : Base
 	{
 
-		//Zajistí vztah M:N u Objednávek a Jídla
+		//Ensures the M:N relationship between tables Food nad Order
 		public Food() {
 			this.Order = new HashSet<Order>();
 		}
 
 		public string Name { get; set; }
+
+		public string Path { get; set; }
 
 		public decimal Price { get; set; }
 

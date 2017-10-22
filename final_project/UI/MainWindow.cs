@@ -16,6 +16,7 @@ public partial class MainWindow : Gtk.Window
 		this.server = s;
 		Build();
 		this.statbar = this.statusbar;
+		buildNodeView();
 	}
 
 	protected void OnDeleteEvent(object sender, DeleteEventArgs a)
@@ -24,7 +25,15 @@ public partial class MainWindow : Gtk.Window
 		a.RetVal = true;
 	}
 
-	private void addCategory(object sender, EventArgs e)
+	private void buildNodeView() {		this.nodeview.AppendColumn(@"Id objednávky", new CellRendererText(), "text", 0);
+        this.nodeview.AppendColumn(@"Uživatel", new CellRendererText(), "text", 1);
+        this.nodeview.AppendColumn(@"Objednávka", new CellRendererText(), "text", 2);
+		this.nodeview.ShowAll();
+	}
+
+
+
+	/*private void addCategory(object sender, EventArgs e)
 	{
 		CategoryDialog cd = new CategoryDialog(this, true);
 		string name = null;
@@ -35,12 +44,13 @@ public partial class MainWindow : Gtk.Window
 			cd.Dispose();
 		}
 		Task.Factory.StartNew(() => server.addCategory(name));
-	}
+	}*/
 
 	protected void connectToDatabaseAction(object sender, EventArgs e)
 	{
 		this.statusbar.Push(0, "Navazování spojení...");
-		Task.Factory.StartNew(() => server.connect(server.databaseConnectionString));
+		Task.Factory.StartNew(() => server.connect());
+		
 		//		this.server.connect();
 	}
 
@@ -132,4 +142,7 @@ public partial class MainWindow : Gtk.Window
 			}
 		}
 	}
+
+
+
 }

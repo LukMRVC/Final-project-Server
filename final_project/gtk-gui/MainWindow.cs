@@ -21,9 +21,9 @@ public partial class MainWindow
 
 	private global::Gtk.Action UpravitAction1;
 
-	private global::Gtk.Action newMenuAction1;
+	private global::Gtk.Action NovAction3;
 
-	private global::Gtk.Action CategoryAction;
+	private global::Gtk.Action KategorieAction;
 
 	private global::Gtk.Action PridatAction;
 
@@ -48,6 +48,8 @@ public partial class MainWindow
 	private global::Gtk.Button BtnMenuDesigner;
 
 	private global::Gtk.Button BtnStartListening;
+
+	private global::Gtk.NodeView nodeview;
 
 	protected virtual void Build()
 	{
@@ -79,12 +81,12 @@ public partial class MainWindow
 		this.UpravitAction1 = new global::Gtk.Action("UpravitAction1", global::Mono.Unix.Catalog.GetString("Upravit..."), null, null);
 		this.UpravitAction1.ShortLabel = global::Mono.Unix.Catalog.GetString("Upravit...");
 		w1.Add(this.UpravitAction1, null);
-		this.newMenuAction1 = new global::Gtk.Action("newMenuAction1", global::Mono.Unix.Catalog.GetString("Nová..."), null, null);
-		this.newMenuAction1.ShortLabel = global::Mono.Unix.Catalog.GetString("Nový...");
-		w1.Add(this.newMenuAction1, null);
-		this.CategoryAction = new global::Gtk.Action("CategoryAction", global::Mono.Unix.Catalog.GetString("Kategorie"), null, null);
-		this.CategoryAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Tabulka");
-		w1.Add(this.CategoryAction, null);
+		this.NovAction3 = new global::Gtk.Action("NovAction3", global::Mono.Unix.Catalog.GetString("Nová..."), null, null);
+		this.NovAction3.ShortLabel = global::Mono.Unix.Catalog.GetString("Nový...");
+		w1.Add(this.NovAction3, null);
+		this.KategorieAction = new global::Gtk.Action("KategorieAction", global::Mono.Unix.Catalog.GetString("Kategorie"), null, null);
+		this.KategorieAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Tabulka");
+		w1.Add(this.KategorieAction, null);
 		this.PridatAction = new global::Gtk.Action("PridatAction", global::Mono.Unix.Catalog.GetString("Přidat do..."), null, null);
 		this.PridatAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Upravit");
 		w1.Add(this.PridatAction, null);
@@ -100,7 +102,7 @@ public partial class MainWindow
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
-		this.Title = global::Mono.Unix.Catalog.GetString("MainWindow");
+		this.Title = global::Mono.Unix.Catalog.GetString("Hlavní okno");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		// Container child MainWindow.Gtk.Container+ContainerChild
 		this.vbox3 = new global::Gtk.VBox();
@@ -111,7 +113,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='newMenuAction1' action='newMenuAction1'><menuitem name='CategoryAction' action='CategoryAction'/></menu><menu name='PridatAction' action='PridatAction'/><menu name='connectionMenuAction' action='connectionMenuAction'><menuitem name='databaseInfoMenuAction' action='databaseInfoMenuAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='NovAction3' action='NovAction3'><menuitem name='KategorieAction' action='KategorieAction'/></menu><menu name='PridatAction' action='PridatAction'/><menu name='connectionMenuAction' action='connectionMenuAction'><menuitem name='databaseInfoMenuAction' action='databaseInfoMenuAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu></menubar></ui>");
 		this.menubar7 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget("/menubar7")));
 		this.menubar7.Name = "menubar7";
 		this.hbox2.Add(this.menubar7);
@@ -166,6 +168,14 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.BtnStartListening]));
 		w8.Position = 2;
 		w8.Expand = false;
+		// Container child vbox3.Gtk.Box+BoxChild
+		this.nodeview = new global::Gtk.NodeView();
+		this.nodeview.CanFocus = true;
+		this.nodeview.Name = "nodeview";
+		this.vbox3.Add(this.nodeview);
+		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.nodeview]));
+		w9.PackType = ((global::Gtk.PackType)(1));
+		w9.Position = 3;
 		this.Add(this.vbox3);
 		if ((this.Child != null))
 		{
@@ -175,7 +185,6 @@ public partial class MainWindow
 		this.DefaultHeight = 499;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
-		this.CategoryAction.Activated += new global::System.EventHandler(this.addCategory);
 		this.databaseInfoMenuAction.Activated += new global::System.EventHandler(this.databaseConnectionFormAction);
 		this.PipojitAction.Activated += new global::System.EventHandler(this.connectToDatabaseAction);
 		this.BtnMenuDesigner.Clicked += new global::System.EventHandler(this.BtnMenuDesignerClick);
