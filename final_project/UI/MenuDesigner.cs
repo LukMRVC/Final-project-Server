@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Gtk;
 using System.Collections.Generic;
+using final_project.Model;
 namespace final_project
 {
     public partial class MenuDesigner : Gtk.Window
@@ -13,7 +14,7 @@ namespace final_project
 		private Dictionary<Gtk.TreePath, string> treeModelValues;
 		//values from CSV will be stored here
 		private Dictionary<string, string> rebuildTreeValues;
-
+        public List<Food> food { get; private set; }
 
 		public MenuDesigner( IEnumerable<string> csvDdata) :
                 base(Gtk.WindowType.Toplevel)
@@ -21,7 +22,7 @@ namespace final_project
             this.Build();
 			this.initiliaze();
 			this.buildTreeView();
-           
+            food = new List<Food>();
 			//tries to read and serialize csv file with treeview info to rebuild treeview
 			try
 			{
@@ -144,7 +145,16 @@ namespace final_project
 			Gtk.TreeIter childIter;
 			do
 			{
-				treeModelValues.Add(foodTreeStore.GetPath(iter), foodTreeStore.GetValue(iter, 0).ToString());
+                string name = foodTreeStore.GetValue(iter, 0).ToString();
+                //finds equal object to a treeview row and sets it path correctly
+                foreach(Food f in food) { 
+                    if (name == f.Name)
+                    {
+                        f.Path = foodTreeStore.GetPath(iter).ToString();
+                        break;
+                    }
+                }
+                treeModelValues.Add(foodTreeStore.GetPath(iter), name);
 
 				if (foodTreeStore.IterHasChild(iter) )
 				{
@@ -222,7 +232,8 @@ namespace final_project
 				dlg.Destroy();
 				dlg.Dispose();
                 this.foodTreeStore.AppendValues(node, name);
-				this.treeview.ShowAll();
+                food.Add(new Food(name));
+                this.treeview.ShowAll();
 			}
 		}
 

@@ -120,9 +120,10 @@ public partial class MainWindow : Gtk.Window
 					{
 						var data = System.IO.File.ReadLines(filedlg.Filename);
 						designer = new MenuDesigner(data);
+                        
 						designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
 						{
-							this.server.saveMenuData();
+							this.server.saveMenuData(designer.food.ToArray());
 						};
 					}
 					filedlg.Destroy();

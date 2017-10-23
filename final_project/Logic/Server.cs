@@ -102,8 +102,18 @@ namespace final_project
 		}
 
 
-		public void saveMenuData() {
-			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
+        private void makeDiff(Food[] arr) {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                database.Menu.Contains(arr[i]) ?  : ;
+            }
+            
+        }
+
+
+		public void saveMenuData(Food[] arr) {
+            makeDiff(arr);
+            var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
 			foreach (string[] line in data) {				database.Menu.Add(new Food { Path = line[0], Name = line[1] });
 			}
 			database.SaveChangesAsync();

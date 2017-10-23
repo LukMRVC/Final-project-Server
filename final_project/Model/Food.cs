@@ -11,6 +11,12 @@ namespace final_project.Model
 			this.Order = new HashSet<Order>();
 		}
 
+        public Food(string name)
+        {
+            this.Name = name;
+            this.Order = new HashSet<Order>();
+        }
+
 		public string Name { get; set; }
 
 		public string Path { get; set; }
