@@ -49,7 +49,9 @@ public partial class MainWindow
 
 	private global::Gtk.Button BtnStartListening;
 
-	private global::Gtk.NodeView nodeview;
+	private global::Gtk.ScrolledWindow GtkScrolledWindow;
+
+	private global::Gtk.TreeView nodeview;
 
 	protected virtual void Build()
 	{
@@ -169,13 +171,19 @@ public partial class MainWindow
 		w8.Position = 2;
 		w8.Expand = false;
 		// Container child vbox3.Gtk.Box+BoxChild
-		this.nodeview = new global::Gtk.NodeView();
+		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
+		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
+		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
+		this.nodeview = new global::Gtk.TreeView();
+		this.nodeview.WidthRequest = 500;
+		this.nodeview.HeightRequest = 200;
 		this.nodeview.CanFocus = true;
 		this.nodeview.Name = "nodeview";
-		this.vbox3.Add(this.nodeview);
-		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.nodeview]));
-		w9.PackType = ((global::Gtk.PackType)(1));
-		w9.Position = 3;
+		this.GtkScrolledWindow.Add(this.nodeview);
+		this.vbox3.Add(this.GtkScrolledWindow);
+		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.GtkScrolledWindow]));
+		w10.Position = 3;
 		this.Add(this.vbox3);
 		if ((this.Child != null))
 		{

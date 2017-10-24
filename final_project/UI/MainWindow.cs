@@ -25,10 +25,43 @@ public partial class MainWindow : Gtk.Window
 		a.RetVal = true;
 	}
 
-	private void buildNodeView() {		this.nodeview.AppendColumn(@"Id objednávky", new CellRendererText(), "text", 0);
-        this.nodeview.AppendColumn(@"Uživatel", new CellRendererText(), "text", 1);
+	private void buildNodeView() {
+	/*	Gtk.TreeViewColumn IdColumn = new Gtk.TreeViewColumn();
+		IdColumn.Title = @"Id objednávky ";
+
+        Gtk.TreeViewColumn UserColumn = new Gtk.TreeViewColumn();
+		UserColumn.Title = @"Uživatel ";
+
+        Gtk.TreeViewColumn OrderColumn = new Gtk.TreeViewColumn();
+		OrderColumn.Title = @"Objednávka";
+
+		Gtk.CellRendererText IdCellText = new Gtk.CellRendererText();
+		Gtk.CellRendererText UserCellText = new Gtk.CellRendererText();
+		Gtk.CellRendererText OrderCellText = new Gtk.CellRendererText();
+
+		IdColumn.PackStart(IdCellText, true);
+		UserColumn.PackStart(UserCellText, true);
+		OrderColumn.PackStart(OrderCellText, true);
+
+		nodeview.AppendColumn(IdColumn);
+		nodeview.AppendColumn(UserColumn);
+		nodeview.AppendColumn(OrderColumn);
+
+		IdColumn.AddAttribute(IdCellText, "text", 0);
+		UserColumn.AddAttribute(UserCellText, "text", 1);
+		OrderColumn.AddAttribute(OrderCellText, "text", 2);
+
+		ListStore store = new ListStore(typeof(int), typeof(string), typeof(string));
+				   */
+       // this.nodeview.Model = store;		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
+        this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);
         this.nodeview.AppendColumn(@"Objednávka", new CellRendererText(), "text", 2);
-		this.nodeview.ShowAll();
+		ListStore store = new ListStore(typeof(int), typeof(string), typeof(string));
+		this.nodeview.Model = store;
+        this.nodeview.ShowAll();
+
+
+		
 	}
 
 
@@ -77,20 +110,13 @@ public partial class MainWindow : Gtk.Window
 		try
 		{
 			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
-			designer = new MenuDesigner(data);
-			designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
-			{
-				this.server.saveMenuData();
-			};		}
+			designer = new MenuDesigner(data, this.server);
+		}
 		catch (Exception)
 		{
 			try
 			{
-				designer = new MenuDesigner(this.server.getMenuData());
-				designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
-				{
-					this.server.saveMenuData();
-				};
+				designer = new MenuDesigner(this.server.getMenuData(), this.server);
 			}
 			catch (DatabaseNotConnectedException)
 			{
@@ -104,11 +130,7 @@ public partial class MainWindow : Gtk.Window
 
 				if (response == 2)
 				{
-					designer = new MenuDesigner();
-					designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
-					{
-						this.server.saveMenuData();
-					};
+					designer = new MenuDesigner(this.server);
 				}
 				else if (response == 1)
 				{					var filedlg = new FileChooserDialog("Choose file", this, FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
@@ -119,12 +141,7 @@ public partial class MainWindow : Gtk.Window
 					if (filedlg.Run() == (int)ResponseType.Accept)
 					{
 						var data = System.IO.File.ReadLines(filedlg.Filename);
-						designer = new MenuDesigner(data);
-                        
-						designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
-						{
-							this.server.saveMenuData(designer.food.ToArray());
-						};
+						designer = new MenuDesigner(data, this.server);
 					}
 					filedlg.Destroy();
 					filedlg.Dispose();
@@ -132,11 +149,7 @@ public partial class MainWindow : Gtk.Window
 				}
 				else if(response == 0){					this.databaseConnectionFormAction(this, EventArgs.Empty);
 					this.connectToDatabaseAction(this, EventArgs.Empty);
-					designer = new MenuDesigner(this.server.getMenuData());
-					designer.DeleteEvent += (object menuDesigner, DeleteEventArgs args) =>
-					{
-						this.server.saveMenuData();
-					};
+					designer = new MenuDesigner(this.server.getMenuData(), this.server);
 				}
 				dlg.Destroy();
 				dlg.Dispose();

@@ -17,7 +17,27 @@ namespace final_project.Model
             this.Order = new HashSet<Order>();
         }
 
+		public void SetValuesFromInstance(Food instance) {
+			this.Name = instance.Name;
+			this.Category = instance.Category;
+			this.Path = instance.Path;
+			this.Price = instance.Price;
+			this.Gram = instance.Gram;
+			this.EnergyKj = instance.EnergyKj;
+			this.EnergyKcal = instance.EnergyKcal;
+			this.Protein = instance.Protein;
+			this.TotalFat = instance.TotalFat;
+			this.SaturatedFat = instance.SaturatedFat;
+			this.Carbohydrates = instance.Carbohydrates;
+			this.Sugar = instance.Sugar;
+			this.Salt = instance.Salt;
+			this.Fiber = instance.Fiber;
+			
+		}
+
 		public string Name { get; set; }
+
+		public bool Category { get; set; }
 
 		public string Path { get; set; }
 

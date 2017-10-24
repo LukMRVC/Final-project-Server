@@ -24,7 +24,7 @@ namespace final_project
 		private MainWindow win;
 		public string databaseConnectionString;
 		private static HttpListener listener;
-		private MenuDbContext database;
+		public MenuDbContext database;
 		public bool isConnected { get; private set; }
 
 		public Server() 
@@ -102,21 +102,56 @@ namespace final_project
 		}
 
 
-        private void makeDiff(Food[] arr) {
-            for (int i = 0; i < arr.Length; i++)
-            {
-                database.Menu.Contains(arr[i]) ?  : ;
-            }
-            
-        }
+		/* Rework this so you return only array of <Food>, then you search for changes and update that */
+		//To co není v array se smaže
+		//to co v array je se updatne
+		//to co v array je navíc, se přidá
 
+		public void CompareAndSave(Food[] comparator) 
+		{
+			try
+			{
+				for (int i = 0; i < database.Menu.Count(); ++i)
+				{
+					var instance = database.Menu.OrderBy(s => s.Id).Skip(i).First();
+					int result = instance.IsIn(comparator);
+					if (result != -1)
+					{
+						database.Entry(instance).State = System.Data.Entity.EntityState.Modified;
+						database.Menu.OrderBy(s => s.Id).Skip(i).First().SetValuesFromInstance(comparator[result]);
+						continue;
+					}
+					else if (result == -1)
+					{
+						database.Menu.Remove(instance);
+						continue;
+					}
+				}
 
-		public void saveMenuData(Food[] arr) {
-            makeDiff(arr);
-            var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
-			foreach (string[] line in data) {				database.Menu.Add(new Food { Path = line[0], Name = line[1] });
+				for (int i = 0; i < comparator.Length; ++i)
+				{
+					if (comparator[i].IsIn(database.Menu.ToArray()) == -1)
+					{
+						database.Menu.Add(comparator[i]);
+					}
+				}
 			}
+			catch (Exception e) { Console.WriteLine(e.ToString()); }
+
 			database.SaveChangesAsync();
+		}
+
+		public void saveMenuData() {
+
+			/* var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
+			 foreach (string[] line in data) {				database.Menu.Add(new Food { Path = line[0], Name = line[1] });
+			 }*/
+			database.SaveChangesAsync();
+		}
+
+		public IQueryable<Food> getWholeTable() {
+			var data = from t in database.Menu select t;
+			return data;
 		}
 
 		public IEnumerable<string> getMenuData(){

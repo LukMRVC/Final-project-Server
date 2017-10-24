@@ -20,6 +20,8 @@ namespace final_project
 
 		private global::Gtk.Button btnSubcategory;
 
+		private global::Gtk.Button btnAddRow;
+
 		private global::Gtk.Button btnDeleteRow;
 
 		private global::Gtk.Label pageLabel1;
@@ -50,7 +52,7 @@ namespace final_project
 			this.hpaned1.CanDefault = true;
 			this.hpaned1.CanFocus = true;
 			this.hpaned1.Name = "hpaned1";
-			this.hpaned1.Position = 1;
+			this.hpaned1.Position = 507;
 			this.hpaned1.BorderWidth = ((uint)(5));
 			// Container child hpaned1.Gtk.Paned+PanedChild
 			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow();
@@ -87,12 +89,23 @@ namespace final_project
 			this.btnSubcategory.CanFocus = true;
 			this.btnSubcategory.Name = "btnSubcategory";
 			this.btnSubcategory.UseUnderline = true;
-			this.btnSubcategory.Label = global::Mono.Unix.Catalog.GetString("Přidat řádek");
+			this.btnSubcategory.Label = global::Mono.Unix.Catalog.GetString("Přidat podkategorii");
 			this.buttonBox.Add(this.btnSubcategory);
 			global::Gtk.ButtonBox.ButtonBoxChild w5 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnSubcategory]));
 			w5.Position = 1;
 			w5.Expand = false;
 			w5.Fill = false;
+			// Container child buttonBox.Gtk.ButtonBox+ButtonBoxChild
+			this.btnAddRow = new global::Gtk.Button();
+			this.btnAddRow.CanFocus = true;
+			this.btnAddRow.Name = "btnAddRow";
+			this.btnAddRow.UseUnderline = true;
+			this.btnAddRow.Label = global::Mono.Unix.Catalog.GetString("Přidat řádek");
+			this.buttonBox.Add(this.btnAddRow);
+			global::Gtk.ButtonBox.ButtonBoxChild w6 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnAddRow]));
+			w6.Position = 2;
+			w6.Expand = false;
+			w6.Fill = false;
 			// Container child buttonBox.Gtk.ButtonBox+ButtonBoxChild
 			this.btnDeleteRow = new global::Gtk.Button();
 			this.btnDeleteRow.CanFocus = true;
@@ -100,14 +113,14 @@ namespace final_project
 			this.btnDeleteRow.UseUnderline = true;
 			this.btnDeleteRow.Label = global::Mono.Unix.Catalog.GetString("Smazat řádek");
 			this.buttonBox.Add(this.btnDeleteRow);
-			global::Gtk.ButtonBox.ButtonBoxChild w6 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnDeleteRow]));
-			w6.Position = 2;
-			w6.Expand = false;
-			w6.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w7 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnDeleteRow]));
+			w7.Position = 3;
+			w7.Expand = false;
+			w7.Fill = false;
 			this.hpaned1.Add(this.buttonBox);
 			this.notebook1.Add(this.hpaned1);
-			global::Gtk.Notebook.NotebookChild w8 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1[this.hpaned1]));
-			w8.TabFill = false;
+			global::Gtk.Notebook.NotebookChild w9 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1[this.hpaned1]));
+			w9.TabFill = false;
 			// Notebook tab
 			this.pageLabel1 = new global::Gtk.Label();
 			this.pageLabel1.CanDefault = true;
@@ -126,10 +139,7 @@ namespace final_project
 			this.DefaultHeight = 519;
 			this.pageLabel1.HasDefault = true;
 			this.Show();
-			this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
-			this.BtnCategory.Clicked += new global::System.EventHandler(this.BtnCategoryClicked);
-			this.btnSubcategory.Clicked += new global::System.EventHandler(this.OnBtnSubcategoryClicked);
-			this.btnDeleteRow.Clicked += new global::System.EventHandler(this.OnBtnDeleteRowClicked);
+			this.btnAddRow.Clicked += new global::System.EventHandler(this.OnBtnAddRowClicked);
 		}
 	}
 }

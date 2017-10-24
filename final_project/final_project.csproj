@@ -96,6 +96,8 @@
     <Compile Include="Model\Food.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Order.cs" />
+    <Compile Include="UI\Dialogs\AddFoodDialog.cs" />
+    <Compile Include="gtk-gui\final_project.AddFoodDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

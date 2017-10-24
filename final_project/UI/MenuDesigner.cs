@@ -14,15 +14,16 @@ namespace final_project
 		private Dictionary<Gtk.TreePath, string> treeModelValues;
 		//values from CSV will be stored here
 		private Dictionary<string, string> rebuildTreeValues;
-        public List<Food> food { get; private set; }
+		private Server server;
+		private List<Food> food;
 
-		public MenuDesigner( IEnumerable<string> csvDdata) :
+		public MenuDesigner( IEnumerable<string> csvDdata, Server serv) :
                 base(Gtk.WindowType.Toplevel)
         {
             this.Build();
-			this.initiliaze();
+			this.initiliaze(serv);
 			this.buildTreeView();
-            food = new List<Food>();
+			this.server = serv;
 			//tries to read and serialize csv file with treeview info to rebuild treeview
 			try
 			{
@@ -36,17 +37,20 @@ namespace final_project
 			}
 
 			appendEventHandlers();
+
         }
 
-		public MenuDesigner() : base(Gtk.WindowType.Toplevel) {
+		public MenuDesigner(Server serv) : base(Gtk.WindowType.Toplevel) {
 			this.Build();
-			this.initiliaze();
+			this.initiliaze(serv);
 			this.buildTreeView();
 			appendEventHandlers();
 
 		}
 
-		private void initiliaze() { 
+		private void initiliaze(Server serv) {
+			this.server = serv;
+			this.food = new List<Food>();
 			tabCaptions = new List<string>();
 			treeModelValues = new Dictionary<Gtk.TreePath, string>();
 
@@ -54,39 +58,42 @@ namespace final_project
 
 		private void buildTreeView() { 
             this.hpaned1.Position = 475;
-			Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
-			categoryColumn.Title = "Jídlo";
+			/*	Gtk.TreeViewColumn categoryColumn = new Gtk.TreeViewColumn();
+				categoryColumn.Title = "Jídlo";
 
-            Gtk.TreeViewColumn compositionColumn = new Gtk.TreeViewColumn();
-			compositionColumn.Title = "Složení";
+				Gtk.TreeViewColumn compositionColumn = new Gtk.TreeViewColumn();
+				compositionColumn.Title = "Složení";
 
-            Gtk.TreeViewColumn weightColumn = new Gtk.TreeViewColumn();
-			weightColumn.Title = "Váha";
+				Gtk.TreeViewColumn weightColumn = new Gtk.TreeViewColumn();
+				weightColumn.Title = "Váha";
 
-            Gtk.TreeViewColumn priceColumn = new Gtk.TreeViewColumn();
-			priceColumn.Title = "Cena";
+				Gtk.TreeViewColumn priceColumn = new Gtk.TreeViewColumn();
+				priceColumn.Title = "Cena";
 
-            Gtk.CellRendererText categoryCellText = new Gtk.CellRendererText();
-			Gtk.CellRendererText compositionCellText = new Gtk.CellRendererText();
-			Gtk.CellRendererText weightCellText = new Gtk.CellRendererText();
-			Gtk.CellRendererText priceCellText = new Gtk.CellRendererText();
+				Gtk.CellRendererText categoryCellText = new Gtk.CellRendererText();
+				Gtk.CellRendererText compositionCellText = new Gtk.CellRendererText();
+				Gtk.CellRendererText weightCellText = new Gtk.CellRendererText();
+				Gtk.CellRendererText priceCellText = new Gtk.CellRendererText();
 
-			categoryColumn.PackStart(categoryCellText, true);
-            compositionColumn.PackStart(compositionCellText, true);
-            weightColumn.PackStart(weightCellText, true);
-            priceColumn.PackStart(priceCellText, true);
+				categoryColumn.PackStart(categoryCellText, true);
+				compositionColumn.PackStart(compositionCellText, true);
+				weightColumn.PackStart(weightCellText, true);
+				priceColumn.PackStart(priceCellText, true);
 
 
-			this.treeview.AppendColumn(categoryColumn);
-            this.treeview.AppendColumn(compositionColumn);
-            this.treeview.AppendColumn(weightColumn);
-            this.treeview.AppendColumn(priceColumn);
+				this.treeview.AppendColumn(categoryColumn);
+				this.treeview.AppendColumn(compositionColumn);
+				this.treeview.AppendColumn(weightColumn);
+				this.treeview.AppendColumn(priceColumn);
 
-			categoryColumn.AddAttribute(categoryCellText, "text", 0);
-			compositionColumn.AddAttribute(compositionCellText, "text", 1);
-			weightColumn.AddAttribute(weightCellText, "text", 2);
-			priceColumn.AddAttribute(priceCellText, "text", 3);
-
+				categoryColumn.AddAttribute(categoryCellText, "text", 0);
+				compositionColumn.AddAttribute(compositionCellText, "text", 1);
+				weightColumn.AddAttribute(weightCellText, "text", 2);
+				priceColumn.AddAttribute(priceCellText, "text", 3);*/
+			this.treeview.AppendColumn(@"Jídlo", new CellRendererText(), "text", 0);
+            this.treeview.AppendColumn(@"Gramáž", new CellRendererText(), "text", 1);
+            this.treeview.AppendColumn(@"Cena", new CellRendererText(), "text", 2);
+            this.treeview.AppendColumn(@"Složení", new CellRendererText(), "text", 3);
 			foodTreeStore = new Gtk.TreeStore(typeof(string), typeof(string), typeof(string), typeof(string));
 
 			this.treeview.Model = foodTreeStore;
@@ -138,6 +145,7 @@ namespace final_project
 			);
 			System.IO.File.WriteAllText(Constants.CSV_FILE_NAME, csv);
 			this.Destroy();
+			this.server.CompareAndSave(food.ToArray());
 			args.RetVal = true;
 		}
 
@@ -145,17 +153,15 @@ namespace final_project
 			Gtk.TreeIter childIter;
 			do
 			{
-                string name = foodTreeStore.GetValue(iter, 0).ToString();
-                //finds equal object to a treeview row and sets it path correctly
-                foreach(Food f in food) { 
-                    if (name == f.Name)
-                    {
-                        f.Path = foodTreeStore.GetPath(iter).ToString();
-                        break;
-                    }
-                }
+				string name = foodTreeStore.GetValue(iter, 0).ToString();
                 treeModelValues.Add(foodTreeStore.GetPath(iter), name);
-
+				Food food = new Food
+				{
+					Name = name,
+					Category = (foodTreeStore.GetValue(iter, 2) == null),
+					Path = foodTreeStore.GetPath(iter).ToString(),
+				};
+				this.food.Add(food);
 				if (foodTreeStore.IterHasChild(iter) )
 				{
 					foodTreeStore.IterChildren(out childIter, iter);
@@ -211,6 +217,39 @@ namespace final_project
 
 		protected void OnBtnSubcategoryClicked(object sender, EventArgs e)
 		{
+			
+			Gtk.TreeIter? node = GetSelectedRow();
+			if (node == null)
+				return;
+			CategoryDialog dlg = new CategoryDialog(this, true);
+			string name = null;
+			if (dlg.Run() == (int)ResponseType.Ok)
+			{
+				name = dlg.name;
+				dlg.Destroy();
+				dlg.Dispose();
+				this.foodTreeStore.AppendValues(node, name);
+                this.treeview.ShowAll();
+			}
+		}
+
+		protected void OnBtnDeleteRowClicked(object sender, EventArgs e)
+		{
+			var dialog = new MessageDialog(this, DialogFlags.Modal, MessageType.Question, ButtonsType.YesNo, "Jste si jistí že chcete smazat vybraný řádek?");
+			if (dialog.Run() == (int)ResponseType.Yes) {				TreeIter? iter = GetSelectedRow();
+				TreeIter node;
+				if (iter.HasValue)
+				{
+					node = iter.Value;
+					this.foodTreeStore.Remove(ref node);
+				}
+			}
+			dialog.Destroy();
+			dialog.Dispose();
+		}
+
+		private TreeIter? GetSelectedRow() 
+		{
 			Gtk.TreePath path;
 			Gtk.TreeIter node;
 			Gtk.TreeViewColumn column;
@@ -221,20 +260,10 @@ namespace final_project
 				message.Run();
 				message.Destroy();
 				message.Dispose();
-				return;
+				return null;
 			}
-			this.foodTreeStore.GetIter(out node, path);
-			CategoryDialog dlg = new CategoryDialog(this, true);
-			string name = null;
-			if (dlg.Run() == (int)ResponseType.Ok)
-			{
-				name = dlg.name;
-				dlg.Destroy();
-				dlg.Dispose();
-                this.foodTreeStore.AppendValues(node, name);
-                food.Add(new Food(name));
-                this.treeview.ShowAll();
-			}
+            this.foodTreeStore.GetIter(out node, path);
+			return node;
 		}
 
 
@@ -245,35 +274,38 @@ namespace final_project
 			if (dlg.Run() == (int)ResponseType.Ok)
 			{
 				name = dlg.name;
+				this.foodTreeStore.AppendValues(name);
+				this.treeview.ShowAll();
+
 			}
-			this.foodTreeStore.AppendValues(name);
-			this.treeview.ShowAll();
 			dlg.Destroy();
 			dlg.Dispose();
 		}
 
-		protected void OnBtnDeleteRowClicked(object sender, EventArgs e)
-		{
-			var dialog = new MessageDialog(this, DialogFlags.Modal, MessageType.Question, ButtonsType.YesNo, "Jste si jistí že chcete smazat vybraný řádek?");
-			if (dialog.Run() == (int)ResponseType.Yes) {				TreePath path;
-				TreeViewColumn column;
-				TreeIter iter;
-				this.treeview.GetCursor(out path, out column);
-				if (path == null)
-				{
-					var message = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Musíte vybrat řádek!");
-					message.Run();
-					message.Destroy();
-					message.Dispose();
-				}
-				else
-				{
-    	            this.foodTreeStore.GetIter(out iter, path);
-	                this.foodTreeStore.Remove(ref iter);
+		/*private void removeFromMenu(string path) {			foreach (Food f in this.server.database.Menu) {				if (f.Path.Substring(path.Length) == path) {
+					this.server.database.Menu.Remove(f);					
 				}
 			}
-			dialog.Destroy();
-			dialog.Dispose();
+		}*/
+
+		protected void OnBtnAddRowClicked(object sender, EventArgs e)
+		{
+			TreeIter? iter = GetSelectedRow();
+			if (iter == null)
+				return;
+			else {
+				var dlg = new AddFoodDialog();
+				if (dlg.Run() == (int)ResponseType.Ok) 
+				{
+					foodTreeStore.AppendValues(iter, dlg.Values);
+					treeview.ShowAll();
+				}
+				dlg.Destroy();
+				dlg.Dispose();
+
+
+			}
+
 		}
 	}
 
