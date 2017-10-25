@@ -60,6 +60,10 @@ namespace final_project.Model
 			modelBuilder.Entity<Order>().HasMany<Food>(o => o.Food).WithMany(f => f.Order).Map(of => {
 				of.ToTable("Order_has_Food");
 			});
+
+			modelBuilder.Entity<Food>().HasMany<Allergen>(o => o.Allergen).WithMany(f => f.Food).Map(of => {
+				of.ToTable("Food_has_Allergen")			
+			});
 		}
 
 

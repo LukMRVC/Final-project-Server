@@ -266,38 +266,18 @@ namespace final_project
 			return node;
 		}
 
-
-		protected void BtnCategoryClicked(object sender, EventArgs e)
-		{
-			CategoryDialog dlg = new CategoryDialog(this, true);
-			string name = null;
-			if (dlg.Run() == (int)ResponseType.Ok)
-			{
-				name = dlg.name;
-				this.foodTreeStore.AppendValues(name);
-				this.treeview.ShowAll();
-
-			}
-			dlg.Destroy();
-			dlg.Dispose();
-		}
-
-		/*private void removeFromMenu(string path) {			foreach (Food f in this.server.database.Menu) {				if (f.Path.Substring(path.Length) == path) {
-					this.server.database.Menu.Remove(f);					
-				}
-			}
-		}*/
-
 		protected void OnBtnAddRowClicked(object sender, EventArgs e)
 		{
 			TreeIter? iter = GetSelectedRow();
+			TreeIter node;
 			if (iter == null)
 				return;
 			else {
 				var dlg = new AddFoodDialog();
+				node = iter.Value;
 				if (dlg.Run() == (int)ResponseType.Ok) 
 				{
-					foodTreeStore.AppendValues(iter, dlg.Values);
+					foodTreeStore.AppendValues(node, dlg.Values.ToArray());
 					treeview.ShowAll();
 				}
 				dlg.Destroy();
@@ -306,6 +286,21 @@ namespace final_project
 
 			}
 
+		}
+
+		protected void OnBtnCategoryClicked(object sender, EventArgs e)
+		{
+			CategoryDialog dlg = new CategoryDialog(this, true);
+			string name = null;
+						if (dlg.Run() == (int)ResponseType.Ok)
+						{
+							name = dlg.name;
+							this.foodTreeStore.AppendValues(name);
+							this.treeview.ShowAll();
+
+			}
+			dlg.Destroy();
+			dlg.Dispose();
 		}
 	}
 

@@ -118,7 +118,7 @@ namespace final_project
 					if (result != -1)
 					{
 						database.Entry(instance).State = System.Data.Entity.EntityState.Modified;
-						database.Menu.OrderBy(s => s.Id).Skip(i).First().SetValuesFromInstance(comparator[result]);
+						database.Menu.OrderBy(s => s.Id).Skip(i).First().SetValues(comparator[result]);
 						continue;
 					}
 					else if (result == -1)

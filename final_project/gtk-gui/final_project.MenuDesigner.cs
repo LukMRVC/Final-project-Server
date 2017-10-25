@@ -100,7 +100,7 @@ namespace final_project
 			this.btnAddRow.CanFocus = true;
 			this.btnAddRow.Name = "btnAddRow";
 			this.btnAddRow.UseUnderline = true;
-			this.btnAddRow.Label = global::Mono.Unix.Catalog.GetString("Přidat řádek");
+			this.btnAddRow.Label = global::Mono.Unix.Catalog.GetString("Přidat Jídlo");
 			this.buttonBox.Add(this.btnAddRow);
 			global::Gtk.ButtonBox.ButtonBoxChild w6 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.buttonBox[this.btnAddRow]));
 			w6.Position = 2;
@@ -139,7 +139,10 @@ namespace final_project
 			this.DefaultHeight = 519;
 			this.pageLabel1.HasDefault = true;
 			this.Show();
+			this.BtnCategory.Clicked += new global::System.EventHandler(this.OnBtnCategoryClicked);
+			this.btnSubcategory.Clicked += new global::System.EventHandler(this.OnBtnSubcategoryClicked);
 			this.btnAddRow.Clicked += new global::System.EventHandler(this.OnBtnAddRowClicked);
+			this.btnDeleteRow.Clicked += new global::System.EventHandler(this.OnBtnDeleteRowClicked);
 		}
 	}
 }

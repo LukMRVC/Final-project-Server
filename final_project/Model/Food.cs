@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 namespace final_project.Model
 {
@@ -15,9 +15,28 @@ namespace final_project.Model
         {
             this.Name = name;
             this.Order = new HashSet<Order>();
-        }
+            this.Allergen = new HashSet<Allergen>();
+		}
 
-		public void SetValuesFromInstance(Food instance) {
+		public void setValues(string[] values) 
+		{
+			this.Name = values[0];
+			bool.TryParse(values[1], out this.Category); 
+			this.Path = values[2];
+			decimal.TryParse(values[3], out this.Price);
+			int.TryParse(values[4], out this.Gram);
+			int.TryParse(values[5], out this.EnergyKj);
+			int.TryParse(values[6], out this.EnergyKcal);
+			decimal.TryParse(values[7], out this.Protein);
+			decimal.TryParse(values[8], out this.TotalFat);
+			decimal.TryParse(values[9], out this.SaturatedFat);
+			decimal.TryParse(values[10], out this.Carbohydrates);
+			decimal.TryParse(values[11], out this.Sugar);
+			decimal.TryParse(values[12], out this.Salt);
+			decimal.TryParse(values[13], out this.Fiber);
+		}
+
+		public void SetValues(Food instance) {
 			this.Name = instance.Name;
 			this.Category = instance.Category;
 			this.Path = instance.Path;
@@ -65,5 +84,9 @@ namespace final_project.Model
 
 		public ICollection<Order> Order { get; set; }
 
+		public ICollection<Allergen> Allergen { get; set; }
+
 	}
+
+	
 }
