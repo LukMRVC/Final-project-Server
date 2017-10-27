@@ -1,8 +1,4 @@
-0;Snídaně;
-0:0;Hamburgy;
-0:1;Hranolky;
-0:2;Vajíčka;
-0:2:0;Vajíčka s párkem;
-1;Večeře;
-2;Obědy;
-3;Sezonní nabídka;
+0;Snídaně;0;0;;True;0;0;0;0;0;0;0;0;0;
+1;Obědy;0;0;;True;0;0;0;0;0;0;0;0;0;
+2;Večeře;0;0;;True;0;0;0;0;0;0;0;0;0;
+0:0;Vajíčak;150;50;Vajca;False;0;0;0;0;0;0;0;0;0;

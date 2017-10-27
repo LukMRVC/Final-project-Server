@@ -52,7 +52,7 @@ namespace final_project
 			this.hpaned1.CanDefault = true;
 			this.hpaned1.CanFocus = true;
 			this.hpaned1.Name = "hpaned1";
-			this.hpaned1.Position = 507;
+			this.hpaned1.Position = 1;
 			this.hpaned1.BorderWidth = ((uint)(5));
 			// Container child hpaned1.Gtk.Paned+PanedChild
 			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow();
@@ -139,6 +139,7 @@ namespace final_project
 			this.DefaultHeight = 519;
 			this.pageLabel1.HasDefault = true;
 			this.Show();
+			this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 			this.BtnCategory.Clicked += new global::System.EventHandler(this.OnBtnCategoryClicked);
 			this.btnSubcategory.Clicked += new global::System.EventHandler(this.OnBtnSubcategoryClicked);
 			this.btnAddRow.Clicked += new global::System.EventHandler(this.OnBtnAddRowClicked);

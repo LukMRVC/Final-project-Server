@@ -50,6 +50,7 @@ namespace final_project
 			}
 			catch (Exception) {				connect();
 			}
+		
 
 			win.Show();
 
@@ -149,19 +150,8 @@ namespace final_project
 			database.SaveChangesAsync();
 		}
 
-		public IQueryable<Food> getWholeTable() {
-			var data = from t in database.Menu select t;
-			return data;
-		}
-
-		public IEnumerable<string> getMenuData(){
-			var data = from f in database.Menu.AsEnumerable() select new { f.Path, f.Name }.ToString();
-			/*try
-			{
-							}
-			catch (Exception)
-			{
-				throw new DatabaseNotConnectedException("No database connection found!");			}*/
+		public IEnumerable<Food> getMenuData() {
+			var data = (from t in database.Menu select t).AsEnumerable();
 			return data;
 		}
 

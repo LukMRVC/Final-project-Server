@@ -26,45 +26,13 @@ public partial class MainWindow : Gtk.Window
 	}
 
 	private void buildNodeView() {
-	/*	Gtk.TreeViewColumn IdColumn = new Gtk.TreeViewColumn();
-		IdColumn.Title = @"Id objednávky ";
-
-        Gtk.TreeViewColumn UserColumn = new Gtk.TreeViewColumn();
-		UserColumn.Title = @"Uživatel ";
-
-        Gtk.TreeViewColumn OrderColumn = new Gtk.TreeViewColumn();
-		OrderColumn.Title = @"Objednávka";
-
-		Gtk.CellRendererText IdCellText = new Gtk.CellRendererText();
-		Gtk.CellRendererText UserCellText = new Gtk.CellRendererText();
-		Gtk.CellRendererText OrderCellText = new Gtk.CellRendererText();
-
-		IdColumn.PackStart(IdCellText, true);
-		UserColumn.PackStart(UserCellText, true);
-		OrderColumn.PackStart(OrderCellText, true);
-
-		nodeview.AppendColumn(IdColumn);
-		nodeview.AppendColumn(UserColumn);
-		nodeview.AppendColumn(OrderColumn);
-
-		IdColumn.AddAttribute(IdCellText, "text", 0);
-		UserColumn.AddAttribute(UserCellText, "text", 1);
-		OrderColumn.AddAttribute(OrderCellText, "text", 2);
-
-		ListStore store = new ListStore(typeof(int), typeof(string), typeof(string));
-				   */
-       // this.nodeview.Model = store;		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
+		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
         this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);
         this.nodeview.AppendColumn(@"Objednávka", new CellRendererText(), "text", 2);
 		ListStore store = new ListStore(typeof(int), typeof(string), typeof(string));
 		this.nodeview.Model = store;
         this.nodeview.ShowAll();
-
-
-		
 	}
-
-
 
 	/*private void addCategory(object sender, EventArgs e)
 	{
@@ -118,7 +86,7 @@ public partial class MainWindow : Gtk.Window
 			{
 				designer = new MenuDesigner(this.server.getMenuData(), this.server);
 			}
-			catch (DatabaseNotConnectedException)
+			catch (Exception)
 			{
 				//new dialog comes here
 				var dlg = new MenuDesignerWarningDialog();

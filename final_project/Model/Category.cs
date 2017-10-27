@@ -13,6 +13,6 @@ namespace final_project.Model
 
 		public string Path { get; set; }
 
-		public bool IsSubCategory { get; set; }
+		public int ParentId { get; set; }
 	}
 }

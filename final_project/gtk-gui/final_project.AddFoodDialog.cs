@@ -20,23 +20,23 @@ namespace final_project
 
 		private global::Gtk.Label Alergeny;
 
-		private global::Gtk.Entry entry1;
+		private global::Gtk.Entry EntryCarbs;
 
-		private global::Gtk.Entry entry2;
+		private global::Gtk.Entry EntryEnergyKcal;
 
-		private global::Gtk.Entry entry3;
+		private global::Gtk.Entry EntryEnergyKj;
 
-		private global::Gtk.Entry entry4;
+		private global::Gtk.Entry EntryFiber;
 
-		private global::Gtk.Entry entry5;
+		private global::Gtk.Entry EntryProtein;
 
-		private global::Gtk.Entry entry6;
+		private global::Gtk.Entry EntrySalt;
 
-		private global::Gtk.Entry entry7;
+		private global::Gtk.Entry EntrySaturatedFat;
 
-		private global::Gtk.Entry entry8;
+		private global::Gtk.Entry EntrySugar;
 
-		private global::Gtk.Entry entry9;
+		private global::Gtk.Entry EntryTotalFat;
 
 		private global::Gtk.Label label1;
 
@@ -192,25 +192,27 @@ namespace final_project
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry1 = new global::Gtk.Entry();
-			this.entry1.CanFocus = true;
-			this.entry1.Name = "entry1";
-			this.entry1.IsEditable = true;
-			this.entry1.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry1);
-			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry1]));
+			this.EntryCarbs = new global::Gtk.Entry();
+			this.EntryCarbs.CanFocus = true;
+			this.EntryCarbs.Name = "EntryCarbs";
+			this.EntryCarbs.IsEditable = true;
+			this.EntryCarbs.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntryCarbs);
+			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntryCarbs]));
+			w7.TopAttach = ((uint)(3));
+			w7.BottomAttach = ((uint)(4));
 			w7.LeftAttach = ((uint)(1));
 			w7.RightAttach = ((uint)(2));
 			w7.XOptions = ((global::Gtk.AttachOptions)(4));
 			w7.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry2 = new global::Gtk.Entry();
-			this.entry2.CanFocus = true;
-			this.entry2.Name = "entry2";
-			this.entry2.IsEditable = true;
-			this.entry2.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry2);
-			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry2]));
+			this.EntryEnergyKcal = new global::Gtk.Entry();
+			this.EntryEnergyKcal.CanFocus = true;
+			this.EntryEnergyKcal.Name = "EntryEnergyKcal";
+			this.EntryEnergyKcal.IsEditable = true;
+			this.EntryEnergyKcal.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntryEnergyKcal);
+			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntryEnergyKcal]));
 			w8.TopAttach = ((uint)(1));
 			w8.BottomAttach = ((uint)(2));
 			w8.LeftAttach = ((uint)(1));
@@ -218,69 +220,67 @@ namespace final_project
 			w8.XOptions = ((global::Gtk.AttachOptions)(4));
 			w8.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry3 = new global::Gtk.Entry();
-			this.entry3.CanFocus = true;
-			this.entry3.Name = "entry3";
-			this.entry3.IsEditable = true;
-			this.entry3.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry3);
-			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry3]));
-			w9.TopAttach = ((uint)(2));
-			w9.BottomAttach = ((uint)(3));
+			this.EntryEnergyKj = new global::Gtk.Entry();
+			this.EntryEnergyKj.CanFocus = true;
+			this.EntryEnergyKj.Name = "EntryEnergyKj";
+			this.EntryEnergyKj.IsEditable = true;
+			this.EntryEnergyKj.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntryEnergyKj);
+			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntryEnergyKj]));
 			w9.LeftAttach = ((uint)(1));
 			w9.RightAttach = ((uint)(2));
 			w9.XOptions = ((global::Gtk.AttachOptions)(4));
 			w9.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry4 = new global::Gtk.Entry();
-			this.entry4.CanFocus = true;
-			this.entry4.Name = "entry4";
-			this.entry4.IsEditable = true;
-			this.entry4.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry4);
-			global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry4]));
-			w10.TopAttach = ((uint)(3));
-			w10.BottomAttach = ((uint)(4));
+			this.EntryFiber = new global::Gtk.Entry();
+			this.EntryFiber.CanFocus = true;
+			this.EntryFiber.Name = "EntryFiber";
+			this.EntryFiber.IsEditable = true;
+			this.EntryFiber.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntryFiber);
+			global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntryFiber]));
+			w10.TopAttach = ((uint)(7));
+			w10.BottomAttach = ((uint)(8));
 			w10.LeftAttach = ((uint)(1));
 			w10.RightAttach = ((uint)(2));
 			w10.XOptions = ((global::Gtk.AttachOptions)(4));
 			w10.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry5 = new global::Gtk.Entry();
-			this.entry5.CanFocus = true;
-			this.entry5.Name = "entry5";
-			this.entry5.IsEditable = true;
-			this.entry5.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry5);
-			global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry5]));
-			w11.TopAttach = ((uint)(4));
-			w11.BottomAttach = ((uint)(5));
+			this.EntryProtein = new global::Gtk.Entry();
+			this.EntryProtein.CanFocus = true;
+			this.EntryProtein.Name = "EntryProtein";
+			this.EntryProtein.IsEditable = true;
+			this.EntryProtein.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntryProtein);
+			global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntryProtein]));
+			w11.TopAttach = ((uint)(2));
+			w11.BottomAttach = ((uint)(3));
 			w11.LeftAttach = ((uint)(1));
 			w11.RightAttach = ((uint)(2));
 			w11.XOptions = ((global::Gtk.AttachOptions)(4));
 			w11.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry6 = new global::Gtk.Entry();
-			this.entry6.CanFocus = true;
-			this.entry6.Name = "entry6";
-			this.entry6.IsEditable = true;
-			this.entry6.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry6);
-			global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry6]));
-			w12.TopAttach = ((uint)(5));
-			w12.BottomAttach = ((uint)(6));
+			this.EntrySalt = new global::Gtk.Entry();
+			this.EntrySalt.CanFocus = true;
+			this.EntrySalt.Name = "EntrySalt";
+			this.EntrySalt.IsEditable = true;
+			this.EntrySalt.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntrySalt);
+			global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntrySalt]));
+			w12.TopAttach = ((uint)(8));
+			w12.BottomAttach = ((uint)(9));
 			w12.LeftAttach = ((uint)(1));
 			w12.RightAttach = ((uint)(2));
 			w12.XOptions = ((global::Gtk.AttachOptions)(4));
 			w12.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry7 = new global::Gtk.Entry();
-			this.entry7.CanFocus = true;
-			this.entry7.Name = "entry7";
-			this.entry7.IsEditable = true;
-			this.entry7.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry7);
-			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry7]));
+			this.EntrySaturatedFat = new global::Gtk.Entry();
+			this.EntrySaturatedFat.CanFocus = true;
+			this.EntrySaturatedFat.Name = "EntrySaturatedFat";
+			this.EntrySaturatedFat.IsEditable = true;
+			this.EntrySaturatedFat.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntrySaturatedFat);
+			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntrySaturatedFat]));
 			w13.TopAttach = ((uint)(6));
 			w13.BottomAttach = ((uint)(7));
 			w13.LeftAttach = ((uint)(1));
@@ -288,29 +288,29 @@ namespace final_project
 			w13.XOptions = ((global::Gtk.AttachOptions)(4));
 			w13.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry8 = new global::Gtk.Entry();
-			this.entry8.CanFocus = true;
-			this.entry8.Name = "entry8";
-			this.entry8.IsEditable = true;
-			this.entry8.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry8);
-			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry8]));
-			w14.TopAttach = ((uint)(7));
-			w14.BottomAttach = ((uint)(8));
+			this.EntrySugar = new global::Gtk.Entry();
+			this.EntrySugar.CanFocus = true;
+			this.EntrySugar.Name = "EntrySugar";
+			this.EntrySugar.IsEditable = true;
+			this.EntrySugar.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntrySugar);
+			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntrySugar]));
+			w14.TopAttach = ((uint)(4));
+			w14.BottomAttach = ((uint)(5));
 			w14.LeftAttach = ((uint)(1));
 			w14.RightAttach = ((uint)(2));
 			w14.XOptions = ((global::Gtk.AttachOptions)(4));
 			w14.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.entry9 = new global::Gtk.Entry();
-			this.entry9.CanFocus = true;
-			this.entry9.Name = "entry9";
-			this.entry9.IsEditable = true;
-			this.entry9.InvisibleChar = '●';
-			this.ExpandedTable.Add(this.entry9);
-			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.entry9]));
-			w15.TopAttach = ((uint)(8));
-			w15.BottomAttach = ((uint)(9));
+			this.EntryTotalFat = new global::Gtk.Entry();
+			this.EntryTotalFat.CanFocus = true;
+			this.EntryTotalFat.Name = "EntryTotalFat";
+			this.EntryTotalFat.IsEditable = true;
+			this.EntryTotalFat.InvisibleChar = '●';
+			this.ExpandedTable.Add(this.EntryTotalFat);
+			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.EntryTotalFat]));
+			w15.TopAttach = ((uint)(5));
+			w15.BottomAttach = ((uint)(6));
 			w15.LeftAttach = ((uint)(1));
 			w15.RightAttach = ((uint)(2));
 			w15.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -687,10 +687,12 @@ namespace final_project
 			{
 				this.Child.ShowAll();
 			}
-			this.DefaultWidth = 434;
-			this.DefaultHeight = 265;
+			this.DefaultWidth = 899;
+			this.DefaultHeight = 615;
 			this.Show();
+			this.buttonCancel.Clicked += new global::System.EventHandler(this.OnButtonCancelClicked);
 			this.buttonOk.Clicked += new global::System.EventHandler(this.OnButtonOkClicked);
+			this.buttonOk.Pressed += new global::System.EventHandler(this.Check);
 		}
 	}
 }

@@ -24,14 +24,19 @@ namespace final_project.Model
 					break;
 				}
 			}
-
+			string values = "";
+			foreach (string allergen in Constants.Allergenes) 
+			{
+				values += "('" +allergen + "'),";
+			}
+			values = values.Remove(values.Length - 1);
 			context.Database.ExecuteSqlCommand("ALTER DATABASE " + dbName + " COLLATE utf8_czech_ci");
 			context.Database.ExecuteSqlCommand("ALTER TABLE order_has_food CONVERT TO CHARACTER SET utf8 COLLATE utf8_czech_ci");
 			context.Database.ExecuteSqlCommand("ALTER TABLE menu CONVERT TO CHARACTER SET utf8 COLLATE utf8_czech_ci");
 			context.Database.ExecuteSqlCommand("ALTER TABLE users CONVERT TO CHARACTER SET utf8 COLLATE utf8_czech_ci");
 			context.Database.ExecuteSqlCommand("ALTER TABLE orders CONVERT TO CHARACTER SET utf8 COLLATE utf8_czech_ci");
-
-
+			context.Database.ExecuteSqlCommand("ALTER TABLE allergenes CONVERT TO CHARACTER SET utf8 COLLATE utf8_czech_ci");
+			context.Database.ExecuteSqlCommand("INSERT INTO allergenes (name) VALUES" +values) ;
 			base.Seed(context);
 		}
 	}
@@ -46,6 +51,8 @@ namespace final_project.Model
 		public DbSet<Order> Orders { get; set; }
 
 		public DbSet<User> Users { get; set; }
+
+		public DbSet<Allergen> Allergens { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -62,8 +69,10 @@ namespace final_project.Model
 			});
 
 			modelBuilder.Entity<Food>().HasMany<Allergen>(o => o.Allergen).WithMany(f => f.Food).Map(of => {
-				of.ToTable("Food_has_Allergen")			
+				of.ToTable("Food_has_Allergen");			
 			});
+
+
 		}
 
 
