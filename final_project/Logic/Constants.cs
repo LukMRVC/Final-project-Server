@@ -49,5 +49,22 @@ namespace final_project
 			}
 			return result;
 		}
+
+		public static int UsefulLength(this int[] arr) {
+			int length = 0;
+			for (int i = 0; i < arr.Length; ++i) {
+				if (arr[i] != 0)
+					++length;
+			}
+			return length;
+		}
+
+		public static Allergen[] GetAllergenes(this IEnumerable<Allergen> enumerable, int[] indices) {
+			Allergen[] arr = new Allergen[indices.UsefulLength()];
+			for (int i = 0; i < arr.Length; ++i) {
+				arr[i] = enumerable.ElementAt( (indices[i] -1 ) );
+			}
+			return arr;
+		}
 	}
 }

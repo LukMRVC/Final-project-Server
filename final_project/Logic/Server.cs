@@ -26,7 +26,7 @@ namespace final_project
 		private static HttpListener listener;
 		public MenuDbContext database;
 		public bool isConnected { get; private set; }
-
+		private IEnumerable<Food> f;
 		public Server() 
 		{
 			try
@@ -50,7 +50,6 @@ namespace final_project
 			}
 			catch (Exception) {				connect();
 			}
-		
 
 			win.Show();
 
@@ -150,9 +149,18 @@ namespace final_project
 			database.SaveChangesAsync();
 		}
 
-		public IEnumerable<Food> getMenuData() {
-			var data = (from t in database.Menu select t).AsEnumerable();
+		public IEnumerable<Food> getMenuData() 
+		{
+			var data = (from Food in database.Menu.ToList() select Food);
 			return data;
+		}
+
+		public int[] GetAllergenes(int foodId) 
+		{
+			var query = this.database.Database.SqlQuery<string>("SELECT Allergen_Id FROM food_has_allergen WHERE Food_Id=" + foodId);
+			var list = query.ToList();
+			var w = list.Select(Int32.Parse).ToArray();
+			return w;
 		}
 
 		//starts HTTPListener on port 8080, responses are handled asynchronously in a static method

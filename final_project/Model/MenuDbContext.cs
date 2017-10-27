@@ -52,7 +52,7 @@ namespace final_project.Model
 
 		public DbSet<User> Users { get; set; }
 
-		public DbSet<Allergen> Allergens { get; set; }
+		public DbSet<Allergen> Allergenes { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{

@@ -17,6 +17,7 @@ namespace final_project
 		private List<Food> food;
 		private List<Food> distinct;
 
+		//DB data constructor
 		public MenuDesigner(IEnumerable<Food> menuData, Server serv) :
 								base(Gtk.WindowType.Toplevel)
 		{
@@ -24,8 +25,10 @@ namespace final_project
 			this.initiliaze(serv);
 			this.buildTreeView();
 			this.server = serv;
+			var alg = this.server.database.Allergenes.ToList();
 			foreach (var f in menuData) 
 			{
+				f.SetAllergenes(alg.GetAllergenes(this.server.GetAllergenes(f.Id)));
 				food.Add(f);
 			}
 			rebuildTreeValues = menuData.Select(o => o.toCsvString()).Select(s => s.Split(';')).ToDictionary(s => s[0], s => s.SubArray(1, s.Length));
@@ -33,7 +36,7 @@ namespace final_project
 			appendEventHandlers();		
 		}
 
-
+		//CSV constructor
 		public MenuDesigner(IEnumerable<string> menuData, Server serv) :
 		                base(Gtk.WindowType.Toplevel)
 		        {
@@ -41,13 +44,24 @@ namespace final_project
 			this.initiliaze(serv);
 			this.buildTreeView();
 			this.server = serv;
+			var alg = this.server.database.Allergenes.AsEnumerable();
 			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray()) {
-				food.Add(new Food(arr));
+				Food f = new Food(arr);
+				try
+				{					var indices = arr[arr.Length - 2].Split(',').Select(Int32.Parse).ToArray();
+					f.SetAllergenes(alg.GetAllergenes(indices));
+				}
+				catch (Exception)
+				{
+				}
+				finally {					food.Add(f);
+				}
 			}
 			rebuildTreeValues = menuData.Select(line => line.Split(';')).ToDictionary(line => line[0], line => line.SubArray(1, line.Length));
 			rebuildTree();
 			appendEventHandlers();   		}
 
+		//Plain Constructor
 		public MenuDesigner(Server serv) : base(Gtk.WindowType.Toplevel) {
 			this.Build();
 			this.initiliaze(serv);
@@ -113,7 +127,7 @@ namespace final_project
 			{
 				String csv = String.Join(
 					Environment.NewLine,
-					food.Select(d => d.toCsvString())
+					food.Select(d =>  d.toCsvString() + d.GetAllergenIdsString() + ";")
 				);
 				System.IO.File.WriteAllText(Constants.CSV_FILE_NAME, csv);
 				
@@ -280,6 +294,8 @@ namespace final_project
 				{
 					Food fd = new Food();
 					fd.SetValues(dlg.Values);
+					var alg =  this.server.database.Allergenes.AsEnumerable();
+					fd.SetAllergenes(alg.GetAllergenes(dlg.Allergenes));
 					food.Add(fd);
 					foodTreeStore.AppendValues(node, dlg.Values.ToArray().SubArray(1, 5));
 					treeview.ShowAll();

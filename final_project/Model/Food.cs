@@ -24,6 +24,7 @@ namespace final_project.Model
             this.Order = new HashSet<Order>();
             this.Allergen = new HashSet<Allergen>();
 			SetValues(values);
+
 		}
 
 		public void SetValues(string[] values) 
@@ -58,6 +59,12 @@ namespace final_project.Model
 			this.Salt = dec;
 			decimal.TryParse(values[14], out dec);
 			this.Fiber = dec;
+		}
+
+		public void SetAllergenes(Allergen[] allergenes) {
+			foreach (Allergen a in allergenes) {
+				this.Allergen.Add(a);
+			}
 		}
 
 		public string[] toStringArray() 
@@ -132,6 +139,32 @@ namespace final_project.Model
 		public string toCsvString() 
 		{
 			return string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14};", Path, Name, Gram, Price, Composition, Category, EnergyKj, EnergyKcal, Protein, Carbohydrates, Sugar, TotalFat, SaturatedFat, Fiber, Salt);
+		}
+
+		public int[] GetAllergenIds() 
+		{
+			List<int> list = new List<int>();
+			foreach (Allergen a in Allergen) 
+			{
+				list.Add(a.Id);
+			}
+			return list.ToArray();
+
+		}
+
+		public string GetAllergenIdsString()
+		{
+			string str = "";
+			bool rmv = false;
+			foreach (Allergen a in Allergen)
+			{
+				rmv = true;
+				str += a.Id + ",";
+			}
+			if(rmv)
+				return str.Remove(str.Length - 1);
+			return str;			
+
 		}
 
 	}

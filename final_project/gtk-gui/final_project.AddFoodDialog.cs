@@ -38,25 +38,7 @@ namespace final_project
 
 		private global::Gtk.Entry EntryTotalFat;
 
-		private global::Gtk.Label label1;
-
-		private global::Gtk.Label label10;
-
-		private global::Gtk.Label label11;
-
-		private global::Gtk.Label label12;
-
-		private global::Gtk.Label label13;
-
-		private global::Gtk.Label label2;
-
-		private global::Gtk.Label label3;
-
-		private global::Gtk.Label label4;
-
-		private global::Gtk.Label label9;
-
-		private global::Gtk.Table table3;
+		private global::Gtk.Table CheckBoxesTable;
 
 		private global::Gtk.CheckButton checkbutton1;
 
@@ -85,6 +67,24 @@ namespace final_project
 		private global::Gtk.CheckButton checkbutton8;
 
 		private global::Gtk.CheckButton checkbutton9;
+
+		private global::Gtk.Label label1;
+
+		private global::Gtk.Label label10;
+
+		private global::Gtk.Label label11;
+
+		private global::Gtk.Label label12;
+
+		private global::Gtk.Label label13;
+
+		private global::Gtk.Label label2;
+
+		private global::Gtk.Label label3;
+
+		private global::Gtk.Label label4;
+
+		private global::Gtk.Label label9;
 
 		private global::Gtk.Label ExpanderLabel;
 
@@ -176,6 +176,7 @@ namespace final_project
 			this.Expander = new global::Gtk.Expander(null);
 			this.Expander.CanFocus = true;
 			this.Expander.Name = "Expander";
+			this.Expander.Expanded = true;
 			// Container child Expander.Gtk.Container+ContainerChild
 			this.ExpandedTable = new global::Gtk.Table(((uint)(10)), ((uint)(2)), false);
 			this.ExpandedTable.Name = "ExpandedTable";
@@ -316,283 +317,283 @@ namespace final_project
 			w15.XOptions = ((global::Gtk.AttachOptions)(4));
 			w15.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label1 = new global::Gtk.Label();
-			this.label1.Name = "label1";
-			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString("Energetická hodnota (kJ):");
-			this.ExpandedTable.Add(this.label1);
-			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label1]));
-			w16.XOptions = ((global::Gtk.AttachOptions)(4));
-			w16.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label10 = new global::Gtk.Label();
-			this.label10.Name = "label10";
-			this.label10.LabelProp = global::Mono.Unix.Catalog.GetString("Tuky:");
-			this.ExpandedTable.Add(this.label10);
-			global::Gtk.Table.TableChild w17 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label10]));
-			w17.TopAttach = ((uint)(5));
-			w17.BottomAttach = ((uint)(6));
-			w17.XOptions = ((global::Gtk.AttachOptions)(4));
-			w17.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label11 = new global::Gtk.Label();
-			this.label11.Name = "label11";
-			this.label11.LabelProp = global::Mono.Unix.Catalog.GetString("Z toho nas. mastné kyseliny:");
-			this.ExpandedTable.Add(this.label11);
-			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label11]));
-			w18.TopAttach = ((uint)(6));
-			w18.BottomAttach = ((uint)(7));
-			w18.XOptions = ((global::Gtk.AttachOptions)(4));
-			w18.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label12 = new global::Gtk.Label();
-			this.label12.Name = "label12";
-			this.label12.LabelProp = global::Mono.Unix.Catalog.GetString("Vláknina:");
-			this.ExpandedTable.Add(this.label12);
-			global::Gtk.Table.TableChild w19 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label12]));
-			w19.TopAttach = ((uint)(7));
-			w19.BottomAttach = ((uint)(8));
-			w19.XOptions = ((global::Gtk.AttachOptions)(4));
-			w19.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label13 = new global::Gtk.Label();
-			this.label13.Name = "label13";
-			this.label13.LabelProp = global::Mono.Unix.Catalog.GetString("Sůl:");
-			this.ExpandedTable.Add(this.label13);
-			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label13]));
-			w20.TopAttach = ((uint)(8));
-			w20.BottomAttach = ((uint)(9));
-			w20.XOptions = ((global::Gtk.AttachOptions)(4));
-			w20.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label2 = new global::Gtk.Label();
-			this.label2.Name = "label2";
-			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString("Energetická hodnota (kcal):");
-			this.ExpandedTable.Add(this.label2);
-			global::Gtk.Table.TableChild w21 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label2]));
-			w21.TopAttach = ((uint)(1));
-			w21.BottomAttach = ((uint)(2));
-			w21.XOptions = ((global::Gtk.AttachOptions)(4));
-			w21.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label3 = new global::Gtk.Label();
-			this.label3.Name = "label3";
-			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString("Bílkoviny");
-			this.ExpandedTable.Add(this.label3);
-			global::Gtk.Table.TableChild w22 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label3]));
-			w22.TopAttach = ((uint)(2));
-			w22.BottomAttach = ((uint)(3));
-			w22.XOptions = ((global::Gtk.AttachOptions)(4));
-			w22.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label4 = new global::Gtk.Label();
-			this.label4.Name = "label4";
-			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString("Sacharidy");
-			this.ExpandedTable.Add(this.label4);
-			global::Gtk.Table.TableChild w23 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label4]));
-			w23.TopAttach = ((uint)(3));
-			w23.BottomAttach = ((uint)(4));
-			w23.XOptions = ((global::Gtk.AttachOptions)(4));
-			w23.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.label9 = new global::Gtk.Label();
-			this.label9.Name = "label9";
-			this.label9.LabelProp = global::Mono.Unix.Catalog.GetString("Z toho cukry:");
-			this.ExpandedTable.Add(this.label9);
-			global::Gtk.Table.TableChild w24 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label9]));
-			w24.TopAttach = ((uint)(4));
-			w24.BottomAttach = ((uint)(5));
-			w24.XPadding = ((uint)(3));
-			w24.XOptions = ((global::Gtk.AttachOptions)(4));
-			w24.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child ExpandedTable.Gtk.Table+TableChild
-			this.table3 = new global::Gtk.Table(((uint)(2)), ((uint)(7)), false);
-			this.table3.Name = "table3";
-			this.table3.RowSpacing = ((uint)(6));
-			this.table3.ColumnSpacing = ((uint)(6));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable = new global::Gtk.Table(((uint)(2)), ((uint)(7)), false);
+			this.CheckBoxesTable.Name = "CheckBoxesTable";
+			this.CheckBoxesTable.RowSpacing = ((uint)(6));
+			this.CheckBoxesTable.ColumnSpacing = ((uint)(6));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton1 = new global::Gtk.CheckButton();
 			this.checkbutton1.CanFocus = true;
 			this.checkbutton1.Name = "checkbutton1";
 			this.checkbutton1.Label = global::Mono.Unix.Catalog.GetString("Lepek");
 			this.checkbutton1.DrawIndicator = true;
 			this.checkbutton1.UseUnderline = true;
-			this.table3.Add(this.checkbutton1);
-			global::Gtk.Table.TableChild w25 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton1]));
-			w25.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton1);
+			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton1]));
+			w16.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton10 = new global::Gtk.CheckButton();
 			this.checkbutton10.CanFocus = true;
 			this.checkbutton10.Name = "checkbutton10";
-			this.checkbutton10.Label = global::Mono.Unix.Catalog.GetString("Oxid siřičitý a siřičitany");
+			this.checkbutton10.Label = global::Mono.Unix.Catalog.GetString("Hořčice");
 			this.checkbutton10.DrawIndicator = true;
 			this.checkbutton10.UseUnderline = true;
-			this.table3.Add(this.checkbutton10);
-			global::Gtk.Table.TableChild w26 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton10]));
-			w26.TopAttach = ((uint)(1));
-			w26.BottomAttach = ((uint)(2));
-			w26.LeftAttach = ((uint)(4));
-			w26.RightAttach = ((uint)(5));
-			w26.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton10);
+			global::Gtk.Table.TableChild w17 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton10]));
+			w17.TopAttach = ((uint)(1));
+			w17.BottomAttach = ((uint)(2));
+			w17.LeftAttach = ((uint)(2));
+			w17.RightAttach = ((uint)(3));
+			w17.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton11 = new global::Gtk.CheckButton();
 			this.checkbutton11.CanFocus = true;
 			this.checkbutton11.Name = "checkbutton11";
-			this.checkbutton11.Label = global::Mono.Unix.Catalog.GetString("Vlčí bob");
+			this.checkbutton11.Label = global::Mono.Unix.Catalog.GetString("Sezamové semena");
 			this.checkbutton11.DrawIndicator = true;
 			this.checkbutton11.UseUnderline = true;
-			this.table3.Add(this.checkbutton11);
-			global::Gtk.Table.TableChild w27 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton11]));
-			w27.TopAttach = ((uint)(1));
-			w27.BottomAttach = ((uint)(2));
-			w27.LeftAttach = ((uint)(5));
-			w27.RightAttach = ((uint)(6));
-			w27.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton11);
+			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton11]));
+			w18.TopAttach = ((uint)(1));
+			w18.BottomAttach = ((uint)(2));
+			w18.LeftAttach = ((uint)(3));
+			w18.RightAttach = ((uint)(4));
+			w18.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton12 = new global::Gtk.CheckButton();
 			this.checkbutton12.CanFocus = true;
 			this.checkbutton12.Name = "checkbutton12";
-			this.checkbutton12.Label = global::Mono.Unix.Catalog.GetString("Měkkýši");
+			this.checkbutton12.Label = global::Mono.Unix.Catalog.GetString("Oxid siřičitý a siřičitany");
 			this.checkbutton12.DrawIndicator = true;
 			this.checkbutton12.UseUnderline = true;
-			this.table3.Add(this.checkbutton12);
-			global::Gtk.Table.TableChild w28 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton12]));
-			w28.TopAttach = ((uint)(1));
-			w28.BottomAttach = ((uint)(2));
-			w28.LeftAttach = ((uint)(6));
-			w28.RightAttach = ((uint)(7));
-			w28.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton12);
+			global::Gtk.Table.TableChild w19 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton12]));
+			w19.TopAttach = ((uint)(1));
+			w19.BottomAttach = ((uint)(2));
+			w19.LeftAttach = ((uint)(4));
+			w19.RightAttach = ((uint)(5));
+			w19.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton13 = new global::Gtk.CheckButton();
 			this.checkbutton13.CanFocus = true;
 			this.checkbutton13.Name = "checkbutton13";
-			this.checkbutton13.Label = global::Mono.Unix.Catalog.GetString("Sója");
+			this.checkbutton13.Label = global::Mono.Unix.Catalog.GetString("Vlčí bob");
 			this.checkbutton13.DrawIndicator = true;
 			this.checkbutton13.UseUnderline = true;
-			this.table3.Add(this.checkbutton13);
-			global::Gtk.Table.TableChild w29 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton13]));
-			w29.LeftAttach = ((uint)(5));
-			w29.RightAttach = ((uint)(6));
-			w29.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton13);
+			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton13]));
+			w20.TopAttach = ((uint)(1));
+			w20.BottomAttach = ((uint)(2));
+			w20.LeftAttach = ((uint)(5));
+			w20.RightAttach = ((uint)(6));
+			w20.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton14 = new global::Gtk.CheckButton();
 			this.checkbutton14.CanFocus = true;
 			this.checkbutton14.Name = "checkbutton14";
-			this.checkbutton14.Label = global::Mono.Unix.Catalog.GetString("Mléko");
+			this.checkbutton14.Label = global::Mono.Unix.Catalog.GetString("Měkkýši");
 			this.checkbutton14.DrawIndicator = true;
 			this.checkbutton14.UseUnderline = true;
-			this.table3.Add(this.checkbutton14);
-			global::Gtk.Table.TableChild w30 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton14]));
-			w30.LeftAttach = ((uint)(6));
-			w30.RightAttach = ((uint)(7));
-			w30.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton14);
+			global::Gtk.Table.TableChild w21 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton14]));
+			w21.TopAttach = ((uint)(1));
+			w21.BottomAttach = ((uint)(2));
+			w21.LeftAttach = ((uint)(6));
+			w21.RightAttach = ((uint)(7));
+			w21.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton2 = new global::Gtk.CheckButton();
 			this.checkbutton2.CanFocus = true;
 			this.checkbutton2.Name = "checkbutton2";
 			this.checkbutton2.Label = global::Mono.Unix.Catalog.GetString("Korýši");
 			this.checkbutton2.DrawIndicator = true;
 			this.checkbutton2.UseUnderline = true;
-			this.table3.Add(this.checkbutton2);
-			global::Gtk.Table.TableChild w31 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton2]));
-			w31.LeftAttach = ((uint)(1));
-			w31.RightAttach = ((uint)(2));
-			w31.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton2);
+			global::Gtk.Table.TableChild w22 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton2]));
+			w22.LeftAttach = ((uint)(1));
+			w22.RightAttach = ((uint)(2));
+			w22.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton3 = new global::Gtk.CheckButton();
 			this.checkbutton3.CanFocus = true;
 			this.checkbutton3.Name = "checkbutton3";
 			this.checkbutton3.Label = global::Mono.Unix.Catalog.GetString("Vejce");
 			this.checkbutton3.DrawIndicator = true;
 			this.checkbutton3.UseUnderline = true;
-			this.table3.Add(this.checkbutton3);
-			global::Gtk.Table.TableChild w32 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton3]));
-			w32.LeftAttach = ((uint)(2));
-			w32.RightAttach = ((uint)(3));
-			w32.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton3);
+			global::Gtk.Table.TableChild w23 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton3]));
+			w23.LeftAttach = ((uint)(2));
+			w23.RightAttach = ((uint)(3));
+			w23.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton4 = new global::Gtk.CheckButton();
 			this.checkbutton4.CanFocus = true;
 			this.checkbutton4.Name = "checkbutton4";
 			this.checkbutton4.Label = global::Mono.Unix.Catalog.GetString("Ryby");
 			this.checkbutton4.DrawIndicator = true;
 			this.checkbutton4.UseUnderline = true;
-			this.table3.Add(this.checkbutton4);
-			global::Gtk.Table.TableChild w33 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton4]));
-			w33.LeftAttach = ((uint)(3));
-			w33.RightAttach = ((uint)(4));
-			w33.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton4);
+			global::Gtk.Table.TableChild w24 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton4]));
+			w24.LeftAttach = ((uint)(3));
+			w24.RightAttach = ((uint)(4));
+			w24.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton5 = new global::Gtk.CheckButton();
 			this.checkbutton5.CanFocus = true;
 			this.checkbutton5.Name = "checkbutton5";
 			this.checkbutton5.Label = global::Mono.Unix.Catalog.GetString("Podzemnice olejná");
 			this.checkbutton5.DrawIndicator = true;
 			this.checkbutton5.UseUnderline = true;
-			this.table3.Add(this.checkbutton5);
-			global::Gtk.Table.TableChild w34 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton5]));
-			w34.LeftAttach = ((uint)(4));
-			w34.RightAttach = ((uint)(5));
-			w34.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton5);
+			global::Gtk.Table.TableChild w25 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton5]));
+			w25.LeftAttach = ((uint)(4));
+			w25.RightAttach = ((uint)(5));
+			w25.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton6 = new global::Gtk.CheckButton();
 			this.checkbutton6.CanFocus = true;
 			this.checkbutton6.Name = "checkbutton6";
-			this.checkbutton6.Label = global::Mono.Unix.Catalog.GetString("Skořápkové plody");
+			this.checkbutton6.Label = global::Mono.Unix.Catalog.GetString("Sója");
 			this.checkbutton6.DrawIndicator = true;
 			this.checkbutton6.UseUnderline = true;
-			this.table3.Add(this.checkbutton6);
-			global::Gtk.Table.TableChild w35 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton6]));
-			w35.TopAttach = ((uint)(1));
-			w35.BottomAttach = ((uint)(2));
-			w35.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton6);
+			global::Gtk.Table.TableChild w26 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton6]));
+			w26.LeftAttach = ((uint)(5));
+			w26.RightAttach = ((uint)(6));
+			w26.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton7 = new global::Gtk.CheckButton();
 			this.checkbutton7.CanFocus = true;
 			this.checkbutton7.Name = "checkbutton7";
-			this.checkbutton7.Label = global::Mono.Unix.Catalog.GetString("Celer");
+			this.checkbutton7.Label = global::Mono.Unix.Catalog.GetString("Mléko");
 			this.checkbutton7.DrawIndicator = true;
 			this.checkbutton7.UseUnderline = true;
-			this.table3.Add(this.checkbutton7);
-			global::Gtk.Table.TableChild w36 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton7]));
-			w36.TopAttach = ((uint)(1));
-			w36.BottomAttach = ((uint)(2));
-			w36.LeftAttach = ((uint)(1));
-			w36.RightAttach = ((uint)(2));
-			w36.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton7);
+			global::Gtk.Table.TableChild w27 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton7]));
+			w27.LeftAttach = ((uint)(6));
+			w27.RightAttach = ((uint)(7));
+			w27.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton8 = new global::Gtk.CheckButton();
 			this.checkbutton8.CanFocus = true;
 			this.checkbutton8.Name = "checkbutton8";
-			this.checkbutton8.Label = global::Mono.Unix.Catalog.GetString("Hořčice");
+			this.checkbutton8.Label = global::Mono.Unix.Catalog.GetString("Skořápkové plody");
 			this.checkbutton8.DrawIndicator = true;
 			this.checkbutton8.UseUnderline = true;
-			this.table3.Add(this.checkbutton8);
-			global::Gtk.Table.TableChild w37 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton8]));
-			w37.TopAttach = ((uint)(1));
-			w37.BottomAttach = ((uint)(2));
-			w37.LeftAttach = ((uint)(2));
-			w37.RightAttach = ((uint)(3));
-			w37.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table3.Gtk.Table+TableChild
+			this.CheckBoxesTable.Add(this.checkbutton8);
+			global::Gtk.Table.TableChild w28 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton8]));
+			w28.TopAttach = ((uint)(1));
+			w28.BottomAttach = ((uint)(2));
+			w28.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child CheckBoxesTable.Gtk.Table+TableChild
 			this.checkbutton9 = new global::Gtk.CheckButton();
 			this.checkbutton9.CanFocus = true;
 			this.checkbutton9.Name = "checkbutton9";
-			this.checkbutton9.Label = global::Mono.Unix.Catalog.GetString("Sezamové semena");
+			this.checkbutton9.Label = global::Mono.Unix.Catalog.GetString("Celer");
 			this.checkbutton9.DrawIndicator = true;
 			this.checkbutton9.UseUnderline = true;
-			this.table3.Add(this.checkbutton9);
-			global::Gtk.Table.TableChild w38 = ((global::Gtk.Table.TableChild)(this.table3[this.checkbutton9]));
-			w38.TopAttach = ((uint)(1));
-			w38.BottomAttach = ((uint)(2));
-			w38.LeftAttach = ((uint)(3));
-			w38.RightAttach = ((uint)(4));
+			this.CheckBoxesTable.Add(this.checkbutton9);
+			global::Gtk.Table.TableChild w29 = ((global::Gtk.Table.TableChild)(this.CheckBoxesTable[this.checkbutton9]));
+			w29.TopAttach = ((uint)(1));
+			w29.BottomAttach = ((uint)(2));
+			w29.LeftAttach = ((uint)(1));
+			w29.RightAttach = ((uint)(2));
+			w29.YOptions = ((global::Gtk.AttachOptions)(4));
+			this.ExpandedTable.Add(this.CheckBoxesTable);
+			global::Gtk.Table.TableChild w30 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.CheckBoxesTable]));
+			w30.TopAttach = ((uint)(9));
+			w30.BottomAttach = ((uint)(10));
+			w30.LeftAttach = ((uint)(1));
+			w30.RightAttach = ((uint)(2));
+			w30.XOptions = ((global::Gtk.AttachOptions)(4));
+			w30.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label1 = new global::Gtk.Label();
+			this.label1.Name = "label1";
+			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString("Energetická hodnota (kJ):");
+			this.ExpandedTable.Add(this.label1);
+			global::Gtk.Table.TableChild w31 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label1]));
+			w31.XOptions = ((global::Gtk.AttachOptions)(4));
+			w31.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label10 = new global::Gtk.Label();
+			this.label10.Name = "label10";
+			this.label10.LabelProp = global::Mono.Unix.Catalog.GetString("Tuky:");
+			this.ExpandedTable.Add(this.label10);
+			global::Gtk.Table.TableChild w32 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label10]));
+			w32.TopAttach = ((uint)(5));
+			w32.BottomAttach = ((uint)(6));
+			w32.XOptions = ((global::Gtk.AttachOptions)(4));
+			w32.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label11 = new global::Gtk.Label();
+			this.label11.Name = "label11";
+			this.label11.LabelProp = global::Mono.Unix.Catalog.GetString("Z toho nas. mastné kyseliny:");
+			this.ExpandedTable.Add(this.label11);
+			global::Gtk.Table.TableChild w33 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label11]));
+			w33.TopAttach = ((uint)(6));
+			w33.BottomAttach = ((uint)(7));
+			w33.XOptions = ((global::Gtk.AttachOptions)(4));
+			w33.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label12 = new global::Gtk.Label();
+			this.label12.Name = "label12";
+			this.label12.LabelProp = global::Mono.Unix.Catalog.GetString("Vláknina:");
+			this.ExpandedTable.Add(this.label12);
+			global::Gtk.Table.TableChild w34 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label12]));
+			w34.TopAttach = ((uint)(7));
+			w34.BottomAttach = ((uint)(8));
+			w34.XOptions = ((global::Gtk.AttachOptions)(4));
+			w34.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label13 = new global::Gtk.Label();
+			this.label13.Name = "label13";
+			this.label13.LabelProp = global::Mono.Unix.Catalog.GetString("Sůl:");
+			this.ExpandedTable.Add(this.label13);
+			global::Gtk.Table.TableChild w35 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label13]));
+			w35.TopAttach = ((uint)(8));
+			w35.BottomAttach = ((uint)(9));
+			w35.XOptions = ((global::Gtk.AttachOptions)(4));
+			w35.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label2 = new global::Gtk.Label();
+			this.label2.Name = "label2";
+			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString("Energetická hodnota (kcal):");
+			this.ExpandedTable.Add(this.label2);
+			global::Gtk.Table.TableChild w36 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label2]));
+			w36.TopAttach = ((uint)(1));
+			w36.BottomAttach = ((uint)(2));
+			w36.XOptions = ((global::Gtk.AttachOptions)(4));
+			w36.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label3 = new global::Gtk.Label();
+			this.label3.Name = "label3";
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString("Bílkoviny");
+			this.ExpandedTable.Add(this.label3);
+			global::Gtk.Table.TableChild w37 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label3]));
+			w37.TopAttach = ((uint)(2));
+			w37.BottomAttach = ((uint)(3));
+			w37.XOptions = ((global::Gtk.AttachOptions)(4));
+			w37.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label4 = new global::Gtk.Label();
+			this.label4.Name = "label4";
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString("Sacharidy");
+			this.ExpandedTable.Add(this.label4);
+			global::Gtk.Table.TableChild w38 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label4]));
+			w38.TopAttach = ((uint)(3));
+			w38.BottomAttach = ((uint)(4));
+			w38.XOptions = ((global::Gtk.AttachOptions)(4));
 			w38.YOptions = ((global::Gtk.AttachOptions)(4));
-			this.ExpandedTable.Add(this.table3);
-			global::Gtk.Table.TableChild w39 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.table3]));
-			w39.TopAttach = ((uint)(9));
-			w39.BottomAttach = ((uint)(10));
-			w39.LeftAttach = ((uint)(1));
-			w39.RightAttach = ((uint)(2));
+			// Container child ExpandedTable.Gtk.Table+TableChild
+			this.label9 = new global::Gtk.Label();
+			this.label9.Name = "label9";
+			this.label9.LabelProp = global::Mono.Unix.Catalog.GetString("Z toho cukry:");
+			this.ExpandedTable.Add(this.label9);
+			global::Gtk.Table.TableChild w39 = ((global::Gtk.Table.TableChild)(this.ExpandedTable[this.label9]));
+			w39.TopAttach = ((uint)(4));
+			w39.BottomAttach = ((uint)(5));
+			w39.XPadding = ((uint)(3));
 			w39.XOptions = ((global::Gtk.AttachOptions)(4));
 			w39.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.Expander.Add(this.ExpandedTable);

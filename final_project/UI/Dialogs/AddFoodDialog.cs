@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Gtk;
 namespace final_project
 {
 	public partial class AddFoodDialog : Gtk.Dialog
 	{
+		public string[] Values { get; set; }
+
+		public int[] Allergenes { get; set; }
+
 		public AddFoodDialog()
 		{
 			this.Initialize();
@@ -13,9 +18,20 @@ namespace final_project
 		{
 			this.Build();
 			Values = new string[15];
+			Allergenes = new int[14];
 			for (int i = 0; i < Values.Length; i++)
 			{
 				Values[i] = "";
+			}
+		}
+
+		private void SetAllergenes() {
+			int i = 0;
+			foreach (Widget w in this.CheckBoxesTable) {
+				if ((w as CheckButton).Active) { 
+					int.TryParse(Regex.Match(w.Name, @"\d+").Value, out Allergenes[i]);
+					++i;
+				}
 			}
 		}
 
@@ -44,7 +60,7 @@ namespace final_project
             this.EntrySalt.Text = Values[14];
 		}
 
-		public string[] Values { get; set; }
+
 
 		protected void OnButtonOkClicked(object sender, EventArgs e)
 		{
@@ -53,12 +69,9 @@ namespace final_project
 			Values[3] = this.EntryPrice.Text;
 			Values[4] = this.EntryComposition.Text;
 			Values[5] = "0";
+			this.SetAllergenes();
 			this.Destroy();
 			this.Dispose();
-		}
-
-		public string[] getValues() {
-			return this.Values;
 		}
 
 		protected void OnButtonCancelClicked(object sender, EventArgs e)
