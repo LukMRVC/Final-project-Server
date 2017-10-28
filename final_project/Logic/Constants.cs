@@ -66,5 +66,13 @@ namespace final_project
 			}
 			return arr;
 		}
+
+		public static bool Has(this int[] arr, int number) {
+			foreach (int num in arr) {
+				if (num == number)
+					return true;
+			}
+			return false;
+		}
 	}
 }

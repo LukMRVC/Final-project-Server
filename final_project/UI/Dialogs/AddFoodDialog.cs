@@ -25,7 +25,15 @@ namespace final_project
 			}
 		}
 
-		private void SetAllergenes() {
+		public void SetAllergenes(int[] indices) {
+			foreach (Widget w in this.CheckBoxesTable) {
+				if (indices.Has(Int32.Parse(Regex.Match(w.Name, @"\d+").Value))){
+					(w as CheckButton).Active = true;
+				}
+			}
+		}
+
+		private void GetAllergenes() {
 			int i = 0;
 			foreach (Widget w in this.CheckBoxesTable) {
 				if ((w as CheckButton).Active) { 
@@ -69,7 +77,7 @@ namespace final_project
 			Values[3] = this.EntryPrice.Text;
 			Values[4] = this.EntryComposition.Text;
 			Values[5] = "0";
-			this.SetAllergenes();
+			this.GetAllergenes();
 			this.Destroy();
 			this.Dispose();
 		}

@@ -106,6 +106,7 @@ namespace final_project
 					string label = foodTreeStore.GetValue(iterator, 0).ToString();
 					int result = food.FindFoodIndex(label);
 					var dlg = new AddFoodDialog(food[result].toStringArray());
+					dlg.SetAllergenes(food[result].GetAllergenIds());
 					if (dlg.Run() == (int)ResponseType.Ok) 
 					{
 						foodTreeStore.SetValues(iterator, dlg.Values.ToArray().SubArray(1, 5));
