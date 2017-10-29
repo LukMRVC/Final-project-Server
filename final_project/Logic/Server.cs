@@ -23,22 +23,12 @@ namespace final_project
 	{
 		private MainWindow win;
 		public string databaseConnectionString;
-		private static HttpListener listener;
 		public MenuDbContext database;
 		public bool isConnected { get; private set; }
 		private IEnumerable<Food> f;
 		public Server() 
 		{
-			try
-			{
-                listener = new HttpListener();
-				listener.Prefixes.Add("http://localhost:8080/");
-			}
-			catch (PlatformNotSupportedException ex)
-			{
-				this.showMessage(MessageType.Error, @"Tato platforma není podporována, prosím upgradujte systém" + ex.ToString());
-				this.quit();
-			}
+			Http.server = this;
             this.win = new MainWindow(this);
 			try
 			{
@@ -50,7 +40,6 @@ namespace final_project
 			}
 			catch (Exception) {				connect();
 			}
-
 			win.Show();
 
 		}
@@ -163,33 +152,26 @@ namespace final_project
 			return w;
 		}
 
-		//starts HTTPListener on port 8080, responses are handled asynchronously in a static method
-		public void startListening() {
-			listener.Start();
-			IAsyncResult result = listener.BeginGetContext(ContextCallback, null);
-			showMessage(MessageType.Info, "Naslouchání na portu 8080");
+		public void AddOrder(Dictionary<string, string[]> order) 
+		{
+			var food = new List<Food>();
+			User user = this.database.Users.Find(order["Token"][1]);
+			foreach (string foodId in order["Food"]) 
+			{
+				food.Add(database.Menu.Find(Int32.Parse(foodId)));
+			}
+			database.Orders.Add(new Order(user, food.ToArray()));
+			database.SaveChanges();
+			                    
 		}
 
-		//static method for handling requests
-		public static void ContextCallback(IAsyncResult result) {
-			var context = listener.EndGetContext(result);
-			//starts new listening
-			listener.BeginGetContext(ContextCallback, null);
-			var request = context.Request;
-			var response = context.Response;
-			response.ContentType = "text/html; charset=utf-8";
-			string responseString = "<HTML><BODY><h1>Hello, World!</h1></body></html>";
-			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-			response.ContentLength64 = buffer.Length;
-			System.IO.Stream output = response.OutputStream;
-			output.Write(buffer, 0, buffer.Length);
-			output.Close();
-		}
+		
+
 
 		//Show message dialog with given message type and message
-		public void showMessage(MessageType type, string message)
+		public static void showMessage(MessageType type, string message)
 		{
-			MessageDialog dlg = new MessageDialog(win, DialogFlags.Modal, type, ButtonsType.Ok, @message);
+			MessageDialog dlg = new MessageDialog(null, DialogFlags.Modal, type, ButtonsType.Ok, @message);
 			dlg.Run();
 			dlg.Destroy();
 			dlg.Dispose();

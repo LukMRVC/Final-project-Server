@@ -75,7 +75,6 @@ namespace final_project.Model
 
 		}
 
-
 		public MenuDbContext(string connectionString) : base (connectionString) {
 			Database.SetInitializer(new CzechDbInitializer());
 		}

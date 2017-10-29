@@ -69,7 +69,7 @@ public partial class MainWindow : Gtk.Window
 
 	protected void BtnStartListeningClicked(object sender, EventArgs e)
 	{
-		this.server.startListening();
+		Http.startListening();
 	}
 
 	protected void BtnMenuDesignerClick(object sender, EventArgs e)

@@ -176,7 +176,6 @@ namespace final_project
 			this.Expander = new global::Gtk.Expander(null);
 			this.Expander.CanFocus = true;
 			this.Expander.Name = "Expander";
-			this.Expander.Expanded = true;
 			// Container child Expander.Gtk.Container+ContainerChild
 			this.ExpandedTable = new global::Gtk.Table(((uint)(10)), ((uint)(2)), false);
 			this.ExpandedTable.Name = "ExpandedTable";
@@ -688,8 +687,8 @@ namespace final_project
 			{
 				this.Child.ShowAll();
 			}
-			this.DefaultWidth = 899;
-			this.DefaultHeight = 615;
+			this.DefaultWidth = 405;
+			this.DefaultHeight = 277;
 			this.Show();
 			this.buttonCancel.Clicked += new global::System.EventHandler(this.OnButtonCancelClicked);
 			this.buttonOk.Clicked += new global::System.EventHandler(this.OnButtonOkClicked);

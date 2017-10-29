@@ -99,10 +99,6 @@
               <widget class="Gtk.MenuBar" id="menubar7">
                 <property name="MemberName" />
                 <node name="menubar7" type="Menubar">
-                  <node type="Menu" action="NovAction3">
-                    <node type="Menuitem" action="KategorieAction" />
-                  </node>
-                  <node type="Menu" action="PridatAction" />
                   <node type="Menu" action="connectionMenuAction">
                     <node type="Menuitem" action="databaseInfoMenuAction" />
                     <node type="Menuitem" action="PipojitAction" />

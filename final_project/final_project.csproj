@@ -63,6 +63,9 @@
       <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Linq" />
+    <Reference Include="CryptSharp">
+      <HintPath>..\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -100,6 +103,7 @@
     <Compile Include="gtk-gui\final_project.AddFoodDialog.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Allergen.cs" />
+    <Compile Include="Logic\Http.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

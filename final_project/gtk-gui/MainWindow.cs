@@ -115,7 +115,10 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='NovAction3' action='NovAction3'><menuitem name='KategorieAction' action='KategorieAction'/></menu><menu name='PridatAction' action='PridatAction'/><menu name='connectionMenuAction' action='connectionMenuAction'><menuitem name='databaseInfoMenuAction' action='databaseInfoMenuAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString("<ui><menubar name=\'menubar7\'><menu name=\'connectionMenuAction\' action=\'connection" +
+				"MenuAction\'><menuitem name=\'databaseInfoMenuAction\' action=\'databaseInfoMenuActi" +
+				"on\'/><menuitem name=\'PipojitAction\' action=\'PipojitAction\'/></menu></menubar></u" +
+				"i>");
 		this.menubar7 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget("/menubar7")));
 		this.menubar7.Name = "menubar7";
 		this.hbox2.Add(this.menubar7);
