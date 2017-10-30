@@ -4,7 +4,7 @@ namespace final_project
 {
 	public partial class AddFoodDialog
 	{
-		private global::Gtk.Table table1;
+		private global::Gtk.Table MainTable;
 
 		private global::Gtk.Entry EntryComposition;
 
@@ -108,71 +108,75 @@ namespace final_project
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child final_project.AddFoodDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;
-			w1.Name = "dialog1_VBox";
+			w1.Name = "VBoxWrapper";
 			w1.BorderWidth = ((uint)(2));
-			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.table1 = new global::Gtk.Table(((uint)(5)), ((uint)(2)), false);
-			this.table1.Name = "table1";
-			this.table1.RowSpacing = ((uint)(6));
-			this.table1.ColumnSpacing = ((uint)(10));
-			this.table1.BorderWidth = ((uint)(10));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child VBoxWrapper.Gtk.Box+BoxChild
+			this.MainTable = new global::Gtk.Table(((uint)(5)), ((uint)(2)), false);
+			this.MainTable.Name = "MainTable";
+			this.MainTable.RowSpacing = ((uint)(6));
+			this.MainTable.ColumnSpacing = ((uint)(10));
+			this.MainTable.BorderWidth = ((uint)(10));
+			// Container child MainTable.Gtk.Table+TableChild
 			this.EntryComposition = new global::Gtk.Entry();
+			this.EntryComposition.TooltipMarkup = "Složení";
 			this.EntryComposition.WidthRequest = 200;
 			this.EntryComposition.HeightRequest = 30;
 			this.EntryComposition.CanFocus = true;
 			this.EntryComposition.Name = "EntryComposition";
 			this.EntryComposition.IsEditable = true;
 			this.EntryComposition.InvisibleChar = '●';
-			this.table1.Add(this.EntryComposition);
-			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table1[this.EntryComposition]));
+			this.MainTable.Add(this.EntryComposition);
+			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.MainTable[this.EntryComposition]));
 			w2.TopAttach = ((uint)(3));
 			w2.BottomAttach = ((uint)(4));
 			w2.LeftAttach = ((uint)(1));
 			w2.RightAttach = ((uint)(2));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.EntryGram = new global::Gtk.Entry();
+			this.EntryGram.TooltipMarkup = "Hmotnost";
 			this.EntryGram.WidthRequest = 200;
 			this.EntryGram.HeightRequest = 30;
 			this.EntryGram.CanFocus = true;
 			this.EntryGram.Name = "EntryGram";
 			this.EntryGram.IsEditable = true;
 			this.EntryGram.InvisibleChar = '●';
-			this.table1.Add(this.EntryGram);
-			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table1[this.EntryGram]));
+			this.MainTable.Add(this.EntryGram);
+			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.MainTable[this.EntryGram]));
 			w3.TopAttach = ((uint)(1));
 			w3.BottomAttach = ((uint)(2));
 			w3.LeftAttach = ((uint)(1));
 			w3.RightAttach = ((uint)(2));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.EntryName = new global::Gtk.Entry();
+			this.EntryName.TooltipMarkup = "Název";
 			this.EntryName.WidthRequest = 200;
 			this.EntryName.HeightRequest = 30;
 			this.EntryName.CanFocus = true;
 			this.EntryName.Name = "EntryName";
 			this.EntryName.IsEditable = true;
 			this.EntryName.InvisibleChar = '●';
-			this.table1.Add(this.EntryName);
-			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table1[this.EntryName]));
+			this.MainTable.Add(this.EntryName);
+			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.MainTable[this.EntryName]));
 			w4.LeftAttach = ((uint)(1));
 			w4.RightAttach = ((uint)(2));
 			w4.XOptions = ((global::Gtk.AttachOptions)(4));
 			w4.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.EntryPrice = new global::Gtk.Entry();
+			this.EntryPrice.TooltipMarkup = "Cena";
 			this.EntryPrice.WidthRequest = 200;
 			this.EntryPrice.HeightRequest = 30;
 			this.EntryPrice.CanFocus = true;
 			this.EntryPrice.Name = "EntryPrice";
 			this.EntryPrice.IsEditable = true;
 			this.EntryPrice.InvisibleChar = '●';
-			this.table1.Add(this.EntryPrice);
-			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1[this.EntryPrice]));
+			this.MainTable.Add(this.EntryPrice);
+			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.MainTable[this.EntryPrice]));
 			w5.TopAttach = ((uint)(2));
 			w5.BottomAttach = ((uint)(3));
 			w5.LeftAttach = ((uint)(1));
 			w5.RightAttach = ((uint)(2));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.Expander = new global::Gtk.Expander(null);
 			this.Expander.CanFocus = true;
 			this.Expander.Name = "Expander";
@@ -193,6 +197,7 @@ namespace final_project
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntryCarbs = new global::Gtk.Entry();
+			this.EntryCarbs.TooltipMarkup = "Sacharidy";
 			this.EntryCarbs.CanFocus = true;
 			this.EntryCarbs.Name = "EntryCarbs";
 			this.EntryCarbs.IsEditable = true;
@@ -207,6 +212,7 @@ namespace final_project
 			w7.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntryEnergyKcal = new global::Gtk.Entry();
+			this.EntryEnergyKcal.TooltipMarkup = "Energetická hodnota v kilokaloriích";
 			this.EntryEnergyKcal.CanFocus = true;
 			this.EntryEnergyKcal.Name = "EntryEnergyKcal";
 			this.EntryEnergyKcal.IsEditable = true;
@@ -221,6 +227,7 @@ namespace final_project
 			w8.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntryEnergyKj = new global::Gtk.Entry();
+			this.EntryEnergyKj.TooltipMarkup = "Energetická hodnota v kilojoulech";
 			this.EntryEnergyKj.CanFocus = true;
 			this.EntryEnergyKj.Name = "EntryEnergyKj";
 			this.EntryEnergyKj.IsEditable = true;
@@ -233,6 +240,7 @@ namespace final_project
 			w9.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntryFiber = new global::Gtk.Entry();
+			this.EntryFiber.TooltipMarkup = "Vláknina";
 			this.EntryFiber.CanFocus = true;
 			this.EntryFiber.Name = "EntryFiber";
 			this.EntryFiber.IsEditable = true;
@@ -247,6 +255,7 @@ namespace final_project
 			w10.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntryProtein = new global::Gtk.Entry();
+			this.EntryProtein.TooltipMarkup = "Bílkoviny";
 			this.EntryProtein.CanFocus = true;
 			this.EntryProtein.Name = "EntryProtein";
 			this.EntryProtein.IsEditable = true;
@@ -261,6 +270,7 @@ namespace final_project
 			w11.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntrySalt = new global::Gtk.Entry();
+			this.EntrySalt.TooltipMarkup = "Sůl";
 			this.EntrySalt.CanFocus = true;
 			this.EntrySalt.Name = "EntrySalt";
 			this.EntrySalt.IsEditable = true;
@@ -275,6 +285,7 @@ namespace final_project
 			w12.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntrySaturatedFat = new global::Gtk.Entry();
+			this.EntrySaturatedFat.TooltipMarkup = "Z toho nasycené mastné kyseliny";
 			this.EntrySaturatedFat.CanFocus = true;
 			this.EntrySaturatedFat.Name = "EntrySaturatedFat";
 			this.EntrySaturatedFat.IsEditable = true;
@@ -289,6 +300,7 @@ namespace final_project
 			w13.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntrySugar = new global::Gtk.Entry();
+			this.EntrySugar.TooltipMarkup = "Z toho cukry";
 			this.EntrySugar.CanFocus = true;
 			this.EntrySugar.Name = "EntrySugar";
 			this.EntrySugar.IsEditable = true;
@@ -303,6 +315,7 @@ namespace final_project
 			w14.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child ExpandedTable.Gtk.Table+TableChild
 			this.EntryTotalFat = new global::Gtk.Entry();
+			this.EntryTotalFat.TooltipMarkup = "Tuky";
 			this.EntryTotalFat.CanFocus = true;
 			this.EntryTotalFat.Name = "EntryTotalFat";
 			this.EntryTotalFat.IsEditable = true;
@@ -601,54 +614,54 @@ namespace final_project
 			this.ExpanderLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Výživové hodnoty na 100g");
 			this.ExpanderLabel.UseUnderline = true;
 			this.Expander.LabelWidget = this.ExpanderLabel;
-			this.table1.Add(this.Expander);
-			global::Gtk.Table.TableChild w41 = ((global::Gtk.Table.TableChild)(this.table1[this.Expander]));
+			this.MainTable.Add(this.Expander);
+			global::Gtk.Table.TableChild w41 = ((global::Gtk.Table.TableChild)(this.MainTable[this.Expander]));
 			w41.TopAttach = ((uint)(4));
 			w41.BottomAttach = ((uint)(5));
 			w41.LeftAttach = ((uint)(1));
 			w41.RightAttach = ((uint)(2));
 			w41.XOptions = ((global::Gtk.AttachOptions)(4));
 			w41.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.label5 = new global::Gtk.Label();
 			this.label5.Name = "label5";
 			this.label5.LabelProp = global::Mono.Unix.Catalog.GetString("Název:");
-			this.table1.Add(this.label5);
-			global::Gtk.Table.TableChild w42 = ((global::Gtk.Table.TableChild)(this.table1[this.label5]));
+			this.MainTable.Add(this.label5);
+			global::Gtk.Table.TableChild w42 = ((global::Gtk.Table.TableChild)(this.MainTable[this.label5]));
 			w42.XOptions = ((global::Gtk.AttachOptions)(4));
 			w42.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.label6 = new global::Gtk.Label();
 			this.label6.Name = "label6";
 			this.label6.LabelProp = global::Mono.Unix.Catalog.GetString("Gramáž:");
-			this.table1.Add(this.label6);
-			global::Gtk.Table.TableChild w43 = ((global::Gtk.Table.TableChild)(this.table1[this.label6]));
+			this.MainTable.Add(this.label6);
+			global::Gtk.Table.TableChild w43 = ((global::Gtk.Table.TableChild)(this.MainTable[this.label6]));
 			w43.TopAttach = ((uint)(1));
 			w43.BottomAttach = ((uint)(2));
 			w43.XOptions = ((global::Gtk.AttachOptions)(4));
 			w43.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.label7 = new global::Gtk.Label();
 			this.label7.Name = "label7";
 			this.label7.LabelProp = global::Mono.Unix.Catalog.GetString("Cena:");
-			this.table1.Add(this.label7);
-			global::Gtk.Table.TableChild w44 = ((global::Gtk.Table.TableChild)(this.table1[this.label7]));
+			this.MainTable.Add(this.label7);
+			global::Gtk.Table.TableChild w44 = ((global::Gtk.Table.TableChild)(this.MainTable[this.label7]));
 			w44.TopAttach = ((uint)(2));
 			w44.BottomAttach = ((uint)(3));
 			w44.XOptions = ((global::Gtk.AttachOptions)(4));
 			w44.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
+			// Container child MainTable.Gtk.Table+TableChild
 			this.label8 = new global::Gtk.Label();
 			this.label8.Name = "label8";
 			this.label8.LabelProp = global::Mono.Unix.Catalog.GetString("Složení:");
-			this.table1.Add(this.label8);
-			global::Gtk.Table.TableChild w45 = ((global::Gtk.Table.TableChild)(this.table1[this.label8]));
+			this.MainTable.Add(this.label8);
+			global::Gtk.Table.TableChild w45 = ((global::Gtk.Table.TableChild)(this.MainTable[this.label8]));
 			w45.TopAttach = ((uint)(3));
 			w45.BottomAttach = ((uint)(4));
 			w45.XOptions = ((global::Gtk.AttachOptions)(4));
 			w45.YOptions = ((global::Gtk.AttachOptions)(4));
-			w1.Add(this.table1);
-			global::Gtk.Box.BoxChild w46 = ((global::Gtk.Box.BoxChild)(w1[this.table1]));
+			w1.Add(this.MainTable);
+			global::Gtk.Box.BoxChild w46 = ((global::Gtk.Box.BoxChild)(w1[this.MainTable]));
 			w46.Position = 0;
 			w46.Expand = false;
 			w46.Fill = false;
@@ -687,8 +700,8 @@ namespace final_project
 			{
 				this.Child.ShowAll();
 			}
-			this.DefaultWidth = 405;
-			this.DefaultHeight = 277;
+			this.DefaultWidth = 404;
+			this.DefaultHeight = 273;
 			this.Show();
 			this.buttonCancel.Clicked += new global::System.EventHandler(this.OnButtonCancelClicked);
 			this.buttonOk.Clicked += new global::System.EventHandler(this.OnButtonOkClicked);

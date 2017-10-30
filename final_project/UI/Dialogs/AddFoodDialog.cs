@@ -43,6 +43,9 @@ namespace final_project
 			}
 		}
 
+		
+
+
 		public AddFoodDialog(string[] defaultValues) 
 		{
             this.Initialize();
@@ -67,7 +70,6 @@ namespace final_project
             this.EntryFiber.Text = Values[13];
             this.EntrySalt.Text = Values[14];
 		}
-
 
 
 		protected void OnButtonOkClicked(object sender, EventArgs e)
@@ -95,23 +97,28 @@ namespace final_project
 			dlg.Dispose();
 		}
 
-		private void ShowMessage(string title, string message){
-			
-		}
-
 		private void Check(object sender, EventArgs e) {
-			if (string.IsNullOrWhiteSpace(EntryName.Text)) {
-				ShowMessage("Název nesmí být prázdný!");
+            foreach (Widget w in this.MainTable)
+            {
+				if (w is Gtk.Entry) { 
+					if (string.IsNullOrWhiteSpace((w as Gtk.Entry).Text))
+                    {
+                        ShowMessage("Položka \'" + (w as Gtk.Entry).TooltipText+ "\' nesmí být prázdná.");
+                    }
+				}
+            }
+
+			foreach (Widget w in this.ExpandedTable) 
+			{
+				if (w is Gtk.Entry) 
+				{
+					if ( !string.IsNullOrWhiteSpace((w as Gtk.Entry).Text) && !Regex.IsMatch( (w as Gtk.Entry).Text, @"^\d+([,]\d+)?$") ) 
+					{
+						ShowMessage("Položka \'" + (w as Gtk.Entry).TooltipText + "\' smí obsahovat pouze číslice oddělená čárkou.");
+					}
+				}	
 			}
-			else if (string.IsNullOrWhiteSpace(EntryPrice.Text)) {
-				ShowMessage("Cena nesmí být prázdná!");
-			}
-			else if (string.IsNullOrWhiteSpace(EntryGram.Text)) {
-				ShowMessage("Hmotnost nesmí být prázdná!");
-			}
-			else if (string.IsNullOrWhiteSpace(EntryComposition.Text)) {
-				ShowMessage("Složení nesmí být prázdné!");
-			}
+            
 		}
 
 	}

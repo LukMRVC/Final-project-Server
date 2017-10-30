@@ -15,6 +15,7 @@ namespace final_project.Model
 	public class CzechDbInitializer : DropCreateDatabaseIfModelChanges<MenuDbContext> { 
 		protected override void Seed(MenuDbContext context)
 		{
+			//find database name from connection string to set collation to czech utf8
 			string con = System.Configuration.ConfigurationManager.ConnectionStrings["MenuDbContext"].ConnectionString;
 			string[] sub = con.Split(';');
 			string dbName = "";

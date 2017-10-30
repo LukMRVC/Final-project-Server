@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Gtk;
 using System.Threading.Tasks;
 using final_project;
@@ -78,6 +79,8 @@ public partial class MainWindow : Gtk.Window
 		try
 		{
 			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
+            if (string.IsNullOrWhiteSpace(data.ToArray<string>()[0]))
+                throw new InvalidOperationException();
 			designer = new MenuDesigner(data, this.server);
 		}
 		catch (Exception)

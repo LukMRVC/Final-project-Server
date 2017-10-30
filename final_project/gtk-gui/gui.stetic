@@ -740,17 +740,17 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="final_project.AddFoodDialog" design-size="405 277">
+  <widget class="Gtk.Dialog" id="final_project.AddFoodDialog" design-size="404 273">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
     <child internal-child="VBox">
-      <widget class="Gtk.VBox" id="dialog1_VBox">
+      <widget class="Gtk.VBox" id="VBoxWrapper">
         <property name="MemberName" />
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.Table" id="table1">
+          <widget class="Gtk.Table" id="MainTable">
             <property name="MemberName" />
             <property name="NRows">5</property>
             <property name="NColumns">2</property>
@@ -762,9 +762,10 @@
             </child>
             <child>
               <widget class="Gtk.Entry" id="EntryComposition">
-                <property name="MemberName">EntryComposition</property>
+                <property name="MemberName">Složení</property>
                 <property name="WidthRequest">200</property>
                 <property name="HeightRequest">30</property>
+                <property name="Tooltip" translatable="yes">Složení</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -788,6 +789,7 @@
                 <property name="MemberName">EntryGram</property>
                 <property name="WidthRequest">200</property>
                 <property name="HeightRequest">30</property>
+                <property name="Tooltip" translatable="yes">Hmotnost</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -811,6 +813,7 @@
                 <property name="MemberName">EntryName</property>
                 <property name="WidthRequest">200</property>
                 <property name="HeightRequest">30</property>
+                <property name="Tooltip" translatable="yes">Název</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -831,9 +834,10 @@
             </child>
             <child>
               <widget class="Gtk.Entry" id="EntryPrice">
-                <property name="MemberName">EntryPrice</property>
+                <property name="MemberName">Cena</property>
                 <property name="WidthRequest">200</property>
                 <property name="HeightRequest">30</property>
+                <property name="Tooltip" translatable="yes">Cena</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -885,6 +889,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntryCarbs">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Sacharidy</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -908,6 +913,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntryEnergyKcal">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Energetická hodnota v kilokaloriích</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -931,6 +937,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntryEnergyKj">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Energetická hodnota v kilojoulech</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -952,6 +959,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntryFiber">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Vláknina</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -975,6 +983,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntryProtein">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Bílkoviny</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -998,6 +1007,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntrySalt">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Sůl</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -1021,6 +1031,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntrySaturatedFat">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Z toho nasycené mastné kyseliny</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -1044,6 +1055,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntrySugar">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Z toho cukry</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
@@ -1067,6 +1079,7 @@
                     <child>
                       <widget class="Gtk.Entry" id="EntryTotalFat">
                         <property name="MemberName" />
+                        <property name="Tooltip" translatable="yes">Tuky</property>
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>

@@ -286,11 +286,14 @@ namespace final_project
 		{
 			TreeIter? iter = GetSelectedRow();
 			TreeIter node;
-			if (iter == null)
+			if (!iter.HasValue)
 				return;
 			else {
-				var dlg = new AddFoodDialog();
 				node = iter.Value;
+				if (foodTreeStore.GetValue(node, 2) != null)
+					return;
+				var dlg = new AddFoodDialog();
+
 				if (dlg.Run() == (int)ResponseType.Ok)
 				{
 					Food fd = new Food();
