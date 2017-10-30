@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Text;
+using System.Linq;
 using System.Net;
 using Gtk;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using Newtonsoft.Json;
 namespace final_project
 {
@@ -59,9 +62,10 @@ namespace final_project
 				case "GET": Console.WriteLine("GET");
 					break; 
 				case "POST":
-					//0 for signup, 1 for order
 					if (request.RawUrl == "/signup/")
 						responseText = HandleSignUp(request.InputStream);
+					else if (request.RawUrl == "/login/")
+						responseText = HandleLogin(request.InputStream);
 					else
 						responseText = HandleOrder(request.InputStream);
 					break;
@@ -80,10 +84,34 @@ namespace final_project
 				string val = reader.ReadToEnd();
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
 			}
-			server.database.Users.Add(new Model.User(postText["username"], postText["password"], postText["email"]));
-			server.database.SaveChangesAsync();
-			StatusCode = 200;
+			try
+			{
+				server.AddUser(postText["username"], postText["password"], postText["email"]);
+			}
+			catch (Exception) {
+				StatusCode = 422;
+				return "Uživatel s tímto jménem nebo emailem již existuje!";
+			}
+			StatusCode = 201;
 			return "User " + postText["username"] + " registered succesfully";
+		}
+
+		public static string HandleLogin(Stream input) 
+		{
+			Dictionary<string, string> postText;
+			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8)) 
+			{
+				string val = reader.ReadToEnd();
+			postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
+			}
+			string token = server.ValidateUser(postText["username"], postText["password"]);
+			if (!string.IsNullOrWhiteSpace(token))
+			{
+				StatusCode = 200;
+				return token;
+			}
+			StatusCode = 422;
+			return "špatné přihlašovací údaje!";
 		}
 
 		public static string HandleOrder(Stream input) {
@@ -96,7 +124,7 @@ namespace final_project
 			if (Token.IsValid(postText["Token"][0]))
 			{
 				System.Threading.Tasks.Task.Run(() => server.AddOrder(postText));
-				StatusCode = 200;
+				StatusCode = 201;
 				return "Vaše objednávka byla zpracována.";
 			}
 			StatusCode = 401;
@@ -107,17 +135,28 @@ namespace final_project
 
 	public static class Token {
 
-		public static string GenerateNew() {
-			return "token";
+		public static string GenerateNew(int UserId) {
+			byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+			byte[] key = Guid.NewGuid().ToByteArray();
+			string token =  Convert.ToBase64String(time.Concat(key).ToArray()) + Constants.GenerateRandom(12, new System.Random())+UserId;
+			return token;
 		}
 
 		public static bool IsValid(string token) 
 		{
-			if (token == "token")
-				return true;
-			return false;
+			//Take substring to validate
+			byte[] data = Convert.FromBase64String(token);
+			DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
+			if (when < DateTime.UtcNow.AddHours(-24)) {
+				return false;
+			}
+			return true;
 			
 		}
 
 	}
+
+
+
+
 }

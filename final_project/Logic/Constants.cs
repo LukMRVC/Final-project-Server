@@ -1,11 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using final_project.Model;
 
 namespace final_project
 {
 	public static class Constants
 	{
+		public const string SECRET = "8Hwt9evygMOU";
+
+		public static string GenerateRandom(int length, Random rng) 
+		{
+			const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";
+			var chars = Enumerable.Range(0, length).Select(x => pool[rng.Next(0, pool.Length)]);
+			    return new string(chars.ToArray());
+		}
+
 		public const string CSV_FILE_NAME = "menu_data.csv";
 
 		public static string[] Allergenes = { "Obiloviny obsahující lepek", "Korýši", "Vejce", "Ryby", "Jádra podzemnice olejné", "Sójové boby (sója)",

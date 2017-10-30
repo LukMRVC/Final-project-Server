@@ -2,7 +2,7 @@
 using System.Data;
 using System.Collections.Generic;
 using System.Net;
-
+using MySql;
 using Gtk;
 using System.Linq;
 using final_project.Model;
@@ -25,7 +25,6 @@ namespace final_project
 		public string databaseConnectionString;
 		public MenuDbContext database;
 		public bool isConnected { get; private set; }
-		private IEnumerable<Food> f;
 		public Server() 
 		{
 			Http.server = this;
@@ -34,7 +33,7 @@ namespace final_project
 			{
 				database = new MenuDbContext();
 				database.Database.Initialize(true);
-				//ChangeCollation();
+
 				this.win.statbar.Push(0, @"Připojeno k databázi");
 				this.isConnected = true;
 			}
@@ -44,17 +43,7 @@ namespace final_project
 
 		}
 
-		/*public void ChangeCollation() { 
-			string con = System.Configuration.ConfigurationManager.ConnectionStrings["MenuDbContext"].ConnectionString;
-			string []sub = con.Split(';');
-			string dbName = "";
-			foreach (string word in sub) {				if (word.Contains("database=")){					dbName = word.Substring(word.IndexOf('=')+1).ToLower();
-					break;
-				}
-			}
 
-			database.Database.ExecuteSqlCommand("ALTER DATABASE "+ dbName +" COLLATE utf8_czech_ci");
-		}*/
 
 		public void connect()
         {
@@ -165,8 +154,34 @@ namespace final_project
 			                    
 		}
 
-		
+		public void AddUser(string username, string password, string email) 
+		{
+			if (CheckUserUniqueConstraint(username, email))			{
+				this.database.Users.Add(new User(username, password, email));
+			}
+			else {
+				throw new Exception("Unique constraint violation exception");
+			}
 
+		}
+
+		private bool CheckUserUniqueConstraint(string username, string email)
+		{
+			try
+			{				var user = (from u in this.database.Users where u.Username == username select u).First();
+				return false;
+			}
+			catch (Exception) {
+				try
+				{					var mail = (from u in this.database.Users where u.Email == email select u).First();
+					return false;
+				}
+				catch (Exception) { 
+					return true;
+				
+				}			}
+
+		}
 
 		//Show message dialog with given message type and message
 		public static void showMessage(MessageType type, string message)
@@ -175,6 +190,19 @@ namespace final_project
 			dlg.Run();
 			dlg.Destroy();
 			dlg.Dispose();
+		}
+
+		public string ValidateUser(string username, string password) 
+		{
+			try
+			{				var user = (from u in this.database.Users where u.Username == username select u).First();
+				if (user.ValidatePassword(password)) 
+					return Token.GenerateNew(user.Id);
+			}
+			catch (Exception) {
+				return "";
+			}
+			return "";
 		}
 
 	}
