@@ -141,11 +141,11 @@ namespace final_project
 			return w;
 		}
 
-		public void AddOrder(Dictionary<string, string[]> order) 
+		public void AddOrder(string[] order, int uid) 
 		{
 			var food = new List<Food>();
-			User user = this.database.Users.Find(order["Token"][1]);
-			foreach (string foodId in order["Food"]) 
+			User user = this.database.Users.Find(uid);
+			foreach (string foodId in order) 
 			{
 				food.Add(database.Menu.Find(Int32.Parse(foodId)));
 			}
@@ -158,6 +158,7 @@ namespace final_project
 		{
 			if (CheckUserUniqueConstraint(username, email))			{
 				this.database.Users.Add(new User(username, password, email));
+				this.database.SaveChanges();
 			}
 			else {
 				throw new Exception("Unique constraint violation exception");

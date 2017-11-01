@@ -11,7 +11,7 @@ namespace final_project
 
 		public static string GenerateRandom(int length, Random rng) 
 		{
-			const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";
+			const string pool = "0123456789";
 			var chars = Enumerable.Range(0, length).Select(x => pool[rng.Next(0, pool.Length)]);
 			    return new string(chars.ToArray());
 		}

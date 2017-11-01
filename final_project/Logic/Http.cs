@@ -73,7 +73,6 @@ namespace final_project
 					return "{ \"Error\": [ {\"Code\": \"400\"}, {\"Text\" : \"Chyba! špatný požadavek\" } ] }";
 					
 			}
-
 			return responseText;
 		}
 
@@ -93,7 +92,7 @@ namespace final_project
 				return "Uživatel s tímto jménem nebo emailem již existuje!";
 			}
 			StatusCode = 201;
-			return "User " + postText["username"] + " registered succesfully";
+			return server.ValidateUser(postText["username"], postText["password"]);
 		}
 
 		public static string HandleLogin(Stream input) 
@@ -104,10 +103,11 @@ namespace final_project
 				string val = reader.ReadToEnd();
 			postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
 			}
+			//method Validate User validates users and creates new Token
 			string token = server.ValidateUser(postText["username"], postText["password"]);
 			if (!string.IsNullOrWhiteSpace(token))
 			{
-				StatusCode = 200;
+				StatusCode = 202;
 				return token;
 			}
 			StatusCode = 422;
@@ -123,7 +123,7 @@ namespace final_project
 			}
 			if (Token.IsValid(postText["Token"][0]))
 			{
-				System.Threading.Tasks.Task.Run(() => server.AddOrder(postText));
+				System.Threading.Tasks.Task.Run(() => server.AddOrder(postText["Order"], Token.GetUserId(postText["Token"][0])));
 				StatusCode = 201;
 				return "Vaše objednávka byla zpracována.";
 			}
@@ -151,7 +151,11 @@ namespace final_project
 				return false;
 			}
 			return true;
-			
+		}
+
+		public static int GetUserId(string token) {
+			string sub = token.Substring(token.Length - 48);
+			return Int32.Parse(sub);
 		}
 
 	}
