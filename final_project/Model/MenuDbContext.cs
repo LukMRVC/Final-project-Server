@@ -55,6 +55,8 @@ namespace final_project.Model
 
 		public DbSet<Allergen> Allergenes { get; set; }
 
+		public DbSet<OrderFood> OrderFood { get; set; }
+
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			//Sets decimals range in DB

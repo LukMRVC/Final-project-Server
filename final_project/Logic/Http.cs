@@ -124,9 +124,9 @@ namespace final_project
 				string val = reader.ReadToEnd();
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(val);
 			}
-			if (Token.IsValid(postText["Token"][0]))
+			if (Token.IsValid(postText["token"][0]))
 			{
-				System.Threading.Tasks.Task.Run(() => server.AddOrder(postText["Order"], Token.GetUserId(postText["Token"][0])));
+				System.Threading.Tasks.Task.Run( () => server.AddOrder(postText["food"], Token.GetUserId(postText["token"][0])));
 				StatusCode = 201;
 				return "Vaše objednávka byla zpracována.";
 			}
@@ -139,7 +139,7 @@ namespace final_project
 		public static string HandleGetFood(System.Collections.Specialized.NameValueCollection headers)
 		{
 			var token = headers.GetValues("Authorization")[0];
-			if (Token.IsValid(token)) { 
+			if (Token.IsValidFromHeader(token)) { 
 				StatusCode = 200;
 				var data = server.getMenuData();
 				string json = dataToJson(data);
@@ -174,13 +174,14 @@ namespace final_project
 		public static string GenerateNew(int UserId) {
 			byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
 			byte[] key = Guid.NewGuid().ToByteArray();
+			//44 token length + userId
 			string token =  Convert.ToBase64String(time.Concat(key).ToArray()) + Constants.GenerateRandom(12, new System.Random())+UserId;
 			return token;
 		}
 
 		public static bool IsValid(string token) 
 		{
-			//Take substring to validate			string sub = token.Substring(6, 24);
+			string sub = token.Substring(0, 24);
 			byte[] data = Convert.FromBase64String(sub);
 			DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
 			if (when < DateTime.UtcNow.AddHours(-24)) {
@@ -189,8 +190,19 @@ namespace final_project
 			return true;
 		}
 
+		public static bool IsValidFromHeader(string token) {
+			//Take substring to validate
+			string sub = token.Substring(6, 24);
+			byte[] data = Convert.FromBase64String(sub);
+			DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
+			if (when<DateTime.UtcNow.AddHours(-24)) {
+				return false;
+			}
+			return true;
+		}
+
 		public static int GetUserId(string token) {
-			string sub = token.Substring(token.Length - 48);
+			string sub = token.Substring(44);
 			return Int32.Parse(sub);
 		}
 

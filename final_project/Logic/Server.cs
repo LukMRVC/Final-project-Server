@@ -142,17 +142,27 @@ namespace final_project
 			return w;
 		}
 
-		public void AddOrder(string[] order, int uid) 
+		public void AddOrder(string[] orderArr, int uid) 
 		{
-			var food = new List<Food>();
-			User user = this.database.Users.Find(uid);
-			foreach (string foodId in order) 
-			{
-				food.Add(database.Menu.Find(Int32.Parse(foodId)));
+			try
+			{				var food = new List<Food>();
+				User user = this.database.Users.Find(uid);
+				foreach (string foodId in orderArr)				{
+					food.Add(database.Menu.Find(Int32.Parse(foodId)));
+				}
+				var order = new Order(user, food.ToArray());
+				database.Orders.Add(order);
+				var duplicates = new List<string>();
+				foreach (string foodId in orderArr) 
+				{
+					if (duplicates.Contains(foodId))
+						continue;	
+					database.OrderFood.Add(new OrderFood { Order = order, Food = database.Menu.Find(Int32.Parse(foodId)), foodCount = orderArr.Duplicates(foodId) });
+					duplicates.Add(foodId);
+				}
+				database.SaveChanges();
 			}
-			database.Orders.Add(new Order(user, food.ToArray()));
-			database.SaveChanges();
-			                    
+			catch (Exception ex) { Console.WriteLine(ex.ToString());}
 		}
 
 		public void AddUser(string username, string password, string email) 

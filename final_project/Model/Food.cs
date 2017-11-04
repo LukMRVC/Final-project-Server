@@ -139,6 +139,8 @@ namespace final_project.Model
 
 		public ICollection<Allergen> Allergen { get; set; }
 
+		public virtual ICollection<OrderFood> OrderFood { get; set; }
+
 		public override string ToString()
 		{
 			return string.Format("[Food: Name={0}, Category={1}, Path={2}, Price={3}, Gram={4}, Composition={5}, EnergyKj={6}, EnergyKcal={7}, Protein={8}, TotalFat={9}, SaturatedFat={10}, Carbohydrates={11}, Sugar={12}, Salt={13}, Fiber={14}, Order={15}, Allergen={16}]", Name, Category, Path, Price, Gram, Composition, EnergyKj, EnergyKcal, Protein, TotalFat, SaturatedFat, Carbohydrates, Sugar, Salt, Fiber, Order, Allergen);
