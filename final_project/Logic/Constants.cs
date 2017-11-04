@@ -84,5 +84,18 @@ namespace final_project
 			}
 			return false;
 		}
+
+		public static string toJsonArray(this int[] arr) 
+		{
+			string json = "[";
+			foreach (int i in arr) 
+			{
+				json += i + ",";
+			}
+			if(arr.Length != 0)
+				json = json.Remove(json.Length - 1);
+			json += "]";
+			return json;
+		}
 	}
 }

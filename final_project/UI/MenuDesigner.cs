@@ -111,6 +111,15 @@ namespace final_project
 					{
 						foodTreeStore.SetValues(iterator, dlg.Values.ToArray().SubArray(1, 5));
 						food[result].SetValues(dlg.Values.ToArray());
+						//aId = allergen Id
+						foreach (int aId in dlg.Allergenes) 
+						{
+							//dlg.Allergenes is full of 0
+							if (aId == 0)
+								continue;
+							var allergen = (from a in this.server.database.Allergenes where a.Id == aId select a).First();
+							food[result].SetAllergen(allergen);
+						}
 					}
 				}
 			};

@@ -87,36 +87,36 @@ namespace final_project
 
 		public void CompareAndSave(Food[] comparator) 
 		{
-			try
+			
+			for (int i = 0; i < database.Menu.Count(); ++i)
 			{
-				for (int i = 0; i < database.Menu.Count(); ++i)
+				var instance = database.Menu.OrderBy(s => s.Id).Skip(i).First();
+				int result = instance.IsIn(comparator);
+				if (result != -1)
 				{
-					var instance = database.Menu.OrderBy(s => s.Id).Skip(i).First();
-					int result = instance.IsIn(comparator);
-					if (result != -1)
-					{
-						database.Entry(instance).State = System.Data.Entity.EntityState.Modified;
-						database.Menu.OrderBy(s => s.Id).Skip(i).First().SetValues(comparator[result]);
-						continue;
-					}
-					else if (result == -1)
-					{
-						database.Menu.Remove(instance);
-						continue;
-					}
+					database.Entry(instance).State = System.Data.Entity.EntityState.Modified;
+					database.Menu.OrderBy(s => s.Id).Skip(i).First().SetValues(comparator[result]);
+					continue;
 				}
-
-				for (int i = 0; i < comparator.Length; ++i)
+				else if (result == -1)
 				{
-					if (comparator[i].IsIn(database.Menu.ToArray()) == -1)
-					{
-						database.Menu.Add(comparator[i]);
-					}
+					database.Menu.Remove(instance);
+					continue;
 				}
 			}
-			catch (Exception e) { Console.WriteLine(e.ToString()); }
 
-			database.SaveChangesAsync();
+			for (int i = 0; i < comparator.Length; ++i)
+			{
+				if (comparator[i].IsIn(database.Menu.ToArray()) == -1)
+				{
+					database.Menu.Add(comparator[i]);
+				}
+			}
+			try
+			{
+				database.SaveChanges();
+			}
+			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 		}
 
 		public void saveMenuData() {
@@ -133,9 +133,10 @@ namespace final_project
 			return data;
 		}
 
+
 		public int[] GetAllergenes(int foodId) 
 		{
-			var query = this.database.Database.SqlQuery<string>("SELECT Allergen_Id FROM food_has_allergen WHERE Food_Id=" + foodId);
+			var query = this.database.Database.SqlQuery<string>("SELECT Allergen_Id FROM foodallergens WHERE Food_Id=" + foodId);
 			var list = query.ToList();
 			var w = list.Select(Int32.Parse).ToArray();
 			return w;

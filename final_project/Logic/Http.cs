@@ -20,17 +20,20 @@ namespace final_project
 		public static void startListening() {
 			try
 			{
-                listener = new HttpListener();
-				listener.Prefixes.Add("http://localhost:8080/");
-				listener.Prefixes.Add("http://localhost:8080/get/");
-				
+				listener = new HttpListener();
+				listener.Prefixes.Add("http://192.168.0.108:8088/");
+				listener.Prefixes.Add("http://192.168.0.108:8088/login/");
+				listener.Prefixes.Add("http://192.168.0.108:8088/signup/");
+				listener.Prefixes.Add("http://192.168.0.108:8088/get_food/");
+				listener.Prefixes.Add("http://192.168.0.108:8088/order/");
+				listener.Start();
 			}
 			catch (PlatformNotSupportedException ex)
 			{
 				Server.showMessage(MessageType.Error, @"Tato platforma není podporována, prosím upgradujte systém" + ex.ToString());
-				
+
 			}
-			listener.Start();
+			catch (Exception e) { Console.WriteLine(e.ToString()); }
 			IAsyncResult result = listener.BeginGetContext(ContextCallback, listener);
 			Server.showMessage(MessageType.Info, @"Naslouchání na portu 8080");
 
@@ -45,7 +48,6 @@ namespace final_project
 			listener.BeginGetContext(ContextCallback, listener);
 			HttpListenerRequest request = context.Request;
 			HttpListenerResponse response = context.Response;
-			
 			response.ContentType = "text/plain; charset=utf-8";
 			string responseString = HandleMethod(request);
 			response.StatusCode = StatusCode;
@@ -59,8 +61,9 @@ namespace final_project
 		public static string HandleMethod(HttpListenerRequest request) {
 			string responseText = "";
 			switch (request.HttpMethod) {
-				case "GET": Console.WriteLine("GET");
-					break; 
+				case "GET":
+					responseText = HandleGetFood(request.Headers);
+					break;
 				case "POST":
 					if (request.RawUrl == "/signup/")
 						responseText = HandleSignUp(request.InputStream);
@@ -131,7 +134,40 @@ namespace final_project
 			return "Vaše přihlášení již není platné";
 
 		}
+
+
+		public static string HandleGetFood(System.Collections.Specialized.NameValueCollection headers)
+		{
+			var token = headers.GetValues("Authorization")[0];
+			if (Token.IsValid(token)) { 
+				StatusCode = 200;
+				var data = server.getMenuData();
+				string json = dataToJson(data);
+				return json;
+			}
+			else{
+				StatusCode = 403;
+				return "Invalid Token";
+				
+			}
+		}
+
+		private static string dataToJson(IEnumerable<Model.Food> data)
+		{
+			string json = "{";
+			foreach (Model.Food f in data)
+			{
+				json += "\""+f.Name+"\" : [" + f.toClientData() + ", "+server.GetAllergenes(f.Id).toJsonArray() +"],";
+			}
+			json = json.Remove(json.Length - 1);
+			json += "}";
+			return json;
+		}
+
 	}
+
+
+
 
 	public static class Token {
 
@@ -144,8 +180,8 @@ namespace final_project
 
 		public static bool IsValid(string token) 
 		{
-			//Take substring to validate
-			byte[] data = Convert.FromBase64String(token);
+			//Take substring to validate			string sub = token.Substring(6, 24);
+			byte[] data = Convert.FromBase64String(sub);
 			DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
 			if (when < DateTime.UtcNow.AddHours(-24)) {
 				return false;

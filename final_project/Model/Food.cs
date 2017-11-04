@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Globalization;
+
 namespace final_project.Model
 {
 	[Table("Menu")]
@@ -61,8 +63,14 @@ namespace final_project.Model
 			this.Fiber = dec;
 		}
 
-		public void SetAllergenes(Allergen[] allergenes) {
-			foreach (Allergen a in allergenes) {
+		public void SetAllergen(Allergen allergen) {
+			this.Allergen.Add(allergen);
+		}
+
+		public void SetAllergenes(Allergen[] allergenes)
+		{
+			foreach (Allergen a in allergenes)
+			{
 				this.Allergen.Add(a);
 			}
 		}
@@ -94,7 +102,7 @@ namespace final_project.Model
 			this.Sugar = instance.Sugar;
 			this.Salt = instance.Salt;
 			this.Fiber = instance.Fiber;
-			
+			this.Allergen = instance.Allergen;
 		}
 
 		public string Path { get; set; }
@@ -141,10 +149,19 @@ namespace final_project.Model
 			return string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14};", Path, Name, Gram, Price, Composition, Category, EnergyKj, EnergyKcal, Protein, Carbohydrates, Sugar, TotalFat, SaturatedFat, Fiber, Salt);
 		}
 
+		public string toClientData() {
+			return string.Format("\"{0}\",{1},{2},{3},\"{4}\",{5},{6},{7},{8},{9},{10},{11},{12},{13}", Name, Id, (Category)? 1 : 0,
+			                     Price.ToString("0.00", CultureInfo.InvariantCulture), Composition, EnergyKj, EnergyKcal,
+			                     Protein.ToString("0.00", CultureInfo.InvariantCulture), Carbohydrates.ToString("0.00", CultureInfo.InvariantCulture),
+			                     Sugar.ToString("0.00", CultureInfo.InvariantCulture), TotalFat.ToString("0.00", CultureInfo.InvariantCulture), 
+			                     SaturatedFat.ToString("0.00", CultureInfo.InvariantCulture), Fiber.ToString("0.00", CultureInfo.InvariantCulture),
+			                     Salt.ToString("0.00", CultureInfo.InvariantCulture));
+		}
+
 		public int[] GetAllergenIds() 
 		{
 			List<int> list = new List<int>();
-			foreach (Allergen a in Allergen) 
+			foreach (Allergen a in this.Allergen) 
 			{
 				list.Add(a.Id);
 			}
@@ -156,7 +173,7 @@ namespace final_project.Model
 		{
 			string str = "";
 			bool rmv = false;
-			foreach (Allergen a in Allergen)
+			foreach (Allergen a in this.Allergen)
 			{
 				rmv = true;
 				str += a.Id + ",";

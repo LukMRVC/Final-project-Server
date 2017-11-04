@@ -79,6 +79,15 @@ namespace final_project
 			Values[3] = this.EntryPrice.Text;
 			Values[4] = this.EntryComposition.Text;
 			Values[5] = "0";
+			Values[6] = this.EntryEnergyKj.Text;
+			Values[7] = this.EntryEnergyKcal.Text;
+			Values[8] = this.EntryProtein.Text;
+			Values[9] = this.EntryCarbs.Text;
+			Values[10] = this.EntrySugar.Text;
+			Values[11] = this.EntryTotalFat.Text;
+			Values[12] = this.EntrySaturatedFat.Text;
+			Values[13] = this.EntryFiber.Text;
+			Values[14] = this.EntrySalt.Text;
 			this.GetAllergenes();
 			this.Destroy();
 			this.Dispose();
