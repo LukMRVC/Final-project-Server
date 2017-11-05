@@ -9,7 +9,7 @@ public partial class MainWindow : Gtk.Window
 {
 
 	private Server server;
-
+	private ListStore store;
 	public Statusbar statbar;
 
 	public MainWindow(Server s) : base(Gtk.WindowType.Toplevel)
@@ -30,9 +30,20 @@ public partial class MainWindow : Gtk.Window
 		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
         this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);
         this.nodeview.AppendColumn(@"Objednávka", new CellRendererText(), "text", 2);
-		ListStore store = new ListStore(typeof(int), typeof(string), typeof(string));
+		this.store = new ListStore(typeof(string), typeof(string), typeof(string));
 		this.nodeview.Model = store;
         this.nodeview.ShowAll();
+	}
+
+	public void PushToNodeView(int id, string username, IEnumerable<final_project.Model.OrderFood> content) {
+		string val = "";
+		foreach (var x in content) 
+		{
+			val += x.foodCount +"x "+ x.Food.Name+",";
+		}
+		val = val.Remove(val.Length - 1);
+		string[] values = { id.ToString(), username, val };
+		this.store.AppendValues(values);
 	}
 
 	/*private void addCategory(object sender, EventArgs e)

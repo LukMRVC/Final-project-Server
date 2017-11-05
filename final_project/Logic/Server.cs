@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using MySql;
 using Gtk;
@@ -25,15 +26,13 @@ namespace final_project
 		public string databaseConnectionString;
 		public MenuDbContext database;
 		public bool isConnected { get; private set; }
-		public Server() 
-		{
+		public Server()		{
 			Http.server = this;
             this.win = new MainWindow(this);
 			try
 			{
 				database = new MenuDbContext();
 				database.Database.Initialize(true);
-
 				this.win.statbar.Push(0, @"Připojeno k databázi");
 				this.isConnected = true;
 			}
@@ -43,7 +42,9 @@ namespace final_project
 
 		}
 
-
+		public void CollectionChanged(object o, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
+			Console.WriteLine("Order changed");
+		}
 
 		public void connect()
         {
@@ -161,6 +162,7 @@ namespace final_project
 					duplicates.Add(foodId);
 				}
 				database.SaveChanges();
+				this.win.PushToNodeView(order.Id, user.Username, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable());
 			}
 			catch (Exception ex) { Console.WriteLine(ex.ToString());}
 		}
@@ -216,6 +218,8 @@ namespace final_project
 			}
 			return "";
 		}
+
+		
 
 	}
 
