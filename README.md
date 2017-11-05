@@ -7,11 +7,8 @@ The main idea behind this project is to make a order system, that would save tim
 
 ### To do's
 * Validate CSV input
-* Set DB collation to UTF8
+* Make better UI
 * Warn if database connection drops
-* Display orders
-* Come up with an idea how requests should look
-* Make complete responses to client
 
 ### Future ideas
 * Geolocation
