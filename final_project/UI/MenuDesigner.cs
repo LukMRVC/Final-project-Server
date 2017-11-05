@@ -184,53 +184,53 @@ namespace final_project
 			}
 			for (int i = 0; i < depth; i += 2) {
 			pathIndex = 0;
-			foreach (string pathString in rebuildTreeValues.Keys)
-			{
-				if (i == 0)
+				foreach (string pathString in rebuildTreeValues.Keys)
 				{
-					if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
+					if (i == 0)
 					{
-						if (rebuildTreeValues[pathString][4] == "True")
-						{
-							foodTreeStore.AppendValues(rebuildTreeValues[pathString][0]);
-						}
-						else {
-							foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
-						}
-						++pathIndex;
-					}
-				}
-				else
-				{
-					//Exception would be thrown otherwise
-					if (pathString.Length > i) {
-						// this is because path 0:1 and 1:0 are different.
-						if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
-							pathIndex = 0;
-
-						}
-						//Gets parent TreeIter and appends new Node to it
 						if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
 						{
-							TreeIter iter;
-							foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
 							if (rebuildTreeValues[pathString][4] == "True")
 							{
-								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString][0]);
+								foodTreeStore.AppendValues(rebuildTreeValues[pathString][0]);
 							}
 							else {
-								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
+								foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
 							}
-							//foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
 							++pathIndex;
-							firstPos = (int)Char.GetNumericValue(pathString[i-2]);
+						}
+					}
+					else
+					{
+						//Exception would be thrown otherwise
+						if (pathString.Length > i) {
+							// this is because path 0:1 and 1:0 are different.
+							if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
+								pathIndex = 0;
 
+							}
+							//Gets parent TreeIter and appends new Node to it
+							if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
+							{
+								TreeIter iter;
+								foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
+								if (rebuildTreeValues[pathString][4] == "True")
+								{
+										foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString][0]);
+								}
+								else {
+										foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString].SubArray(0, 4));
+								}
+								//foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
+								++pathIndex;
+								firstPos = (int)Char.GetNumericValue(pathString[i-2]);
+
+							}
 						}
 					}
 				}
 			}
 		}
-	}
 
 
 
@@ -239,6 +239,8 @@ namespace final_project
 			
 			Gtk.TreeIter? node = GetSelectedRow();
 			if (node == null)
+				return;
+			if (foodTreeStore.GetValue(node.Value, 2) != null)
 				return;
 			CategoryDialog dlg = new CategoryDialog(this, true);
 			string name = null;
@@ -252,7 +254,7 @@ namespace final_project
 				});
 				dlg.Destroy();
 				dlg.Dispose();
-				this.foodTreeStore.AppendValues(node, name);
+				this.foodTreeStore.AppendValues(node.Value, name);
                 this.treeview.ShowAll();
 			}
 		}
@@ -265,7 +267,6 @@ namespace final_project
 				if (iter.HasValue)
 				{
 					node = iter.Value;
-					removeFood();
 					this.foodTreeStore.Remove(ref node);
 				}
 			}
@@ -329,6 +330,7 @@ namespace final_project
 				{
 					Category = true,					Name = name,
 				});
+				
 				this.foodTreeStore.AppendValues(name);
 				this.treeview.ShowAll();
 
@@ -336,11 +338,5 @@ namespace final_project
 			dlg.Destroy();
 			dlg.Dispose();
 		}
-
-		public void removeFood() {
-			
-		}
-
 	}
-
 }

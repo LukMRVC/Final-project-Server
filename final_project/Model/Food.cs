@@ -152,12 +152,12 @@ namespace final_project.Model
 		}
 
 		public string toClientData() {
-			return string.Format("\"{0}\",{1},{2},{3},\"{4}\",{5},{6},{7},{8},{9},{10},{11},{12},{13}", Name, Id, (Category)? 1 : 0,
+			return string.Format("\"{0}\",{1},{2},{3},\"{4}\",{5},{6},{7},{8},{9},{10},{11},{12},{13}, \"{14}\"", Name, Id, (Category)? 1 : 0,
 			                     Price.ToString("0.00", CultureInfo.InvariantCulture), Composition, EnergyKj, EnergyKcal,
 			                     Protein.ToString("0.00", CultureInfo.InvariantCulture), Carbohydrates.ToString("0.00", CultureInfo.InvariantCulture),
 			                     Sugar.ToString("0.00", CultureInfo.InvariantCulture), TotalFat.ToString("0.00", CultureInfo.InvariantCulture), 
 			                     SaturatedFat.ToString("0.00", CultureInfo.InvariantCulture), Fiber.ToString("0.00", CultureInfo.InvariantCulture),
-			                     Salt.ToString("0.00", CultureInfo.InvariantCulture));
+			                     Salt.ToString("0.00", CultureInfo.InvariantCulture), Path);
 		}
 
 		public int[] GetAllergenIds() 
