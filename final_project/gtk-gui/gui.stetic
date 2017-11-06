@@ -87,25 +87,28 @@
         <property name="Label" translatable="yes">Zobrazit</property>
         <property name="ShortLabel" translatable="yes">Zobrazit</property>
       </action>
-      <action id="UivateleAction">
+      <action id="DisplayUsersAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Uživatele</property>
         <property name="ShortLabel" translatable="yes">Uživatele</property>
+        <signal name="Activated" handler="OnDisplayUsersActivated" />
       </action>
-      <action id="HistorieObjednvekAction">
+      <action id="OrderHistoryAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Historie objednávek</property>
         <property name="ShortLabel" translatable="yes">Historie objednávek</property>
+        <signal name="Activated" handler="OnOrderHistoryActionActivated" />
       </action>
       <action id="JdelnLstekAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Jídelní lístek</property>
         <property name="ShortLabel" translatable="yes">Jídelní lístek</property>
       </action>
-      <action id="ExportovatAction">
+      <action id="ExportAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Exportovat</property>
         <property name="ShortLabel" translatable="yes">Exportovat</property>
+        <signal name="Activated" handler="OnExportActionActivated" />
       </action>
     </action-group>
     <property name="MemberName" />
@@ -129,11 +132,11 @@
                     <node type="Menuitem" action="PipojitAction" />
                   </node>
                   <node type="Menu" action="ZobrazitAction">
-                    <node type="Menuitem" action="UivateleAction" />
-                    <node type="Menuitem" action="HistorieObjednvekAction" />
+                    <node type="Menuitem" action="DisplayUsersAction" />
+                    <node type="Menuitem" action="OrderHistoryAction" />
                   </node>
                   <node type="Menu" action="JdelnLstekAction">
-                    <node type="Menuitem" action="ExportovatAction" />
+                    <node type="Menuitem" action="ExportAction" />
                   </node>
                 </node>
               </widget>
@@ -1806,6 +1809,22 @@
   </widget>
   <widget class="Gtk.Window" id="final_project.UserDisplay" design-size="400 300">
     <property name="MemberName" />
+    <property name="Title" translatable="yes">UserDisplay</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <child>
+      <placeholder />
+    </child>
+  </widget>
+  <widget class="Gtk.Window" id="final_project.OrderHistory" design-size="400 300">
+    <property name="MemberName" />
+    <property name="Title" translatable="yes">OrderHistory</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <child>
+      <placeholder />
+    </child>
+  </widget>
+  <widget class="Gtk.Window" id="final_project.Users" design-size="400 300">
+    <property name="MemberName" />
     <property name="Title" translatable="yes">Uživatelé</property>
     <property name="WindowPosition">CenterOnParent</property>
     <child>
@@ -1817,14 +1836,15 @@
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="ShowScrollbars">True</property>
+            <property name="SearchColumn">0</property>
           </widget>
         </child>
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Window" id="final_project.OrderHistory" design-size="400 300">
+  <widget class="Gtk.Window" id="final_project.Orders" design-size="400 300">
     <property name="MemberName" />
-    <property name="Title" translatable="yes">OrderHistory</property>
+    <property name="Title" translatable="yes">Objednávky</property>
     <property name="WindowPosition">CenterOnParent</property>
     <child>
       <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
@@ -1835,6 +1855,7 @@
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="ShowScrollbars">True</property>
+            <property name="SearchColumn">1</property>
           </widget>
         </child>
       </widget>

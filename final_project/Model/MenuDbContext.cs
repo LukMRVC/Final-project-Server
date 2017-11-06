@@ -12,7 +12,7 @@ namespace final_project.Model
 	
 	}
 
-	public class CzechDbInitializer : DropCreateDatabaseAlways<MenuDbContext> { 
+	public class CzechDbInitializer : DropCreateDatabaseIfModelChanges<MenuDbContext> { 
 		protected override void Seed(MenuDbContext context)
 		{
 			//find database name from connection string to set collation to czech utf8

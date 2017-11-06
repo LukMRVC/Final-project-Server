@@ -35,13 +35,13 @@ public partial class MainWindow
 
 	private global::Gtk.Action ZobrazitAction;
 
-	private global::Gtk.Action UivateleAction;
+	private global::Gtk.Action DisplayUsersAction;
 
-	private global::Gtk.Action HistorieObjednvekAction;
+	private global::Gtk.Action OrderHistoryAction;
 
 	private global::Gtk.Action JdelnLstekAction;
 
-	private global::Gtk.Action ExportovatAction;
+	private global::Gtk.Action ExportAction;
 
 	private global::Gtk.VBox vbox3;
 
@@ -114,18 +114,18 @@ public partial class MainWindow
 		this.ZobrazitAction = new global::Gtk.Action("ZobrazitAction", global::Mono.Unix.Catalog.GetString("Zobrazit"), null, null);
 		this.ZobrazitAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Zobrazit");
 		w1.Add(this.ZobrazitAction, null);
-		this.UivateleAction = new global::Gtk.Action("UivateleAction", global::Mono.Unix.Catalog.GetString("Uživatele"), null, null);
-		this.UivateleAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Uživatele");
-		w1.Add(this.UivateleAction, null);
-		this.HistorieObjednvekAction = new global::Gtk.Action("HistorieObjednvekAction", global::Mono.Unix.Catalog.GetString("Historie objednávek"), null, null);
-		this.HistorieObjednvekAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Historie objednávek");
-		w1.Add(this.HistorieObjednvekAction, null);
+		this.DisplayUsersAction = new global::Gtk.Action("DisplayUsersAction", global::Mono.Unix.Catalog.GetString("Uživatele"), null, null);
+		this.DisplayUsersAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Uživatele");
+		w1.Add(this.DisplayUsersAction, null);
+		this.OrderHistoryAction = new global::Gtk.Action("OrderHistoryAction", global::Mono.Unix.Catalog.GetString("Historie objednávek"), null, null);
+		this.OrderHistoryAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Historie objednávek");
+		w1.Add(this.OrderHistoryAction, null);
 		this.JdelnLstekAction = new global::Gtk.Action("JdelnLstekAction", global::Mono.Unix.Catalog.GetString("Jídelní lístek"), null, null);
 		this.JdelnLstekAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Jídelní lístek");
 		w1.Add(this.JdelnLstekAction, null);
-		this.ExportovatAction = new global::Gtk.Action("ExportovatAction", global::Mono.Unix.Catalog.GetString("Exportovat"), null, null);
-		this.ExportovatAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Exportovat");
-		w1.Add(this.ExportovatAction, null);
+		this.ExportAction = new global::Gtk.Action("ExportAction", global::Mono.Unix.Catalog.GetString("Exportovat"), null, null);
+		this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Exportovat");
+		w1.Add(this.ExportAction, null);
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -140,7 +140,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='DatabzeAction' action='DatabzeAction'><menuitem name='PipojenAction' action='PipojenAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu><menu name='ZobrazitAction' action='ZobrazitAction'><menuitem name='UivateleAction' action='UivateleAction'/><menuitem name='HistorieObjednvekAction' action='HistorieObjednvekAction'/></menu><menu name='JdelnLstekAction' action='JdelnLstekAction'><menuitem name='ExportovatAction' action='ExportovatAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='DatabzeAction' action='DatabzeAction'><menuitem name='PipojenAction' action='PipojenAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu><menu name='ZobrazitAction' action='ZobrazitAction'><menuitem name='DisplayUsersAction' action='DisplayUsersAction'/><menuitem name='OrderHistoryAction' action='OrderHistoryAction'/></menu><menu name='JdelnLstekAction' action='JdelnLstekAction'><menuitem name='ExportAction' action='ExportAction'/></menu></menubar></ui>");
 		this.menubar7 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget("/menubar7")));
 		this.menubar7.Name = "menubar7";
 		this.hbox2.Add(this.menubar7);
@@ -221,6 +221,9 @@ public partial class MainWindow
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 		this.PipojenAction.Activated += new global::System.EventHandler(this.databaseConnectionFormAction);
 		this.PipojitAction.Activated += new global::System.EventHandler(this.connectToDatabaseAction);
+		this.DisplayUsersAction.Activated += new global::System.EventHandler(this.OnDisplayUsersActivated);
+		this.OrderHistoryAction.Activated += new global::System.EventHandler(this.OnOrderHistoryActionActivated);
+		this.ExportAction.Activated += new global::System.EventHandler(this.OnExportActionActivated);
 		this.BtnMenuDesigner.Clicked += new global::System.EventHandler(this.BtnMenuDesignerClick);
 		this.BtnStartListening.Clicked += new global::System.EventHandler(this.BtnStartListeningClicked);
 	}

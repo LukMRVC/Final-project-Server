@@ -104,6 +104,10 @@
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Allergen.cs" />
     <Compile Include="Logic\Http.cs" />
+    <Compile Include="UI\Users.cs" />
+    <Compile Include="gtk-gui\final_project.Users.cs" />
+    <Compile Include="UI\Orders.cs" />
+    <Compile Include="gtk-gui\final_project.Orders.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
