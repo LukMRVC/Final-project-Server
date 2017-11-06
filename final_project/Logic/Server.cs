@@ -143,7 +143,7 @@ namespace final_project
 			return w;
 		}
 
-		public void AddOrder(string[] orderArr, int uid) 
+		public void AddOrder(string[] orderArr, int uid, string totalPrice) 
 		{
 			try
 			{				var food = new List<Food>();
@@ -152,6 +152,7 @@ namespace final_project
 					food.Add(database.Menu.Find(Int32.Parse(foodId)));
 				}
 				var order = new Order(user, food.ToArray());
+                order.TotalPrice = Decimal.Parse(totalPrice);
 				database.Orders.Add(order);
 				var duplicates = new List<string>();
 				foreach (string foodId in orderArr) 
@@ -162,7 +163,7 @@ namespace final_project
 					duplicates.Add(foodId);
 				}
 				database.SaveChanges();
-				this.win.PushToNodeView(order.Id, user.Username, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable());
+                this.win.PushToNodeView(order.Id, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable(),order.TotalPrice , order.OrderedAt.ToString());
 			}
 			catch (Exception ex) { Console.WriteLine(ex.ToString());}
 		}

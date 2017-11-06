@@ -27,6 +27,8 @@ namespace final_project.Model
 		public int UserId { get; set; }
 		public virtual User User { get; set; }
 
+        public decimal TotalPrice { get; set; }
+
 		public DateTime OrderedAt { get; set; }
 
 		public ICollection<Food> Food { get; set; }

@@ -28,21 +28,23 @@ public partial class MainWindow : Gtk.Window
 
 	private void buildNodeView() {
 		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
-        this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);
-        this.nodeview.AppendColumn(@"Objednávka", new CellRendererText(), "text", 2);
+        this.nodeview.AppendColumn(@"Objednávka ", new CellRendererText(), "text", 1);
+		this.nodeview.AppendColumn(@"Cena ", new CellRendererText(), "text", 2);
+		this.nodeview.AppendColumn(@"Čas objednání ", new CellRendererText(), "text", 2);
+
 		this.store = new ListStore(typeof(string), typeof(string), typeof(string));
 		this.nodeview.Model = store;
         this.nodeview.ShowAll();
 	}
 
-	public void PushToNodeView(int id, string username, IEnumerable<final_project.Model.OrderFood> content) {
+	public void PushToNodeView(int id, IEnumerable<final_project.Model.OrderFood> content, string price, string time) {
 		string val = "";
 		foreach (var x in content) 
 		{
 			val += x.foodCount +"x "+ x.Food.Name+",";
 		}
 		val = val.Remove(val.Length - 1);
-		string[] values = { id.ToString(), username, val };
+		string[] values = { id.ToString(), val, price, time };
 		this.store.AppendValues(values);
 	}
 

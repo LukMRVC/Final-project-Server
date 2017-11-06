@@ -126,7 +126,7 @@ namespace final_project
 			}
 			if (Token.IsValid(postText["token"][0]))
 			{
-				System.Threading.Tasks.Task.Run( () => server.AddOrder(postText["food"], Token.GetUserId(postText["token"][0])));
+                System.Threading.Tasks.Task.Run( () => server.AddOrder(postText["food"], Token.GetUserId(postText["token"][0]), postText["totalprice"][0]));
 				StatusCode = 201;
 				return "Vaše objednávka byla zpracována.";
 			}

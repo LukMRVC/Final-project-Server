@@ -65,14 +65,14 @@
         <property name="Label" translatable="yes">Přidat do...</property>
         <property name="ShortLabel" translatable="yes">Upravit</property>
       </action>
-      <action id="connectionMenuAction">
+      <action id="DatabzeAction">
         <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Připojení k databázi</property>
+        <property name="Label" translatable="yes">Databáze</property>
         <property name="ShortLabel" translatable="yes">Připojení k databázi</property>
       </action>
-      <action id="databaseInfoMenuAction">
+      <action id="PipojenAction">
         <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Informace k připojení</property>
+        <property name="Label" translatable="yes">Připojení</property>
         <property name="ShortLabel" translatable="yes">Informace k připojení</property>
         <signal name="Activated" handler="databaseConnectionFormAction" />
       </action>
@@ -81,6 +81,31 @@
         <property name="Label" translatable="yes">Připojit</property>
         <property name="ShortLabel" translatable="yes">Připojit</property>
         <signal name="Activated" handler="connectToDatabaseAction" after="yes" />
+      </action>
+      <action id="ZobrazitAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Zobrazit</property>
+        <property name="ShortLabel" translatable="yes">Zobrazit</property>
+      </action>
+      <action id="UivateleAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Uživatele</property>
+        <property name="ShortLabel" translatable="yes">Uživatele</property>
+      </action>
+      <action id="HistorieObjednvekAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Historie objednávek</property>
+        <property name="ShortLabel" translatable="yes">Historie objednávek</property>
+      </action>
+      <action id="JdelnLstekAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Jídelní lístek</property>
+        <property name="ShortLabel" translatable="yes">Jídelní lístek</property>
+      </action>
+      <action id="ExportovatAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Exportovat</property>
+        <property name="ShortLabel" translatable="yes">Exportovat</property>
       </action>
     </action-group>
     <property name="MemberName" />
@@ -99,9 +124,16 @@
               <widget class="Gtk.MenuBar" id="menubar7">
                 <property name="MemberName" />
                 <node name="menubar7" type="Menubar">
-                  <node type="Menu" action="connectionMenuAction">
-                    <node type="Menuitem" action="databaseInfoMenuAction" />
+                  <node type="Menu" action="DatabzeAction">
+                    <node type="Menuitem" action="PipojenAction" />
                     <node type="Menuitem" action="PipojitAction" />
+                  </node>
+                  <node type="Menu" action="ZobrazitAction">
+                    <node type="Menuitem" action="UivateleAction" />
+                    <node type="Menuitem" action="HistorieObjednvekAction" />
+                  </node>
+                  <node type="Menu" action="JdelnLstekAction">
+                    <node type="Menuitem" action="ExportovatAction" />
                   </node>
                 </node>
               </widget>
@@ -133,16 +165,6 @@
             <property name="MemberName" />
             <property name="Spacing">6</property>
             <child>
-              <widget class="Gtk.Statusbar" id="statusbar4">
-                <property name="MemberName" />
-                <property name="Spacing">6</property>
-              </widget>
-              <packing>
-                <property name="Position">0</property>
-                <property name="AutoSize">False</property>
-              </packing>
-            </child>
-            <child>
               <widget class="Gtk.Button" id="BtnMenuDesigner">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
@@ -153,9 +175,19 @@
                 <signal name="Clicked" handler="BtnMenuDesignerClick" />
               </widget>
               <packing>
-                <property name="PackType">End</property>
-                <property name="Position">1</property>
+                <property name="Position">0</property>
                 <property name="AutoSize">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Statusbar" id="statusbar1">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <property name="HasResizeGrip">False</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
               </packing>
             </child>
           </widget>
@@ -179,6 +211,7 @@
             <property name="Position">2</property>
             <property name="AutoSize">False</property>
             <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
         <child>

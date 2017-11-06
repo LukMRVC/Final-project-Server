@@ -65,7 +65,9 @@ namespace final_project.Model
 			modelBuilder.Entity<Food>().Property(x => x.Protein).HasPrecision(10, 2);
 			modelBuilder.Entity<Food>().Property(x => x.SaturatedFat).HasPrecision(10, 2);
 			modelBuilder.Entity<Food>().Property(x => x.Salt).HasPrecision(10, 2);
+			modelBuilder.Entity<Food>().Property(x => x.Price).HasPrecision(10, 2);
 			modelBuilder.Entity<Food>().Property(x => x.TotalFat).HasPrecision(10, 2);
+			modelBuilder.Entity<Order>().Property(x => x.TotalPrice).HasPrecision(10, 2);
 
 			modelBuilder.Entity<Order>().HasMany<Food>(o => o.Food).WithMany(f => f.Order).Map(of => {
 				of.ToTable("Order_has_Food");
