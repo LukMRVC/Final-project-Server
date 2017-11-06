@@ -30,9 +30,9 @@ public partial class MainWindow : Gtk.Window
 		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
         this.nodeview.AppendColumn(@"Objednávka ", new CellRendererText(), "text", 1);
 		this.nodeview.AppendColumn(@"Cena ", new CellRendererText(), "text", 2);
-		this.nodeview.AppendColumn(@"Čas objednání ", new CellRendererText(), "text", 2);
+		this.nodeview.AppendColumn(@"Čas objednání ", new CellRendererText(), "text", 3);
 
-		this.store = new ListStore(typeof(string), typeof(string), typeof(string));
+		this.store = new ListStore(typeof(string), typeof(string), typeof(string), typeof(string));
 		this.nodeview.Model = store;
         this.nodeview.ShowAll();
 	}

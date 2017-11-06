@@ -27,11 +27,21 @@ public partial class MainWindow
 
 	private global::Gtk.Action PridatAction;
 
-	private global::Gtk.Action connectionMenuAction;
+	private global::Gtk.Action DatabzeAction;
 
-	private global::Gtk.Action databaseInfoMenuAction;
+	private global::Gtk.Action PipojenAction;
 
 	private global::Gtk.Action PipojitAction;
+
+	private global::Gtk.Action ZobrazitAction;
+
+	private global::Gtk.Action UivateleAction;
+
+	private global::Gtk.Action HistorieObjednvekAction;
+
+	private global::Gtk.Action JdelnLstekAction;
+
+	private global::Gtk.Action ExportovatAction;
 
 	private global::Gtk.VBox vbox3;
 
@@ -43,9 +53,9 @@ public partial class MainWindow
 
 	private global::Gtk.HBox hbox4;
 
-	private global::Gtk.Statusbar statusbar4;
-
 	private global::Gtk.Button BtnMenuDesigner;
+
+	private global::Gtk.Statusbar statusbar1;
 
 	private global::Gtk.Button BtnStartListening;
 
@@ -92,15 +102,30 @@ public partial class MainWindow
 		this.PridatAction = new global::Gtk.Action("PridatAction", global::Mono.Unix.Catalog.GetString("Přidat do..."), null, null);
 		this.PridatAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Upravit");
 		w1.Add(this.PridatAction, null);
-		this.connectionMenuAction = new global::Gtk.Action("connectionMenuAction", global::Mono.Unix.Catalog.GetString("Připojení k databázi"), null, null);
-		this.connectionMenuAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Připojení k databázi");
-		w1.Add(this.connectionMenuAction, null);
-		this.databaseInfoMenuAction = new global::Gtk.Action("databaseInfoMenuAction", global::Mono.Unix.Catalog.GetString("Informace k připojení"), null, null);
-		this.databaseInfoMenuAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Informace k připojení");
-		w1.Add(this.databaseInfoMenuAction, null);
+		this.DatabzeAction = new global::Gtk.Action("DatabzeAction", global::Mono.Unix.Catalog.GetString("Databáze"), null, null);
+		this.DatabzeAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Připojení k databázi");
+		w1.Add(this.DatabzeAction, null);
+		this.PipojenAction = new global::Gtk.Action("PipojenAction", global::Mono.Unix.Catalog.GetString("Připojení"), null, null);
+		this.PipojenAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Informace k připojení");
+		w1.Add(this.PipojenAction, null);
 		this.PipojitAction = new global::Gtk.Action("PipojitAction", global::Mono.Unix.Catalog.GetString("Připojit"), null, null);
 		this.PipojitAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Připojit");
 		w1.Add(this.PipojitAction, null);
+		this.ZobrazitAction = new global::Gtk.Action("ZobrazitAction", global::Mono.Unix.Catalog.GetString("Zobrazit"), null, null);
+		this.ZobrazitAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Zobrazit");
+		w1.Add(this.ZobrazitAction, null);
+		this.UivateleAction = new global::Gtk.Action("UivateleAction", global::Mono.Unix.Catalog.GetString("Uživatele"), null, null);
+		this.UivateleAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Uživatele");
+		w1.Add(this.UivateleAction, null);
+		this.HistorieObjednvekAction = new global::Gtk.Action("HistorieObjednvekAction", global::Mono.Unix.Catalog.GetString("Historie objednávek"), null, null);
+		this.HistorieObjednvekAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Historie objednávek");
+		w1.Add(this.HistorieObjednvekAction, null);
+		this.JdelnLstekAction = new global::Gtk.Action("JdelnLstekAction", global::Mono.Unix.Catalog.GetString("Jídelní lístek"), null, null);
+		this.JdelnLstekAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Jídelní lístek");
+		w1.Add(this.JdelnLstekAction, null);
+		this.ExportovatAction = new global::Gtk.Action("ExportovatAction", global::Mono.Unix.Catalog.GetString("Exportovat"), null, null);
+		this.ExportovatAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Exportovat");
+		w1.Add(this.ExportovatAction, null);
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -115,10 +140,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString("<ui><menubar name=\'menubar7\'><menu name=\'connectionMenuAction\' action=\'connection" +
-				"MenuAction\'><menuitem name=\'databaseInfoMenuAction\' action=\'databaseInfoMenuActi" +
-				"on\'/><menuitem name=\'PipojitAction\' action=\'PipojitAction\'/></menu></menubar></u" +
-				"i>");
+		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='DatabzeAction' action='DatabzeAction'><menuitem name='PipojenAction' action='PipojenAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu><menu name='ZobrazitAction' action='ZobrazitAction'><menuitem name='UivateleAction' action='UivateleAction'/><menuitem name='HistorieObjednvekAction' action='HistorieObjednvekAction'/></menu><menu name='JdelnLstekAction' action='JdelnLstekAction'><menuitem name='ExportovatAction' action='ExportovatAction'/></menu></menubar></ui>");
 		this.menubar7 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget("/menubar7")));
 		this.menubar7.Name = "menubar7";
 		this.hbox2.Add(this.menubar7);
@@ -141,13 +163,6 @@ public partial class MainWindow
 		this.hbox4.Name = "hbox4";
 		this.hbox4.Spacing = 6;
 		// Container child hbox4.Gtk.Box+BoxChild
-		this.statusbar4 = new global::Gtk.Statusbar();
-		this.statusbar4.Name = "statusbar4";
-		this.statusbar4.Spacing = 6;
-		this.hbox4.Add(this.statusbar4);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.statusbar4]));
-		w5.Position = 0;
-		// Container child hbox4.Gtk.Box+BoxChild
 		this.BtnMenuDesigner = new global::Gtk.Button();
 		this.BtnMenuDesigner.CanFocus = true;
 		this.BtnMenuDesigner.Name = "BtnMenuDesigner";
@@ -155,8 +170,15 @@ public partial class MainWindow
 		this.BtnMenuDesigner.Relief = ((global::Gtk.ReliefStyle)(1));
 		this.BtnMenuDesigner.Label = global::Mono.Unix.Catalog.GetString("Návrhář jídelního lístku");
 		this.hbox4.Add(this.BtnMenuDesigner);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.BtnMenuDesigner]));
-		w6.PackType = ((global::Gtk.PackType)(1));
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.BtnMenuDesigner]));
+		w5.Position = 0;
+		// Container child hbox4.Gtk.Box+BoxChild
+		this.statusbar1 = new global::Gtk.Statusbar();
+		this.statusbar1.Name = "statusbar1";
+		this.statusbar1.Spacing = 6;
+		this.statusbar1.HasResizeGrip = false;
+		this.hbox4.Add(this.statusbar1);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.statusbar1]));
 		w6.Position = 1;
 		this.vbox3.Add(this.hbox4);
 		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox4]));
@@ -173,6 +195,7 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.BtnStartListening]));
 		w8.Position = 2;
 		w8.Expand = false;
+		w8.Fill = false;
 		// Container child vbox3.Gtk.Box+BoxChild
 		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
@@ -196,7 +219,7 @@ public partial class MainWindow
 		this.DefaultHeight = 499;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
-		this.databaseInfoMenuAction.Activated += new global::System.EventHandler(this.databaseConnectionFormAction);
+		this.PipojenAction.Activated += new global::System.EventHandler(this.databaseConnectionFormAction);
 		this.PipojitAction.Activated += new global::System.EventHandler(this.connectToDatabaseAction);
 		this.BtnMenuDesigner.Clicked += new global::System.EventHandler(this.BtnMenuDesignerClick);
 		this.BtnStartListening.Clicked += new global::System.EventHandler(this.BtnStartListeningClicked);
