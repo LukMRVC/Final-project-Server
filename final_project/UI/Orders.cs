@@ -1,30 +1,30 @@
-﻿using System;
+﻿using System.Linq;
 using Gtk;
-using System.Linq;
 namespace final_project
 {
-	public partial class OrderHistory : Gtk.Window
+	public partial class Orders : Gtk.Window
 	{
 		private ListStore store;
-		public OrderHistory(IQueryable<final_project.Model.Order> orders) :
+		public Orders(IQueryable<Model.Order> orders) :
 				base(Gtk.WindowType.Toplevel)
 		{
 			this.Build();
+			this.BuildNodeView(orders);
 		}
 
-		private BuildNodeView(IQueryable<final_project.Model.Order> orders)
+		private void BuildNodeView(IQueryable<Model.Order> orders)
 		{
 			this.nodeview.AppendColumn(@"Id ", new CellRendererText(), "text", 0);
 			this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);
 			this.nodeview.AppendColumn(@"Objednáno ", new CellRendererText(), "text", 2);
 			this.store = new ListStore(typeof(string), typeof(string), typeof(string));
 			this.nodeview.Model = store;
-			foreach(var order in order){
-				string[] temp = { order.Id.toString(), order.User.Username, order.CreatedAt.toString() };
-				store.appendValues(temp);
+			foreach (var order in orders)
+			{
+				string[] temp = { order.Id.ToString(), order.User.Username, order.OrderedAt.ToString() };
+				store.AppendValues(temp);
 			}
-	        this.nodeview.ShowAll();
-
+			this.nodeview.ShowAll();
 		}
 	}
 }

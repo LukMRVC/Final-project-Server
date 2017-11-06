@@ -26,22 +26,24 @@ public partial class MainWindow : Gtk.Window
 		a.RetVal = true;
 	}
 
-	private void buildNodeView() {
+	private void buildNodeView()
+	{
 		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
-        this.nodeview.AppendColumn(@"Objednávka ", new CellRendererText(), "text", 1);
-		this.nodeview.AppendColumn(@"Cena ", new CellRendererText(), "text", 2);
+		this.nodeview.AppendColumn(@"Objednávka ", new CellRendererText(), "text", 1);
+		this.nodeview.AppendColumn(@"Cena (v Kč)", new CellRendererText(), "text", 2);
 		this.nodeview.AppendColumn(@"Čas objednání ", new CellRendererText(), "text", 3);
 
 		this.store = new ListStore(typeof(string), typeof(string), typeof(string), typeof(string));
 		this.nodeview.Model = store;
-        this.nodeview.ShowAll();
+		this.nodeview.ShowAll();
 	}
 
-	public void PushToNodeView(int id, IEnumerable<final_project.Model.OrderFood> content, string price, string time) {
+	public void PushToNodeView(int id, IEnumerable<final_project.Model.OrderFood> content, string price, string time)
+	{
 		string val = "";
-		foreach (var x in content) 
+		foreach (var x in content)
 		{
-			val += x.foodCount +"x "+ x.Food.Name+",";
+			val += x.foodCount + "x " + x.Food.Name + ",";
 		}
 		val = val.Remove(val.Length - 1);
 		string[] values = { id.ToString(), val, price, time };
@@ -65,7 +67,7 @@ public partial class MainWindow : Gtk.Window
 	{
 		this.statusbar.Push(0, "Navazování spojení...");
 		Task.Factory.StartNew(() => server.connect());
-		
+
 		//		this.server.connect();
 	}
 
@@ -92,8 +94,8 @@ public partial class MainWindow : Gtk.Window
 		try
 		{
 			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
-            if (string.IsNullOrWhiteSpace(data.ToArray<string>()[0]))
-                throw new InvalidOperationException();
+			if (string.IsNullOrWhiteSpace(data.ToArray<string>()[0]))
+				throw new InvalidOperationException();
 			designer = new MenuDesigner(data, this.server);
 		}
 		catch (Exception)
@@ -131,7 +133,8 @@ public partial class MainWindow : Gtk.Window
 					filedlg.Dispose();
 
 				}
-				else if(response == 0){					this.databaseConnectionFormAction(this, EventArgs.Empty);
+				else if (response == 0)
+				{					this.databaseConnectionFormAction(this, EventArgs.Empty);
 					this.connectToDatabaseAction(this, EventArgs.Empty);
 					designer = new MenuDesigner(this.server.getMenuData(), this.server);
 				}
@@ -141,6 +144,36 @@ public partial class MainWindow : Gtk.Window
 		}
 	}
 
+	protected void OnDisplayUsersActivated(object sender, EventArgs e)
+	{
+		var display = new Users(this.server.GetUsers());
+	}
 
+	protected void OnOrderHistoryActionActivated(object sender, EventArgs e)
+	{
+		var display = new Orders(this.server.GetOrders());
+	}
 
+	protected void OnExportActionActivated(object sender, EventArgs e)
+	{
+		var filedlg = new FileChooserDialog("Uložit soubor", this, FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Accept);
+		var filter = new FileFilter();
+		filter.Name = "*.csv";
+		filter.AddPattern("*.csv");
+		filedlg.AddFilter(filter); 
+		var result = filedlg.Run();
+		if (result == (int)ResponseType.Accept) 
+		{
+			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
+			string csv = string.Join(Environment.NewLine, data.Select(s => s));
+			string filename = filedlg.Filename;
+			//If file has extension
+			if (!System.Text.RegularExpressions.Regex.IsMatch(filename, @".+\..+")) {
+				filename += @".csv";
+			}
+			System.IO.File.WriteAllText(filename, csv);
+		}
+		filedlg.Destroy();
+		filedlg.Dispose();
+	}
 }

@@ -163,7 +163,7 @@ namespace final_project
 					duplicates.Add(foodId);
 				}
 				database.SaveChanges();
-                this.win.PushToNodeView(order.Id, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable(),order.TotalPrice , order.OrderedAt.ToString());
+				this.win.PushToNodeView(order.Id, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable(),order.TotalPrice.ToString() , order.OrderedAt.ToString("HH:mm:ss"));
 			}
 			catch (Exception ex) { Console.WriteLine(ex.ToString());}
 		}
@@ -220,7 +220,15 @@ namespace final_project
 			return "";
 		}
 
-		
+		public IQueryable<User> GetUsers() 
+		{
+			return (from u in database.Users select u);
+		}
+
+		public IQueryable<Order> GetOrders() 
+		{
+			return (from o in database.Orders select o);
+		}
 
 	}
 
