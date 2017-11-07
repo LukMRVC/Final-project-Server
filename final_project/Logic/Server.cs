@@ -220,14 +220,14 @@ namespace final_project
 			return "";
 		}
 
-		public IQueryable<User> GetUsers() 
+		public IEnumerable<User> GetUsers() 
 		{
-			return (from u in database.Users select u);
+			return (from u in database.Users.ToList() select u);
 		}
 
-		public IQueryable<Order> GetOrders() 
+		public IEnumerable<Order> GetOrders() 
 		{
-			return (from o in database.Orders select o);
+			return (from o in database.Orders.ToList() select o);
 		}
 
 	}

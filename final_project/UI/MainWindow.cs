@@ -47,7 +47,8 @@ public partial class MainWindow : Gtk.Window
 		}
 		val = val.Remove(val.Length - 1);
 		string[] values = { id.ToString(), val, price, time };
-		this.store.AppendValues(values);
+		this.store.InsertWithValues(0, values);
+		//this.store.AppendValues(values);
 	}
 
 	/*private void addCategory(object sender, EventArgs e)
@@ -151,7 +152,11 @@ public partial class MainWindow : Gtk.Window
 
 	protected void OnOrderHistoryActionActivated(object sender, EventArgs e)
 	{
-		var display = new Orders(this.server.GetOrders());
+		try
+		{
+			var display = new Orders(this.server.GetOrders());
+		}
+		catch (Exception ex) {Console.WriteLine(ex.ToString()); }
 	}
 
 	protected void OnExportActionActivated(object sender, EventArgs e)

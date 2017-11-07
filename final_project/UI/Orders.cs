@@ -1,18 +1,19 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using Gtk;
 namespace final_project
 {
 	public partial class Orders : Gtk.Window
 	{
 		private ListStore store;
-		public Orders(IQueryable<Model.Order> orders) :
+		public Orders(IEnumerable<Model.Order> orders) :
 				base(Gtk.WindowType.Toplevel)
 		{
 			this.Build();
 			this.BuildNodeView(orders);
 		}
 
-		private void BuildNodeView(IQueryable<Model.Order> orders)
+		private void BuildNodeView(IEnumerable<Model.Order> orders)
 		{
 			this.nodeview.AppendColumn(@"Id ", new CellRendererText(), "text", 0);
 			this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);

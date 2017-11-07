@@ -1,18 +1,19 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using Gtk;
 namespace final_project
 {
 	public partial class Users : Gtk.Window
 	{
 		private ListStore store;
-		public Users(IQueryable<Model.User> users) :
+		public Users(IEnumerable<Model.User> users) :
 				base(Gtk.WindowType.Toplevel)
 		{
 			this.Build();
 			this.BuildNodeView(users);
 		}
 
-		private void BuildNodeView(IQueryable<Model.User> users)
+		private void BuildNodeView(IEnumerable<Model.User> users)
 		{
             this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 0);
 			this.nodeview.AppendColumn(@"Email ", new CellRendererText(), "text", 1);
