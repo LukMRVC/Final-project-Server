@@ -151,7 +151,11 @@ public partial class MainWindow : Gtk.Window
 
 	protected void OnOrderHistoryActionActivated(object sender, EventArgs e)
 	{
-		var display = new Orders(this.server.GetOrders());
+		try
+		{
+			var display = new Orders(this.server.GetOrders());
+		}
+		catch (Exception ex) {Console.WriteLine(ex.ToString()); }
 	}
 
 	protected void OnExportActionActivated(object sender, EventArgs e)

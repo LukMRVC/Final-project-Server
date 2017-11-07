@@ -23,7 +23,6 @@ namespace final_project
 			this.nodeview = new global::Gtk.NodeView();
 			this.nodeview.CanFocus = true;
 			this.nodeview.Name = "nodeview";
-			this.nodeview.SearchColumn = 0;
 			this.GtkScrolledWindow.Add(this.nodeview);
 			this.Add(this.GtkScrolledWindow);
 			if ((this.Child != null))
