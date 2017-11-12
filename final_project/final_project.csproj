@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>final_project</RootNamespace>
     <AssemblyName>final_project</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <PackageId>Final project - Server</PackageId>
     <PackageVersion>0.1</PackageVersion>
     <Authors>Lukáš Moravec</Authors>
@@ -66,6 +66,11 @@
     <Reference Include="CryptSharp">
       <HintPath>..\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Braintree">
+      <HintPath>..\packages\Braintree.3.9.0\lib\net452\Braintree.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">

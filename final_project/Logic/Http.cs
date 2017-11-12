@@ -1,16 +1,55 @@
 ﻿using System;
-using System.Text;
+using Braintree;
 using System.Linq;
 using System.Net;
 using Gtk;
+using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using Newtonsoft.Json;
 namespace final_project
 {
 	public static class Http
 	{
+		private static BraintreeGateway gateway = new BraintreeGateway
+		{
+			Environment = Braintree.Environment.SANDBOX,
+			MerchantId = Constants.Braintree.MERCHANT_ID,
+			PublicKey = Constants.Braintree.PUBLIC_KEY,
+			PrivateKey = Constants.Braintree.PRIVATE_KEY
+		};
+
+		public class Details { 
+			public int lastTwo { get; set; }
+			public int lastFour { get; set; }
+			public string cardType { get; set; }
+		}
+
+		public class BinData
+		{
+			public string prepaid { get; set; }
+			public string healthcare { get; set; }
+			public string debit { get; set; }
+			public string derbinRegulated { get; set; }
+			public string commercial { get; set; }
+			public string payroll { get; set; }
+			public string issuingBank { get; set; }
+			public string countryOfIssuance { get; set; }
+			public string productId {get; set; }
+		}
+
+		public class PaymentRequest
+		{
+			public string nonce { get; set; }
+			public Details details{get; set; }
+			public string type { get; set; }
+			public string description { get; set; }
+			public BinData binData { get; set; }
+			public decimal amount { get; set; }
+			public string currency { get; set; }
+		}
+
+
 
 		public static Server server { get; set; }
 
@@ -26,6 +65,8 @@ namespace final_project
 				listener.Prefixes.Add("http://192.168.0.108:8088/signup/");
 				listener.Prefixes.Add("http://192.168.0.108:8088/get_food/");
 				listener.Prefixes.Add("http://192.168.0.108:8088/order/");
+				listener.Prefixes.Add("http://192.168.0.108:8088/pay/");
+				listener.Prefixes.Add("http://192.168.0.108:8088/braintree_token/");
 				listener.Start();
 			}
 			catch (PlatformNotSupportedException ex)
@@ -62,13 +103,18 @@ namespace final_project
 			string responseText = "";
 			switch (request.HttpMethod) {
 				case "GET":
-					responseText = HandleGetFood(request.Headers);
+					if (request.RawUrl == "/get_food/")
+						responseText = HandleGetFood(request.Headers);
+					else if (request.RawUrl == "/braintree_token/")
+						responseText = HandleGetBraintreeToken(request.Headers);
 					break;
 				case "POST":
 					if (request.RawUrl == "/signup/")
 						responseText = HandleSignUp(request.InputStream);
 					else if (request.RawUrl == "/login/")
 						responseText = HandleLogin(request.InputStream);
+					else if (request.RawUrl == "/pay/")
+						responseText = HandlePayment(request.InputStream, request.Headers);
 					else
 						responseText = HandleOrder(request.InputStream);
 					break;
@@ -135,6 +181,39 @@ namespace final_project
 
 		}
 
+			public static string HandlePayment(Stream input, System.Collections.Specialized.NameValueCollection headers) {
+			if (!Token.IsValidFromHeader(headers.GetValues("Authorization")[0])) 
+			{
+				StatusCode = 403;
+				return "Invalid user token";
+			}
+			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8))
+			{
+				string val = reader.ReadToEnd();
+				PaymentRequest payment = new PaymentRequest();
+				payment = JsonConvert.DeserializeObject<PaymentRequest>(val);
+				var request = new TransactionRequest
+				{
+					Amount = payment.amount,
+					PaymentMethodNonce = payment.nonce,
+					CustomerId = "5"
+						//Token.GetUserId(headers.GetValues("Authorization")[0]).ToString(),
+				};
+				Result<Transaction> result = gateway.Transaction.Sale(request);
+				if (result.IsSuccess())
+				{
+					Console.WriteLine(result.Target.ToString());
+				}
+				else {					CreditCardVerification verify = result.CreditCardVerification;
+					Console.WriteLine(verify.Status); 
+
+				}
+
+			}
+			StatusCode = 200;
+			return "";
+		}
+
 
 		public static string HandleGetFood(System.Collections.Specialized.NameValueCollection headers)
 		{
@@ -147,7 +226,21 @@ namespace final_project
 			}
 			else{
 				StatusCode = 403;
-				return "Invalid Token";
+				return "Invalid User Token";
+				
+			}
+		}
+
+		public static string HandleGetBraintreeToken(System.Collections.Specialized.NameValueCollection headers) 
+		{
+			var token = headers.GetValues("Authorization")[0];
+			if (Token.IsValidFromHeader(token)) { 
+				StatusCode = 200;
+				return gateway.ClientToken.Generate();
+			}
+			else{
+				StatusCode = 403;
+				return "Invalid User Token";
 				
 			}
 		}

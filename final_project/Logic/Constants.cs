@@ -9,6 +9,14 @@ namespace final_project
 	{
 		public const string SECRET = "8Hwt9evygMOU";
 
+		public static class Braintree
+		{
+			public const string MERCHANT_ID = "ghv94zkc2x36bxwc";
+			public const string PUBLIC_KEY = "833vs2h75r24h67m";
+			public const string PRIVATE_KEY = "704e435eb9199ea6f9210b786125c445";
+		}
+
+
 		public static string GenerateRandom(int length, Random rng)
 		{
 			const string pool = "0123456789";

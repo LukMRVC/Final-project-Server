@@ -157,7 +157,7 @@ namespace final_project.Model
 			                     Protein.ToString("0.00", CultureInfo.InvariantCulture), Carbohydrates.ToString("0.00", CultureInfo.InvariantCulture),
 			                     Sugar.ToString("0.00", CultureInfo.InvariantCulture), TotalFat.ToString("0.00", CultureInfo.InvariantCulture), 
 			                     SaturatedFat.ToString("0.00", CultureInfo.InvariantCulture), Fiber.ToString("0.00", CultureInfo.InvariantCulture),
-			                     Salt.ToString("0.00", CultureInfo.InvariantCulture), Path);
+			                     Salt.ToString("0.00", CultureInfo.InvariantCulture), Path );
 		}
 
 		public int[] GetAllergenIds() 
