@@ -16,7 +16,7 @@ namespace final_project
 			Environment = Braintree.Environment.SANDBOX,
 			MerchantId = Constants.Braintree.MERCHANT_ID,
 			PublicKey = Constants.Braintree.PUBLIC_KEY,
-			PrivateKey = Constants.Braintree.PRIVATE_KEY
+			PrivateKey = Constants.Braintree.PRIVATE_KEY,
 		};
 
 		public class Details { 
@@ -195,23 +195,25 @@ namespace final_project
 				var request = new TransactionRequest
 				{
 					Amount = payment.amount,
+					MerchantAccountId = "Sandbox_Project",
 					PaymentMethodNonce = payment.nonce,
-					CustomerId = "5"
+					CustomerId = "821784946",
+					Options = new TransactionOptionsRequest
+					{						SubmitForSettlement = true
+					}
 						//Token.GetUserId(headers.GetValues("Authorization")[0]).ToString(),
 				};
 				Result<Transaction> result = gateway.Transaction.Sale(request);
 				if (result.IsSuccess())
 				{
-					Console.WriteLine(result.Target.ToString());
+					StatusCode = 200;
+					return "Successfully paid.";
 				}
-				else {					CreditCardVerification verify = result.CreditCardVerification;
-					Console.WriteLine(verify.Status); 
-
+				else {					StatusCode = 400;
+					return "Error while paying";
 				}
-
 			}
-			StatusCode = 200;
-			return "";
+
 		}
 
 
