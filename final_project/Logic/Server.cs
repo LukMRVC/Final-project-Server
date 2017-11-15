@@ -110,6 +110,7 @@ namespace final_project
 			{
 				if (comparator[i].IsIn(database.Menu.ToArray()) == -1)
 				{
+
 					database.Menu.Add(comparator[i]);
 				}
 			}
@@ -168,11 +169,13 @@ namespace final_project
 			catch (Exception ex) { Console.WriteLine(ex.ToString());}
 		}
 
-		public void AddUser(string username, string password, string email) 
+		public User AddUser(string password, string email) 
 		{
-			if (CheckUserUniqueConstraint(username, email))			{
-				this.database.Users.Add(new User(username, password, email));
+			if (CheckUserUniqueConstraint(email))			{
+				var user = new User(password, email);
+				this.database.Users.Add(user);
 				this.database.SaveChanges();
+				return user;
 			}
 			else {
 				throw new Exception("Unique constraint violation exception");
@@ -180,21 +183,16 @@ namespace final_project
 
 		}
 
-		private bool CheckUserUniqueConstraint(string username, string email)
+		private bool CheckUserUniqueConstraint(string email)
 		{
+			//Check by expcetion, if exception is thrown, user doesnt exist and can be added
 			try
-			{				var user = (from u in this.database.Users where u.Username == username select u).First();
+			{				var mail = (from u in this.database.Users.ToList() where u.Email == email select u).First();
 				return false;
+				
 			}
 			catch (Exception) {
-				try
-				{					var mail = (from u in this.database.Users where u.Email == email select u).First();
-					return false;
-				}
-				catch (Exception) { 
-					return true;
-				
-				}			}
+				return true;			}
 
 		}
 
@@ -207,17 +205,17 @@ namespace final_project
 			dlg.Dispose();
 		}
 
-		public string ValidateUser(string username, string password) 
+		public string ValidateUser(string email, string password) 
 		{
 			try
-			{				var user = (from u in this.database.Users where u.Username == username select u).First();
+			{				var user = (from u in this.database.Users where u.Email == email select u).First();
 				if (user.ValidatePassword(password)) 
 					return Token.GenerateNew(user.Id);
 			}
 			catch (Exception) {
-				return "";
+				return "Invalid password";
 			}
-			return "";
+			return "User doesnt exist!";
 		}
 
 		public IEnumerable<User> GetUsers() 

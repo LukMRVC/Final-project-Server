@@ -16,12 +16,11 @@ namespace final_project
 		private void BuildNodeView(IEnumerable<Model.User> users)
 		{
             this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 0);
-			this.nodeview.AppendColumn(@"Email ", new CellRendererText(), "text", 1);
-			this.nodeview.AppendColumn(@"Vytvořen ", new CellRendererText(), "text", 2);
+			this.nodeview.AppendColumn(@"Vytvořen ", new CellRendererText(), "text", 1);
 			this.store = new ListStore(typeof(string), typeof(string), typeof(string));
 			this.nodeview.Model = store;
 			foreach(var user in users){
-				string[] temp = { user.Username, user.Email, user.CreatedDatetime.ToString() };
+				string[] temp = { user.Email, user.CreatedDatetime.ToString() };
 				store.AppendValues(temp);
 			}
 	        this.nodeview.ShowAll();

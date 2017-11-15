@@ -3,7 +3,6 @@ using Braintree;
 using System.Linq;
 using System.Net;
 using Gtk;
-using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -134,14 +133,22 @@ namespace final_project
 			}
 			try
 			{
-				server.AddUser(postText["username"], postText["password"], postText["email"]);
+				var user = server.AddUser(postText["password"], postText["email"]);
+				CustomerRequest customer = new CustomerRequest
+				{
+					CustomerId = user.Id.ToString(),
+					Id = user.Id.ToString(),
+					Email = user.Email
+				};
+				gateway.Customer.Create(customer);
+				
 			}
 			catch (Exception) {
 				StatusCode = 422;
 				return "Uživatel s tímto jménem nebo emailem již existuje!";
 			}
 			StatusCode = 201;
-			return server.ValidateUser(postText["username"], postText["password"]);
+			return "Uživatel úspěšně registrován.";
 		}
 
 		public static string HandleLogin(Stream input) 
@@ -150,15 +157,29 @@ namespace final_project
 			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8)) 
 			{
 				string val = reader.ReadToEnd();
-			postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
+				postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
+			}
+			try
+			{				if (Token.IsValid(postText["token"]))
+				{
+					StatusCode = 202;
+					return Token.GenerateNew(Token.GetUserId(postText["token"]));
+				}
+				else {					StatusCode = 422;
+					return "Token expired";
+				}
+			}
+			catch (Exception) 
+			{
+				string token = server.ValidateUser(postText["email"], postText["password"]);
+				if (!string.IsNullOrWhiteSpace(token))
+				{
+					StatusCode = 202;
+					return token;
+				}
 			}
 			//method Validate User validates users and creates new Token
-			string token = server.ValidateUser(postText["username"], postText["password"]);
-			if (!string.IsNullOrWhiteSpace(token))
-			{
-				StatusCode = 202;
-				return token;
-			}
+
 			StatusCode = 422;
 			return "špatné přihlašovací údaje!";
 		}
@@ -187,6 +208,7 @@ namespace final_project
 				StatusCode = 403;
 				return "Invalid user token";
 			}
+		
 			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8))
 			{
 				string val = reader.ReadToEnd();
@@ -197,7 +219,7 @@ namespace final_project
 					Amount = payment.amount,
 					MerchantAccountId = "Sandbox_Project",
 					PaymentMethodNonce = payment.nonce,
-					CustomerId = "821784946",
+					CustomerId = Token.GetUserId(headers.GetValues("Authorization")[0]).ToString(),
 					Options = new TransactionOptionsRequest
 					{						SubmitForSettlement = true
 					}
@@ -297,7 +319,11 @@ namespace final_project
 		}
 
 		public static int GetUserId(string token) {
-			string sub = token.Substring(44);
+			string sub = "";
+			if (token.Contains("Basic"))
+				sub = token.Substring(50);
+			else
+				sub = token.Substring(44);
 			return Int32.Parse(sub);
 		}
 

@@ -14,8 +14,7 @@ namespace final_project.Model
 			this.CreatedDatetime = DateTime.Now;
 		}
 
-		public User(string username, string password, string email) {
-			this.Username = username;
+		public User(string password, string email) {
 			this.Password = password;
 			this.Email = email;
 			this.CreatedDatetime = DateTime.Now;
@@ -27,11 +26,6 @@ namespace final_project.Model
 				return true;
 			return false;
 		}
-
-		[Column(TypeName="VARCHAR")]
-		[StringLength(200)]
-		[Index("UsernameIndex", 0, IsUnique=true)]
-		public string Username { get; set; }
 
 
 		[Column(TypeName = "VARCHAR")]

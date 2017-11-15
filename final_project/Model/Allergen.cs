@@ -13,7 +13,7 @@ namespace final_project.Model
 
 		public string Name { get; set; }
 
-		public ICollection<Food> Food { get; set; }
+		public virtual ICollection<Food> Food { get; set; }
 
 	}
 }

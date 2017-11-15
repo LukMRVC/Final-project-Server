@@ -137,7 +137,7 @@ namespace final_project.Model
 
 		public ICollection<Order> Order { get; set; }
 
-		public ICollection<Allergen> Allergen { get; set; }
+		public virtual ICollection<Allergen> Allergen { get; set; }
 
 		public virtual ICollection<OrderFood> OrderFood { get; set; }
 

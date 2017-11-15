@@ -16,13 +16,13 @@ namespace final_project
 		private void BuildNodeView(IEnumerable<Model.Order> orders)
 		{
 			this.nodeview.AppendColumn(@"Id ", new CellRendererText(), "text", 0);
-			this.nodeview.AppendColumn(@"Uživatel ", new CellRendererText(), "text", 1);
+			this.nodeview.AppendColumn(@"Email ", new CellRendererText(), "text", 1);
 			this.nodeview.AppendColumn(@"Objednáno ", new CellRendererText(), "text", 2);
 			this.store = new ListStore(typeof(string), typeof(string), typeof(string));
 			this.nodeview.Model = store;
 			foreach (var order in orders)
 			{
-				string[] temp = { order.Id.ToString(), order.User.Username, order.OrderedAt.ToString() };
+				string[] temp = { order.Id.ToString(), order.User.Email, order.OrderedAt.ToString() };
 				store.AppendValues(temp);
 			}
 			this.nodeview.ShowAll();

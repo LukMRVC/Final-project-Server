@@ -31,7 +31,7 @@ namespace final_project
 				f.SetAllergenes(alg.GetAllergenes(this.server.GetAllergenes(f.Id)));
 				food.Add(f);
 			}
-			rebuildTreeValues = menuData.Select(o => o.toCsvString()).Select(s => s.Split(';')).ToDictionary(s => s[0], s => s.SubArray(1, s.Length));
+			rebuildTreeValues = menuData.Select(o => o.toCsvString()).Select(s => s.Split(';')).ToDictionary(s => s[0], s => s.SubArray(3, s.Length));
             this.rebuildTree();
 			appendEventHandlers();		
 		}
