@@ -88,6 +88,10 @@ namespace final_project
 
 		public void CompareAndSave(Food[] comparator) 
 		{
+			//Last resort
+			/*database.Database.ExecuteSqlCommand("TRUNCATE TABLE menu");
+			database.Menu.AddRange(comparator);
+			database.SaveChanges();*/
 			
 			for (int i = 0; i < database.Menu.Count(); ++i)
 			{

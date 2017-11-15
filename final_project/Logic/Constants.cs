@@ -115,16 +115,15 @@ namespace final_project
 			return json;
 		}
 
-		public static int Duplicates(this string[] arr, string id) 
-		{
+		public static int Duplicates(this string[] arr, string id)		{
 			int duplicates = 0;
-			foreach (string d in arr) 
+			foreach (string d in arr)
 			{
 				if (d == id)
 					++duplicates;
 			}
 			return duplicates;
-		
 		}
+
 	}
 }

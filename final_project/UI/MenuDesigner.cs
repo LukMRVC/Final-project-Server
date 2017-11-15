@@ -31,7 +31,7 @@ namespace final_project
 				f.SetAllergenes(alg.GetAllergenes(this.server.GetAllergenes(f.Id)));
 				food.Add(f);
 			}
-			rebuildTreeValues = menuData.Select(o => o.toCsvString()).Select(s => s.Split(';')).ToDictionary(s => s[0], s => s.SubArray(3, s.Length));
+			rebuildTreeValues = menuData.Select(o => o.toCsvString()).Select(s => s.Split(';')).ToDictionary(s => s[0], s => s.SubArray(1, s.Length));
             this.rebuildTree();
 			appendEventHandlers();		
 		}
@@ -183,12 +183,12 @@ namespace final_project
 				throw e;
 			}
 			for (int i = 0; i < depth; i += 2) {
-			pathIndex = 0;
+				pathIndex = 0;
 				foreach (string pathString in rebuildTreeValues.Keys)
 				{
 					if (i == 0)
 					{
-						if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
+						if ((int)Char.GetNumericValue(pathString[i]) == pathIndex && pathString.Length == i+1)
 						{
 							if (rebuildTreeValues[pathString][4] == "True")
 							{
@@ -202,8 +202,21 @@ namespace final_project
 					}
 					else
 					{
-						//Exception would be thrown otherwise
-						if (pathString.Length > i) {
+						if (pathString.Length == i + 1) 
+						{
+							TreeIter iter;
+							foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
+							if (rebuildTreeValues[pathString][4] == "True")
+							{
+								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString][0]);
+							}
+							else {
+								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString].SubArray(0, 4));
+							}
+						}
+
+					/*	//Exception would be thrown otherwise
+						if (pathString.Length > i && pathString.Length == i+1) {
 							// this is because path 0:1 and 1:0 are different.
 							if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
 								pathIndex = 0;
@@ -226,7 +239,7 @@ namespace final_project
 								firstPos = (int)Char.GetNumericValue(pathString[i-2]);
 
 							}
-						}
+						}*/
 					}
 				}
 			}
