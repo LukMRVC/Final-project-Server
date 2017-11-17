@@ -44,18 +44,15 @@ namespace final_project
 			this.initiliaze(serv);
 			this.buildTreeView();
 			this.server = serv;
-			var alg = this.server.database.Allergenes.AsEnumerable();
+			var alg = server.database.Database.SqlQuery<Allergen>("SELECT * FROM allergenes");
+	
 			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray()) {
 				Food f = new Food(arr);
-				try
+				if (!string.IsNullOrWhiteSpace(arr[arr.Length - 2]))
 				{					var indices = arr[arr.Length - 2].Split(',').Select(Int32.Parse).ToArray();
 					f.SetAllergenes(alg.GetAllergenes(indices));
 				}
-				catch (Exception)
-				{
-				}
-				finally {					food.Add(f);
-				}
+				food.Add(f);
 			}
 			rebuildTreeValues = menuData.Select(line => line.Split(';')).ToDictionary(line => line[0], line => line.SubArray(1, line.Length));
 			rebuildTree();
