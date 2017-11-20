@@ -51,7 +51,7 @@ namespace final_project
 
 
 		public static Server server { get; set; }
-
+		private static bool stop;
 		private static HttpListener listener;
 		private static int StatusCode;
 		//starts HTTPListener on port 8080, responses are handled asynchronously in a static method)
@@ -74,17 +74,28 @@ namespace final_project
 
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); }
+			stop = false;
 			IAsyncResult result = listener.BeginGetContext(ContextCallback, listener);
-			Server.showMessage(MessageType.Info, @"Naslouchání na portu 8080");
 
+
+		}
+
+		public static void stopListening() 
+		{
+			stop = true;
+			listener.Close();
+			listener = null;
 		}
 
 
 		//static method for handling requests
 		public static void ContextCallback(IAsyncResult result)
 		{
+			if (stop && listener == null) 
+			{
+				return;
+			}
 			var context = listener.EndGetContext(result);
-			//starts new listening
 			listener.BeginGetContext(ContextCallback, listener);
 			HttpListenerRequest request = context.Request;
 			HttpListenerResponse response = context.Response;

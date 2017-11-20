@@ -170,7 +170,6 @@ namespace final_project
 
 		private void rebuildTree() {
 			int pathIndex;
-			int firstPos = 0;
 			int depth = 1;
 			try
 			{				depth = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;

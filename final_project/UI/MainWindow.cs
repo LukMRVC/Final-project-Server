@@ -11,6 +11,7 @@ public partial class MainWindow : Gtk.Window
 	private Server server;
 	private ListStore store;
 	public Statusbar statbar;
+	private bool isListening = false;
 
 	public MainWindow(Server s) : base(Gtk.WindowType.Toplevel)
 	{
@@ -86,7 +87,20 @@ public partial class MainWindow : Gtk.Window
 
 	protected void BtnStartListeningClicked(object sender, EventArgs e)
 	{
-		Http.startListening();
+		if (!this.isListening)
+		{
+			Http.startListening();
+			this.isListening = true;
+			this.BtnStartListening.Label = @"Zastavit naslouchání";
+			this.statusbar1.Push(0, @"Naslouchání na portu 8088");
+		}
+		else{
+			Http.stopListening();
+			this.isListening = false;
+            this.BtnStartListening.Label = @"Začít naslouchat";
+            this.statusbar1.Push(0, @"Zastaveno naslouchání");
+		}
+
 	}
 
 	protected void BtnMenuDesignerClick(object sender, EventArgs e)

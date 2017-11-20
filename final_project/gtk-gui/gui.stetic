@@ -206,7 +206,7 @@
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="Type">TextOnly</property>
-            <property name="Label" translatable="yes">Start Listening</property>
+            <property name="Label" translatable="yes">Začít naslouchat</property>
             <property name="UseUnderline">True</property>
             <signal name="Clicked" handler="BtnStartListeningClicked" />
           </widget>
@@ -1845,10 +1845,21 @@
   </widget>
   <widget class="Gtk.Window" id="final_project.UserDisplay" design-size="400 300">
     <property name="MemberName" />
-    <property name="Title" translatable="yes">UserDisplay</property>
+    <property name="Title" translatable="yes">Uživatelé</property>
     <property name="WindowPosition">CenterOnParent</property>
     <child>
-      <placeholder />
+      <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+        <property name="MemberName" />
+        <property name="ShadowType">In</property>
+        <child>
+          <widget class="Gtk.NodeView" id="nodeview">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="ShowScrollbars">True</property>
+            <property name="SearchColumn">0</property>
+          </widget>
+        </child>
+      </widget>
     </child>
   </widget>
   <widget class="Gtk.Window" id="final_project.OrderHistory" design-size="400 300">
@@ -1856,7 +1867,17 @@
     <property name="Title" translatable="yes">OrderHistory</property>
     <property name="WindowPosition">CenterOnParent</property>
     <child>
-      <placeholder />
+      <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+        <property name="MemberName" />
+        <property name="ShadowType">In</property>
+        <child>
+          <widget class="Gtk.NodeView" id="nodeview2">
+            <property name="MemberName">nodeview2</property>
+            <property name="CanFocus">True</property>
+            <property name="ShowScrollbars">True</property>
+          </widget>
+        </child>
+      </widget>
     </child>
   </widget>
 </stetic-interface>

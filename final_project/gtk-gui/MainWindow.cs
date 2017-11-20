@@ -190,7 +190,7 @@ public partial class MainWindow
 		this.BtnStartListening.CanFocus = true;
 		this.BtnStartListening.Name = "BtnStartListening";
 		this.BtnStartListening.UseUnderline = true;
-		this.BtnStartListening.Label = global::Mono.Unix.Catalog.GetString("Start Listening");
+		this.BtnStartListening.Label = global::Mono.Unix.Catalog.GetString("Začít naslouchat");
 		this.vbox3.Add(this.BtnStartListening);
 		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.BtnStartListening]));
 		w8.Position = 2;
