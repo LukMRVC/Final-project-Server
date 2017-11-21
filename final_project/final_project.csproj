@@ -12,6 +12,7 @@
     <PackageId>Final project - Server</PackageId>
     <PackageVersion>0.1</PackageVersion>
     <Authors>Lukáš Moravec</Authors>
+    <ApplicationIcon>Images\server.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
