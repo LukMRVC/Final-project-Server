@@ -37,7 +37,7 @@ namespace final_project
 		}
 
 		//CSV constructor
-		public MenuDesigner(IEnumerable<string> menuData, Server serv) :
+		/*public MenuDesigner(IEnumerable<string> menuData, Server serv) :
 		                base(Gtk.WindowType.Toplevel)
 		        {
 			this.Build();
@@ -45,7 +45,6 @@ namespace final_project
 			this.buildTreeView();
 			this.server = serv;
 			var alg = server.database.Database.SqlQuery<Allergen>("SELECT * FROM allergenes");
-	
 			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray()) {
 				Food f = new Food(arr);
 				if (!string.IsNullOrWhiteSpace(arr[arr.Length - 2]))
@@ -56,7 +55,7 @@ namespace final_project
 			}
 			rebuildTreeValues = menuData.Select(line => line.Split(';')).ToDictionary(line => line[0], line => line.SubArray(1, line.Length));
 			rebuildTree();
-			appendEventHandlers();   		}
+			appendEventHandlers();   		}*/
 
 		//Plain Constructor
 		public MenuDesigner(Server serv) : base(Gtk.WindowType.Toplevel) {
@@ -102,19 +101,21 @@ namespace final_project
 					
 					string label = foodTreeStore.GetValue(iterator, 0).ToString();
 					int result = food.FindFoodIndex(label);
-					var dlg = new AddFoodDialog(food[result].toStringArray());
-					dlg.SetAllergenes(food[result].GetAllergenIds());
+					var dlg = new AddFoodDialog(food[result]);
+					//dlg.SetAllergenes(food[result].GetAllergenIds());
 					if (dlg.Run() == (int)ResponseType.Ok) 
 					{
 						foodTreeStore.SetValues(iterator, dlg.Values.ToArray().SubArray(1, 5));
 						food[result].SetValues(dlg.Values.ToArray());
+						//Clear all relations with allergens
+						food[result].Allergen.Clear();
 						//aId = allergen Id
 						foreach (int aId in dlg.Allergenes) 
 						{
 							//dlg.Allergenes is full of 0
 							if (aId == 0)
 								continue;
-							var allergen = (from a in this.server.database.Allergenes where a.Id == aId select a).First();
+							var allergen = (from a in this.server.database.Allergenes.ToList() where a.Id == aId select a).First();
 							food[result].SetAllergen(allergen);
 						}
 					}
@@ -207,7 +208,7 @@ namespace final_project
 								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString][0]);
 							}
 							else {
-								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString].SubArray(0, 4));
+								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString].SubArray(0, 5));
 							}
 						}
 

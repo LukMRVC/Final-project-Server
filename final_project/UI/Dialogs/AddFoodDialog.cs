@@ -36,39 +36,37 @@ namespace final_project
 		private void GetAllergenes() {
 			int i = 0;
 			foreach (Widget w in this.CheckBoxesTable) {
-				if ((w as CheckButton).Active) { 
-					int.TryParse(Regex.Match(w.Name, @"\d+").Value, out Allergenes[i]);
+				if ((w as CheckButton).Active) {
+					Allergenes[i] = Int32.Parse(Regex.Match(w.Name, @"\d+").Value);
 					++i;
 				}
 			}
 		}
 
-		
-
-
-		public AddFoodDialog(string[] defaultValues) 
+		public AddFoodDialog(Model.Food food)
 		{
-            this.Initialize();
-			setDefaultValues(defaultValues);
+			this.Initialize();
+			setDefaultValues(food);
+			this.SetAllergenes(food.GetAllergenIds());
 		}
 
-		public void setDefaultValues(string[] Values) {
-			//path is necessary
-			this.Values[0] = Values[0];
-			this.EntryName.Text = Values[1];
-            this.EntryGram.Text = Values[2];
-            this.EntryPrice.Text = Values[3];
-            this.EntryComposition.Text = Values[4];
+
+		public void setDefaultValues(Model.Food food) {
+			//path is necessary			this.Values[0] = food.Path;
+			this.EntryName.Text = food.Name;
+			this.EntryGram.Text = food.Gram.ToString();
+			this.EntryPrice.Text = food.Price.ToString();
+			this.EntryComposition.Text = food.Composition;
 			//přeskočím 5 protože to je kategorie
-			this.EntryEnergyKj.Text = Values[6];
-            this.EntryEnergyKcal.Text = Values[7];
-            this.EntryProtein.Text = Values[8];
-            this.EntryCarbs.Text = Values[9];
-            this.EntrySugar.Text = Values[10];
-			this.EntryTotalFat.Text = Values[11];
-			this.EntrySaturatedFat.Text = Values[12];
-            this.EntryFiber.Text = Values[13];
-            this.EntrySalt.Text = Values[14];
+			this.EntryEnergyKj.Text = food.EnergyKj.ToString();
+			this.EntryEnergyKcal.Text = food.EnergyKcal.ToString();
+			this.EntryProtein.Text = food.Protein.ToString();
+			this.EntryCarbs.Text = food.Carbohydrates.ToString();
+			this.EntrySugar.Text = food.Sugar.ToString();
+			this.EntryTotalFat.Text = food.TotalFat.ToString();
+			this.EntrySaturatedFat.Text = food.SaturatedFat.ToString();
+			this.EntryFiber.Text = food.Fiber.ToString();
+			this.EntrySalt.Text = food.Salt.ToString();
 		}
 
 

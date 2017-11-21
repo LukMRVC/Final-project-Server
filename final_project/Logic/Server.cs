@@ -187,6 +187,19 @@ namespace final_project
 
 		}
 
+		public void ImportData(IEnumerable<string> menuData) {
+			try
+			{
+                this.database.Database.ExecuteSqlCommand("TRUNCATE TABLE foodallergens");				this.database.Database.ExecuteSqlCommand("DELETE FROM menu");
+			}
+			catch (Exception e) { Console.WriteLine(e.ToString()); }
+			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray()) {
+				Food f = new Food(arr);
+				this.database.Menu.Add(f);
+			}
+			this.database.SaveChangesAsync();
+		}
+
 		private bool CheckUserUniqueConstraint(string email)
 		{
 			//Check by expcetion, if exception is thrown, user doesnt exist and can be added
@@ -199,6 +212,8 @@ namespace final_project
 				return true;			}
 
 		}
+
+
 
 		//Show message dialog with given message type and message
 		public static void showMessage(MessageType type, string message)

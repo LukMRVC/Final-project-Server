@@ -43,6 +43,8 @@ public partial class MainWindow
 
 	private global::Gtk.Action ExportAction;
 
+	private global::Gtk.Action ImportAction;
+
 	private global::Gtk.VBox vbox3;
 
 	private global::Gtk.HBox hbox2;
@@ -126,6 +128,9 @@ public partial class MainWindow
 		this.ExportAction = new global::Gtk.Action("ExportAction", global::Mono.Unix.Catalog.GetString("Exportovat"), null, null);
 		this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Exportovat");
 		w1.Add(this.ExportAction, null);
+		this.ImportAction = new global::Gtk.Action("ImportAction", global::Mono.Unix.Catalog.GetString("Importovat"), null, null);
+		this.ImportAction.ShortLabel = global::Mono.Unix.Catalog.GetString("Importovat");
+		w1.Add(this.ImportAction, "<Primary>i");
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -140,7 +145,7 @@ public partial class MainWindow
 		this.hbox2.Name = "hbox2";
 		this.hbox2.Spacing = 6;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='DatabzeAction' action='DatabzeAction'><menuitem name='PipojenAction' action='PipojenAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu><menu name='ZobrazitAction' action='ZobrazitAction'><menuitem name='DisplayUsersAction' action='DisplayUsersAction'/><menuitem name='OrderHistoryAction' action='OrderHistoryAction'/></menu><menu name='JdelnLstekAction' action='JdelnLstekAction'><menuitem name='ExportAction' action='ExportAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString(@"<ui><menubar name='menubar7'><menu name='DatabzeAction' action='DatabzeAction'><menuitem name='PipojenAction' action='PipojenAction'/><menuitem name='PipojitAction' action='PipojitAction'/></menu><menu name='ZobrazitAction' action='ZobrazitAction'><menuitem name='DisplayUsersAction' action='DisplayUsersAction'/><menuitem name='OrderHistoryAction' action='OrderHistoryAction'/></menu><menu name='JdelnLstekAction' action='JdelnLstekAction'><menuitem name='ExportAction' action='ExportAction'/><menuitem name='ImportAction' action='ImportAction'/></menu></menubar></ui>");
 		this.menubar7 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget("/menubar7")));
 		this.menubar7.Name = "menubar7";
 		this.hbox2.Add(this.menubar7);
@@ -224,6 +229,7 @@ public partial class MainWindow
 		this.DisplayUsersAction.Activated += new global::System.EventHandler(this.OnDisplayUsersActivated);
 		this.OrderHistoryAction.Activated += new global::System.EventHandler(this.OnOrderHistoryActionActivated);
 		this.ExportAction.Activated += new global::System.EventHandler(this.OnExportActionActivated);
+		this.ImportAction.Activated += new global::System.EventHandler(this.OnImportActionActivated);
 		this.BtnMenuDesigner.Clicked += new global::System.EventHandler(this.BtnMenuDesignerClick);
 		this.BtnStartListening.Clicked += new global::System.EventHandler(this.BtnStartListeningClicked);
 	}

@@ -6,8 +6,6 @@ namespace final_project
 	{
 		private global::Gtk.Label messageLabel;
 
-		private global::Gtk.Button buttonDatabase;
-
 		private global::Gtk.Button buttonFileChoose;
 
 		private global::Gtk.Button buttonContinue;
@@ -29,8 +27,7 @@ namespace final_project
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
 			this.messageLabel = new global::Gtk.Label();
 			this.messageLabel.Name = "messageLabel";
-			this.messageLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Nebyl nalezen soubor s daty jídelního lístku, ani připojení k databázi. Přejete s" +
-					"i pokračovat?");
+			this.messageLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Nebyla nalezena žádná data.");
 			this.messageLabel.Wrap = true;
 			w1.Add(this.messageLabel);
 			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(w1[this.messageLabel]));
@@ -44,27 +41,16 @@ namespace final_project
 			w3.BorderWidth = ((uint)(5));
 			w3.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonDatabase = new global::Gtk.Button();
-			this.buttonDatabase.CanFocus = true;
-			this.buttonDatabase.Name = "buttonDatabase";
-			this.buttonDatabase.UseUnderline = true;
-			this.buttonDatabase.Label = global::Mono.Unix.Catalog.GetString("_Připojení databáze");
-			this.AddActionWidget(this.buttonDatabase, 0);
-			global::Gtk.ButtonBox.ButtonBoxChild w4 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonDatabase]));
-			w4.Expand = false;
-			w4.Fill = false;
-			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonFileChoose = new global::Gtk.Button();
 			this.buttonFileChoose.CanDefault = true;
 			this.buttonFileChoose.CanFocus = true;
 			this.buttonFileChoose.Name = "buttonFileChoose";
 			this.buttonFileChoose.UseUnderline = true;
-			this.buttonFileChoose.Label = global::Mono.Unix.Catalog.GetString("_Otevřít soubor");
+			this.buttonFileChoose.Label = global::Mono.Unix.Catalog.GetString("_Importovat data");
 			this.AddActionWidget(this.buttonFileChoose, 1);
-			global::Gtk.ButtonBox.ButtonBoxChild w5 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonFileChoose]));
-			w5.Position = 1;
-			w5.Expand = false;
-			w5.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w4 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonFileChoose]));
+			w4.Expand = false;
+			w4.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonContinue = new global::Gtk.Button();
 			this.buttonContinue.CanDefault = true;
@@ -73,10 +59,10 @@ namespace final_project
 			this.buttonContinue.UseUnderline = true;
 			this.buttonContinue.Label = global::Mono.Unix.Catalog.GetString("_Pokračovat");
 			this.AddActionWidget(this.buttonContinue, 2);
-			global::Gtk.ButtonBox.ButtonBoxChild w6 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonContinue]));
-			w6.Position = 2;
-			w6.Expand = false;
-			w6.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w5 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonContinue]));
+			w5.Position = 1;
+			w5.Expand = false;
+			w5.Fill = false;
 			if ((this.Child != null))
 			{
 				this.Child.ShowAll();
@@ -84,7 +70,6 @@ namespace final_project
 			this.DefaultWidth = 480;
 			this.DefaultHeight = 116;
 			this.Show();
-			this.buttonDatabase.Clicked += new global::System.EventHandler(this.OnButtonDatabaseClicked);
 			this.buttonFileChoose.Clicked += new global::System.EventHandler(this.OnButtonFileChooseClicked);
 			this.buttonContinue.Clicked += new global::System.EventHandler(this.OnButtonContinueClicked);
 		}

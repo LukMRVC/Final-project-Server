@@ -106,56 +106,37 @@ public partial class MainWindow : Gtk.Window
 	protected void BtnMenuDesignerClick(object sender, EventArgs e)
 	{
 		MenuDesigner designer;
-		try
-		{
-			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
-			if (string.IsNullOrWhiteSpace(data.ToArray<string>()[0]))
-				throw new InvalidOperationException();
-			designer = new MenuDesigner(data, this.server);
-		}
-		catch (Exception)
-		{
-			try
+		try {
+			if (this.server.isConnected)
 			{
 				designer = new MenuDesigner(this.server.getMenuData(), this.server);
 			}
-			catch (Exception)
-			{
-				//new dialog comes here
-				var dlg = new MenuDesignerWarningDialog();
-
-				//response id 0 = database connection
-				//response id 1 = file choose
-				//response id 2 = continue
-				int response = dlg.Run();
-
-				if (response == 2)
+			else {
+				var dail = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Připojte se k databázi.");
+				if (dail.Run() == (int)ResponseType.Ok)
 				{
-					designer = new MenuDesigner(this.server);
+					dail.Destroy();
+					dail.Dispose();
 				}
-				else if (response == 1)
-				{					var filedlg = new FileChooserDialog("Choose file", this, FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
-					FileFilter filter = new FileFilter();
-					filter.Name = "CSV files";
-					filter.AddPattern("*.csv");
-					filedlg.AddFilter(filter);
-					if (filedlg.Run() == (int)ResponseType.Accept)
-					{
-						var data = System.IO.File.ReadLines(filedlg.Filename);
-						designer = new MenuDesigner(data, this.server);
-					}
-					filedlg.Destroy();
-					filedlg.Dispose();
-
-				}
-				else if (response == 0)
-				{					this.databaseConnectionFormAction(this, EventArgs.Empty);
-					this.connectToDatabaseAction(this, EventArgs.Empty);
-					designer = new MenuDesigner(this.server.getMenuData(), this.server);
-				}
-				dlg.Destroy();
-				dlg.Dispose();
 			}
+		}catch(Exception){
+			
+			//new dialog comes here
+			var dlg = new MenuDesignerWarningDialog();
+
+			//response id 0 = database connection
+			//response id 1 = file choose
+			//response id 2 = continue
+			int response = dlg.Run();
+			if (response == 2)
+			{
+				designer = new MenuDesigner(this.server);
+			}
+			else if (response == 1)
+			{				ImportData();
+			}
+			dlg.Destroy();
+			dlg.Dispose();
 		}
 	}
 
@@ -191,6 +172,45 @@ public partial class MainWindow : Gtk.Window
 				filename += @".csv";
 			}
 			System.IO.File.WriteAllText(filename, csv);
+		}
+		filedlg.Destroy();
+		filedlg.Dispose();
+	}
+
+	protected void OnImportActionActivated(object sender, EventArgs e) {
+		ImportData();
+	}
+
+	protected void ImportData()
+	{
+		if (!this.server.isConnected) {
+			var dial = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Připojte se k databázi.");
+			if (dial.Run() == (int)ResponseType.Ok)
+			{
+				dial.Destroy();
+				dial.Dispose();
+			}
+		}
+
+		var dail = new MessageDialog(this, DialogFlags.Modal, MessageType.Warning, ButtonsType.OkCancel, @"Import přemaže všechna vaše dosavadní data, jste si jistí?");
+		if (dail.Run() == (int)ResponseType.Ok)
+		{
+			dail.Destroy();
+			dail.Dispose();
+		}
+		else {
+			return;
+		}
+		
+		var filedlg = new FileChooserDialog("Choose file", this, FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
+		FileFilter filter = new FileFilter();
+		filter.Name = "CSV files";
+		filter.AddPattern("*.csv");
+		filedlg.AddFilter(filter);
+		if (filedlg.Run() == (int)ResponseType.Accept)
+		{
+			var data = System.IO.File.ReadLines(filedlg.Filename);
+			server.ImportData(data);
 		}
 		filedlg.Destroy();
 		filedlg.Dispose();

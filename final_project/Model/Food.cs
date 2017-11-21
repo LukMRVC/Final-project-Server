@@ -13,20 +13,22 @@ namespace final_project.Model
 		public Food() {
 			this.Order = new HashSet<Order>();
             this.Allergen = new HashSet<Allergen>();
+			this.OrderFood = new HashSet<OrderFood>();
 		}
 
         public Food(string name)
         {
             this.Name = name;
             this.Order = new HashSet<Order>();
+            this.OrderFood = new HashSet<OrderFood>();
             this.Allergen = new HashSet<Allergen>();
 		}
 
 		public Food(string[] values) {
+			SetValues(values);
             this.Order = new HashSet<Order>();
             this.Allergen = new HashSet<Allergen>();
-			SetValues(values);
-
+            this.OrderFood = new HashSet<OrderFood>();
 		}
 
 		public void SetValues(string[] values) 

@@ -110,6 +110,13 @@
         <property name="ShortLabel" translatable="yes">Exportovat</property>
         <signal name="Activated" handler="OnExportActionActivated" />
       </action>
+      <action id="ImportAction">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Primary&gt;i</property>
+        <property name="Label" translatable="yes">Importovat</property>
+        <property name="ShortLabel" translatable="yes">Importovat</property>
+        <signal name="Activated" handler="OnImportActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Hlavní okno</property>
@@ -137,6 +144,7 @@
                   </node>
                   <node type="Menu" action="JdelnLstekAction">
                     <node type="Menuitem" action="ExportAction" />
+                    <node type="Menuitem" action="ImportAction" />
                   </node>
                 </node>
               </widget>
@@ -696,7 +704,7 @@
     <property name="Modal">True</property>
     <property name="Resizable">False</property>
     <property name="AllowGrow">False</property>
-    <property name="Buttons">3</property>
+    <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
@@ -705,7 +713,7 @@
         <child>
           <widget class="Gtk.Label" id="messageLabel">
             <property name="MemberName" />
-            <property name="LabelProp" translatable="yes">Nebyl nalezen soubor s daty jídelního lístku, ani připojení k databázi. Přejete si pokračovat?</property>
+            <property name="LabelProp" translatable="yes">Nebyla nalezena žádná data.</property>
             <property name="Wrap">True</property>
           </widget>
           <packing>
@@ -722,36 +730,20 @@
         <property name="MemberName" />
         <property name="Spacing">10</property>
         <property name="BorderWidth">5</property>
-        <property name="Size">3</property>
+        <property name="Size">2</property>
         <property name="LayoutStyle">End</property>
-        <child>
-          <widget class="Gtk.Button" id="buttonDatabase">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Type">TextOnly</property>
-            <property name="Label" translatable="yes">_Připojení databáze</property>
-            <property name="UseUnderline">True</property>
-            <property name="ResponseId">0</property>
-            <signal name="Clicked" handler="OnButtonDatabaseClicked" />
-          </widget>
-          <packing>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
         <child>
           <widget class="Gtk.Button" id="buttonFileChoose">
             <property name="MemberName" />
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
             <property name="Type">TextOnly</property>
-            <property name="Label" translatable="yes">_Otevřít soubor</property>
+            <property name="Label" translatable="yes">_Importovat data</property>
             <property name="UseUnderline">True</property>
             <property name="ResponseId">1</property>
             <signal name="Clicked" handler="OnButtonFileChooseClicked" />
           </widget>
           <packing>
-            <property name="Position">1</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
           </packing>
@@ -768,7 +760,7 @@
             <signal name="Clicked" handler="OnButtonContinueClicked" />
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">1</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
           </packing>
