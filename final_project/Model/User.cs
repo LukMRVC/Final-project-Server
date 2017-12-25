@@ -15,7 +15,7 @@ namespace final_project.Model
 		}
 
 		public User(string password, string email) {
-			this.Password = password;
+			this.PasswordHash = password;
 			this.Email = email;
 			this.CreatedDatetime = DateTime.Now;
 		}

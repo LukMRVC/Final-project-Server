@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Gtk;
 namespace final_project
@@ -72,7 +73,7 @@ namespace final_project
 
 		protected void OnButtonOkClicked(object sender, EventArgs e)
 		{
-			Values[1] = this.EntryName.Text;
+			Values[1] = (this.EntryName.Text.First().ToString().ToUpper() + this.EntryName.Text.Substring(1));
 			Values[2] = this.EntryGram.Text;
 			Values[3] = this.EntryPrice.Text;
 			Values[4] = this.EntryComposition.Text;

@@ -1,5 +1,6 @@
 ﻿using System;
 using Gtk;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace final_project
@@ -37,7 +38,7 @@ namespace final_project
 		//Button pressed event
 		protected void check(object sender, EventArgs e)
 		{
-            this.name = this.nameEntry.Text;
+			string name = this.nameEntry.Text;
 			if (string.IsNullOrWhiteSpace(name))
 			{
 				MessageDialog dlg = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Close, "Název nesmí být prázdný!");
@@ -46,13 +47,15 @@ namespace final_project
 				dlg.Dispose();
 				return;
 			}
-			else if( !(new Regex(@"^(\p{L}+\s?)+$").IsMatch(name)) ) { 
+			else if (!(new Regex(@"^(\p{L}+\s?)+$").IsMatch(name)))
+			{
 				MessageDialog dlg = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Close, "Název nesmí obsahovat čísla a speciální znaky!");
 				dlg.Run();
 				dlg.Destroy();
 				dlg.Dispose();
 				return;
 			}
+            this.name = name.First().ToString().ToUpper() + name.Substring(1);;
 		}
 	}
 }

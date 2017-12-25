@@ -28,7 +28,7 @@ namespace final_project
 		public bool isConnected { get; private set; }
 		public Server()		{
 			Http.server = this;
-            this.win = new MainWindow(this);
+        	this.win = new MainWindow(this);
 			try
 			{
 				database = new MenuDbContext();
@@ -39,7 +39,6 @@ namespace final_project
 			catch (Exception) {				connect();
 			}
 			win.Show();
-
 		}
 
 		public void CollectionChanged(object o, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
@@ -224,6 +223,17 @@ namespace final_project
 			dlg.Dispose();
 		}
 
+		/*public string GetUserHash(string email) { 
+			try
+			{
+				var user = (from u in this.database.Users where u.Email == email select u).First();
+				return user.PasswordHash;
+			}
+			catch (Exception) {
+				return "User doesnt exist!";
+			}
+		}*/
+
 		public string ValidateUser(string email, string password) 
 		{
 			try
@@ -246,6 +256,27 @@ namespace final_project
 		{
 			return (from o in database.Orders.ToList() select o);
 		}
+
+		//uid  = user id		//This is actually quite harder than i thought
+		public string GetHistory(int uid) {
+			var orders = (from o in database.Orders.ToList() where o.UserId == uid select o);
+			//List<string> orderFoodList = new List<string>();
+			Dictionary<int, List<string>> history = new Dictionary<int, List<string>>();
+			foreach (Order order in orders) {
+				var orderFood = (from of in database.OrderFood.ToList() where of.OrderId == order.Id select of);
+				if (orderFood.Count() == 0)
+					continue;
+				foreach (var orderF in orderFood) {
+					history[order.Id] = new List<string>();
+					history[order.Id].Add(order.OrderedAt.ToString("dd.MM.yyyy"));
+					history[order.Id].Add(string.Join(", ", orderFood.Select( food => food.foodCount.ToString() + "x " + food.Food.Name  )));
+					history[order.Id].Add(order.TotalPrice.ToString());
+				}
+				//Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(orderFoodList));
+			}
+			return Newtonsoft.Json.JsonConvert.SerializeObject(history, Newtonsoft.Json.Formatting.Indented);
+		}
+
 
 	}
 

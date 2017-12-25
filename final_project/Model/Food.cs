@@ -2,9 +2,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Globalization;
+using System;
 
 namespace final_project.Model
 {
+	[Serializable]
 	[Table("Menu")]
 	public class Food : Base
 	{

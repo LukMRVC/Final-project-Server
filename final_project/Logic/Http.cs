@@ -3,6 +3,7 @@ using Braintree;
 using System.Linq;
 using System.Net;
 using Gtk;
+using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -59,13 +60,14 @@ namespace final_project
 			try
 			{
 				listener = new HttpListener();
-				listener.Prefixes.Add("http://192.168.0.108:8088/");
-				listener.Prefixes.Add("http://192.168.0.108:8088/login/");
-				listener.Prefixes.Add("http://192.168.0.108:8088/signup/");
-				listener.Prefixes.Add("http://192.168.0.108:8088/get_food/");
-				listener.Prefixes.Add("http://192.168.0.108:8088/order/");
-				listener.Prefixes.Add("http://192.168.0.108:8088/pay/");
-				listener.Prefixes.Add("http://192.168.0.108:8088/braintree_token/");
+				listener.Prefixes.Add("http://localhost:8088/");
+				listener.Prefixes.Add("http://localhost:8088/login/");
+				listener.Prefixes.Add("http://localhost:8088/signup/");
+				listener.Prefixes.Add("http://localhost:8088/get_food/");
+				listener.Prefixes.Add("http://localhost:8088/get_user_history/");
+				listener.Prefixes.Add("http://localhost:8088/order/");
+				listener.Prefixes.Add("http://localhost:8088/pay/");
+				listener.Prefixes.Add("http://localhost:8088/braintree_token/");
 				listener.Start();
 			}
 			catch (PlatformNotSupportedException ex)
@@ -76,7 +78,6 @@ namespace final_project
 			catch (Exception e) { Console.WriteLine(e.ToString()); }
 			stop = false;
 			IAsyncResult result = listener.BeginGetContext(ContextCallback, listener);
-
 
 		}
 
@@ -99,7 +100,7 @@ namespace final_project
 			listener.BeginGetContext(ContextCallback, listener);
 			HttpListenerRequest request = context.Request;
 			HttpListenerResponse response = context.Response;
-			response.ContentType = "text/plain; charset=utf-8";
+			response.ContentType = "application/json; charset=utf-8";
 			string responseString = HandleMethod(request);
 			response.StatusCode = StatusCode;
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
@@ -117,6 +118,8 @@ namespace final_project
 						responseText = HandleGetFood(request.Headers);
 					else if (request.RawUrl == "/braintree_token/")
 						responseText = HandleGetBraintreeToken(request.Headers);
+					else if (request.RawUrl == "/get_user_history/") 
+						responseText = HandleGetHistory(request.Headers);
 					break;
 				case "POST":
 					if (request.RawUrl == "/signup/")
@@ -140,6 +143,17 @@ namespace final_project
 			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8)) 
 			{
 				string val = reader.ReadToEnd();
+				Console.WriteLine(val);
+
+				var decircularized = JsonConvert.DeserializeObject(val, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
+				Console.WriteLine(decircularized.ToString());
+				//Now decrypt from string using AES
+				var key = System.Text.Encoding.UTF8.GetBytes("1x3v9r8tp:f?.485");
+				var iv = System.Text.Encoding.UTF8.GetBytes("8808880080808568");
+
+				var enc = System.Text.Encoding.UTF8.GetBytes(decircularized.ToString());
+				var decrypted = DecryptStringFromBytes(enc, key, iv);
+				Console.WriteLine("Decrypted:D " + decrypted)	;
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
 			}
 			try
@@ -170,6 +184,8 @@ namespace final_project
 				string val = reader.ReadToEnd();
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
 			}
+
+			//Try to login with existing token
 			try
 			{				if (Token.IsValid(postText["token"]))
 				{
@@ -179,15 +195,26 @@ namespace final_project
 				else {					StatusCode = 422;
 					return "Token expired";
 				}
+
 			}
+			//login with credentials
 			catch (Exception) 
 			{
-				string token = server.ValidateUser(postText["email"], postText["password"]);
-				if (!string.IsNullOrWhiteSpace(token))
+				//string hash = server.GetUserHash(postText["email"]);
+				try
 				{
-					StatusCode = 202;
-					return token;
+					string token = server.ValidateUser(postText["email"], postText["password"]);
+					if (!string.IsNullOrWhiteSpace(token))
+					{
+						StatusCode = 202;
+						return token;
+					}
 				}
+				catch (Exception) {
+					StatusCode = 500;
+					return "Internal server error, please try again.";
+				}
+
 			}
 			//method Validate User validates users and creates new Token
 
@@ -213,7 +240,7 @@ namespace final_project
 
 		}
 
-			public static string HandlePayment(Stream input, System.Collections.Specialized.NameValueCollection headers) {
+		public static string HandlePayment(Stream input, System.Collections.Specialized.NameValueCollection headers) {
 			if (!Token.IsValidFromHeader(headers.GetValues("Authorization")[0])) 
 			{
 				StatusCode = 403;
@@ -280,6 +307,23 @@ namespace final_project
 			}
 		}
 
+		public static string HandleGetHistory(System.Collections.Specialized.NameValueCollection headers) {
+			var token = headers.GetValues("Authorization")[0];
+			string response;
+			if (Token.IsValidFromHeader(token)) {
+				StatusCode = 200;
+				int userId = Token.GetUserId(token);
+				response = server.GetHistory(userId);
+				Console.WriteLine(response);
+
+				return response;
+			}
+
+			StatusCode = 403;
+			return "Invalid User Token";
+		}
+
+
 		private static string dataToJson(IEnumerable<Model.Food> data)
 		{
 			string json = "{";
@@ -291,6 +335,88 @@ namespace final_project
 			json += "}";
 			return json;
 		}
+
+
+
+
+
+
+
+
+
+
+
+
+private static string DecryptStringFromBytes(byte[] cipherText, byte[] key, byte[] iv)
+{
+	// Check arguments.  
+	if (cipherText == null || cipherText.Length <= 0)
+	{
+		throw new ArgumentNullException("cipherText");
+	}
+	if (key == null || key.Length <= 0)
+	{
+		throw new ArgumentNullException("key");
+	}
+	if (iv == null || iv.Length <= 0)
+	{
+		throw new ArgumentNullException("key");
+	}
+
+	// Declare the string used to hold  
+	// the decrypted text.  
+	string plaintext = null;
+
+	// Create an RijndaelManaged object  
+	// with the specified key and IV.  
+	using (var rijAlg = new RijndaelManaged())
+	{
+		//Settings  
+		rijAlg.Mode = CipherMode.CBC;
+		rijAlg.Padding = PaddingMode.PKCS7;
+		rijAlg.FeedbackSize = 128;
+		rijAlg.Key = key;
+		rijAlg.IV = iv;
+		
+
+		// Create a decrytor to perform the stream transform.  
+		var decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
+
+		try
+		{
+			// Create the streams used for decryption.  
+			using (var msDecrypt = new MemoryStream(cipherText))
+			{
+				using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+				{
+
+					using (var srDecrypt = new StreamReader(csDecrypt))
+					{
+						// Read the decrypted bytes from the decrypting stream  
+						// and place them in a string.  
+						plaintext = srDecrypt.ReadToEnd();
+
+					}
+
+				}
+			}
+		}
+		catch
+		{
+			plaintext = "keyError";
+		}
+	}
+
+	return plaintext;
+	}  
+
+
+
+
+
+
+
+
 
 	}
 
@@ -338,9 +464,10 @@ namespace final_project
 			return Int32.Parse(sub);
 		}
 
+
+
+
+
 	}
-
-
-
 
 }
