@@ -15,6 +15,7 @@ public partial class MainWindow : Gtk.Window
 
 	public MainWindow(Server s) : base(Gtk.WindowType.Toplevel)
 	{
+		//Nastavení referencí
 		this.server = s;
 		Build();
 		this.statbar = this.statusbar;
@@ -29,7 +30,7 @@ public partial class MainWindow : Gtk.Window
 
 	private void buildNodeView()
 	{
-		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
+		//Vytvoří tabulku s informacemi objednávek		this.nodeview.AppendColumn(@"Id objednávky ", new CellRendererText(), "text", 0);
 		this.nodeview.AppendColumn(@"Objednávka ", new CellRendererText(), "text", 1);
 		this.nodeview.AppendColumn(@"Cena (v Kč)", new CellRendererText(), "text", 2);
 		this.nodeview.AppendColumn(@"Čas objednání ", new CellRendererText(), "text", 3);
@@ -39,6 +40,7 @@ public partial class MainWindow : Gtk.Window
 		this.nodeview.ShowAll();
 	}
 
+	//Přidá informace objednávky do tabulky
 	public void PushToNodeView(int id, IEnumerable<final_project.Model.OrderFood> content, string price, string time)
 	{
 		string val = "";
@@ -49,30 +51,18 @@ public partial class MainWindow : Gtk.Window
 		val = val.Remove(val.Length - 1);
 		string[] values = { id.ToString(), val, price, time };
 		this.store.InsertWithValues(0, values);
-		//this.store.AppendValues(values);
+
 	}
 
-	/*private void addCategory(object sender, EventArgs e)
-	{
-		CategoryDialog cd = new CategoryDialog(this, true);
-		string name = null;
-		if (cd.Run() == (int)ResponseType.Ok)
-		{
-			name = cd.name;
-			cd.Destroy();
-			cd.Dispose();
-		}
-		Task.Factory.StartNew(() => server.addCategory(name));
-	}*/
-
+	//Připojí server k datábázi na novém vlákně
 	protected void connectToDatabaseAction(object sender, EventArgs e)
 	{
 		this.statusbar.Push(0, "Navazování spojení...");
 		Task.Factory.StartNew(() => server.connect());
 
-		//		this.server.connect();
 	}
 
+	//Zavolá formulář o připojení k databázi
 	protected void databaseConnectionFormAction(object sender, EventArgs e)
 	{
 		DatabaseConnectionDialog dcd = new DatabaseConnectionDialog(this, true);
@@ -85,6 +75,7 @@ public partial class MainWindow : Gtk.Window
 
 	}
 
+	//Zapínání a zastavení naslouchání
 	protected void BtnStartListeningClicked(object sender, EventArgs e)
 	{
 		if (!this.isListening)
@@ -103,14 +94,19 @@ public partial class MainWindow : Gtk.Window
 
 	}
 
+	//Vytvoření okna návháře
 	protected void BtnMenuDesignerClick(object sender, EventArgs e)
 	{
 		MenuDesigner designer;
 		try {
+			//Otestování jestli je server připojen k databázi
 			if (this.server.isConnected)
 			{
+				//Pokud je, tak se vytáhnou existující data z databáze a předají se návrháři, aby je mohl zobrazit, taky se mu předá reference
+				//na třídu serveru, aby návrhář mohl jednodušeji přidávat data do databáze
 				designer = new MenuDesigner(this.server.getMenuData(), this.server);
 			}
+			//Pokud server není připojen, vytvoření se dialogové okno, aby se uživatel připojil k databázi
 			else {
 				var dail = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Připojte se k databázi.");
 				if (dail.Run() == (int)ResponseType.Ok)
@@ -121,12 +117,12 @@ public partial class MainWindow : Gtk.Window
 			}
 		}catch(Exception){
 			
-			//new dialog comes here
+			//Dialog o varování
 			var dlg = new MenuDesignerWarningDialog();
 
-			//response id 0 = database connection
-			//response id 1 = file choose
-			//response id 2 = continue
+			//response id 1 = Import data
+			//response id 2 = Pokračování na prázdný návrhář, mělo by se stát pouze pokud je návrhář spuštěn poprvé
+			//nebo se měnila databáze
 			int response = dlg.Run();
 			if (response == 2)
 			{
@@ -140,11 +136,13 @@ public partial class MainWindow : Gtk.Window
 		}
 	}
 
+	//Zobrazení uživatelů
 	protected void OnDisplayUsersActivated(object sender, EventArgs e)
 	{
 		var display = new Users(this.server.GetUsers());
 	}
 
+	//Zobrazení historie objednávek
 	protected void OnOrderHistoryActionActivated(object sender, EventArgs e)
 	{
 		try
@@ -154,8 +152,10 @@ public partial class MainWindow : Gtk.Window
 		catch (Exception ex) {Console.WriteLine(ex.ToString()); }
 	}
 
+	//Exportování dat návrháře do nového CSV souboru
 	protected void OnExportActionActivated(object sender, EventArgs e)
 	{
+		//Vytvoření dialogu otevření souboru
 		var filedlg = new FileChooserDialog("Uložit soubor", this, FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Accept);
 		var filter = new FileFilter();
 		filter.Name = "*.csv";
@@ -164,13 +164,15 @@ public partial class MainWindow : Gtk.Window
 		var result = filedlg.Run();
 		if (result == (int)ResponseType.Accept) 
 		{
+			//Při exportu se data prakticky jen přepíšou, protože návrhář je vždy ukládá do souboru
 			var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME);
 			string csv = string.Join(Environment.NewLine, data.Select(s => s));
 			string filename = filedlg.Filename;
-			//If file has extension
+			//Pokud název souboru ještě nemá příponu, tak ji připojíme
 			if (!System.Text.RegularExpressions.Regex.IsMatch(filename, @".+\..+")) {
 				filename += @".csv";
 			}
+			//Vypsání dat do souboru
 			System.IO.File.WriteAllText(filename, csv);
 		}
 		filedlg.Destroy();
@@ -183,6 +185,7 @@ public partial class MainWindow : Gtk.Window
 
 	protected void ImportData()
 	{
+		//Testování, jestli se server připojený k DB
 		if (!this.server.isConnected) {
 			var dial = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Ok, "Připojte se k databázi.");
 			if (dial.Run() == (int)ResponseType.Ok)
@@ -192,6 +195,7 @@ public partial class MainWindow : Gtk.Window
 			}
 		}
 
+		//Import maže všechna dosavadní data, aby nedocházelo ke konfliktům v DB
 		var dail = new MessageDialog(this, DialogFlags.Modal, MessageType.Warning, ButtonsType.OkCancel, @"Import přemaže všechna vaše dosavadní data, jste si jistí?");
 		if (dail.Run() == (int)ResponseType.Ok)
 		{
@@ -201,7 +205,8 @@ public partial class MainWindow : Gtk.Window
 		else {
 			return;
 		}
-		
+
+		//Dialog na zvolení souboru
 		var filedlg = new FileChooserDialog("Choose file", this, FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
 		FileFilter filter = new FileFilter();
 		filter.Name = "CSV files";

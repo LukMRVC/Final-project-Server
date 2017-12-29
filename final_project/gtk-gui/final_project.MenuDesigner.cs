@@ -31,7 +31,7 @@ namespace final_project
 			global::Stetic.Gui.Initialize(this);
 			// Widget final_project.MenuDesigner
 			this.Name = "final_project.MenuDesigner";
-			this.Title = global::Mono.Unix.Catalog.GetString("MenuDesigner");
+			this.Title = global::Mono.Unix.Catalog.GetString("Návrhář");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Container child final_project.MenuDesigner.Gtk.Container+ContainerChild
 			this.scrolledwindow1 = new global::Gtk.ScrolledWindow();

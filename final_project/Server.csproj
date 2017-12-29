@@ -13,7 +13,7 @@
     <PackageVersion>0.2</PackageVersion>
     <Authors>Lukáš Moravec</Authors>
     <ApplicationIcon>Images\server.ico</ApplicationIcon>
-    <ReleaseVersion>0.2</ReleaseVersion>
+    <ReleaseVersion>0.09.1</ReleaseVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -99,7 +99,6 @@
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="UI\MenuDesigner.cs" />
     <Compile Include="gtk-gui\final_project.MenuDesigner.cs" />
-    <Compile Include="UI\CloseableTab.cs" />
     <Compile Include="Logic\Constants.cs" />
     <Compile Include="Logic\DatabaseNotConnectedException.cs" />
     <Compile Include="UI\Dialogs\MenuDesignerWarningDialog.cs" />

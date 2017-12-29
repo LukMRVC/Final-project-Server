@@ -28,13 +28,16 @@ namespace final_project
 		public RsaCryption cryption;
 		public bool isConnected { get; private set; }
 		public Server()		{
+			//Vytvoří se nová instance třídy pro RSA šifrování
 			this.cryption = new RsaCryption();
+			//Přiradí se reference na třídy
 			Http.server = this;
 			Http.cryptor = this.cryption;
 			Token.cryption = this.cryption;
 			this.win = new MainWindow(this);
 			try
 			{
+				//Připojení k databázi pomocí dat z app.config
 				database = new MenuDbContext();
 				database.Database.Initialize(true);
 				this.win.statbar.Push(0, @"Připojeno k databázi");
@@ -46,11 +49,13 @@ namespace final_project
 			win.Show();
 		}
 
-		public void CollectionChanged(object o, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
+		/*public void CollectionChanged(object o, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
 		{
 			Console.WriteLine("Order changed");
-		}
+		}*/
 
+		//Připojení pomocí setting, které občas nespolupracují... 
+		//Naštěstí by tato aplikace měla stejně být programátorsky upravena pro každého, kdo ji chce použít
 		public void connect()
 		{
 			try
@@ -68,46 +73,26 @@ namespace final_project
 
 		}
 
-		public void start()
-		{
-
-		}
-
-		private async void restart()
-		{
-			this.quit();
-			this.start();
-			this.connect();
-		}
-
-		private void quit()
-		{
-
-		}
-
-
-		/* Rework this so you return only array of <Food>, then you search for changes and update that */
 		//To co není v array se smaže
-		//to co v array je se updatne
 		//to co v array je navíc, se přidá
 
 		public void CompareAndSave(Food[] comparator)
 		{
-			//Last resort
-			/*database.Database.ExecuteSqlCommand("TRUNCATE TABLE menu");
-			database.Menu.AddRange(comparator);
-			database.SaveChanges();*/
 
+			//Kontrola, aby se z DB smazali staré záznamy a aktualizace upravených 
 			for (int i = 0; i < database.Menu.Count(); ++i)
 			{
+				//Opravdu zvlášní způsob, jak procházet entity... Seřadí se, a vždy se přeskočí o i entit a vybere jedna.
 				var instance = database.Menu.OrderBy(s => s.Id).Skip(i).First();
 				int result = instance.IsIn(comparator);
 				if (result != -1)
 				{
+					//Změní se stav entity, aby se naznačilo, že se entita upravila
 					database.Entry(instance).State = System.Data.Entity.EntityState.Modified;
 					database.Menu.OrderBy(s => s.Id).Skip(i).First().SetValues(comparator[result]);
 					continue;
 				}
+				//Smazání entity
 				else if (result == -1)
 				{
 					database.Menu.Remove(instance);
@@ -115,8 +100,10 @@ namespace final_project
 				}
 			}
 
+			//Přidání nových záznamů
 			for (int i = 0; i < comparator.Length; ++i)
 			{
+				//Pokud entita z porovnávacího pole není v již v DB, přidá se 
 				if (comparator[i].IsIn(database.Menu.ToArray()) == -1)
 				{
 
@@ -125,21 +112,12 @@ namespace final_project
 			}
 			try
 			{
-				database.SaveChanges();
+				database.SaveChangesAsync();
 			}
 			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 		}
 
-		public void saveMenuData()
-		{
-
-			/* var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
-			 foreach (string[] line in data) {				database.Menu.Add(new Food { Path = line[0], Name = line[1] });
-			 }*/
-
-			database.SaveChangesAsync();
-		}
-
+		//Získá z DB záznamy jídel a vrátí je jako jednu z instancí z rozhraní IEnumerable
 		public IEnumerable<Food> getMenuData()
 		{
 			var data = (from Food in database.Menu.ToList() select Food);
@@ -147,6 +125,7 @@ namespace final_project
 		}
 
 
+		//Získá vazby alergenu k jídlu pomoci id jídla
 		public int[] GetAllergenes(int foodId)
 		{
 			var query = this.database.Database.SqlQuery<string>("SELECT Allergen_Id FROM foodallergens WHERE Food_Id=" + foodId);
@@ -155,33 +134,45 @@ namespace final_project
 			return w;
 		}
 
+		//Přidá objednávku
 		public void AddOrder(string[] orderArr, int uid, string totalPrice)
 		{
 			try
 			{				var food = new List<Food>();
+				//Najde uživatel, který zadal objednávnku
 				User user = this.database.Users.Find(uid);
 				foreach (string foodId in orderArr)				{
+					//Pro každé id jídla z pole objednávku se najde entita a přidá do listu
 					food.Add(database.Menu.Find(Int32.Parse(foodId)));
 				}
+				//Vytvoří se nová objednávka, který se spojí s uživatelem a objednaným jídlem
 				var order = new Order(user, food.ToArray());
+				//Také cena se samozřejmě uloží
 				order.TotalPrice = Decimal.Parse(totalPrice);
+				//A přídá do DB
 				database.Orders.Add(order);
+				//Duplikáty jídel
 				var duplicates = new List<string>();
+				//Ty se najdou a uloží jen pro elegantnější zobraní počtu jídla v objednávce např. 5x Tofu
 				foreach (string foodId in orderArr)
 				{
+					
 					if (duplicates.Contains(foodId))
 						continue;
 					database.OrderFood.Add(new OrderFood { Order = order, Food = database.Menu.Find(Int32.Parse(foodId)), foodCount = orderArr.Duplicates(foodId) });
 					duplicates.Add(foodId);
 				}
 				database.SaveChanges();
+				//A objednávka se zobrazí v hlavním okně
 				this.win.PushToNodeView(order.Id, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable(), order.TotalPrice.ToString(), order.OrderedAt.ToString("HH:mm:ss"));
 			}
 			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 		}
 
+		//Přidání uživatele s heslem a mailem, heslo je uložené v hashi
 		public User AddUser(string password, string email)
 		{
+			//Kontrola, jestli už uživatel se stejným mailem není zapsán
 			if (CheckUserUniqueConstraint(email))			{
 				var user = new User(password, email);
 				this.database.Users.Add(user);
@@ -199,9 +190,11 @@ namespace final_project
 		{
 			try
 			{
+				//Smazání všech dat z DB
 				this.database.Database.ExecuteSqlCommand("TRUNCATE TABLE foodallergens");				this.database.Database.ExecuteSqlCommand("DELETE FROM menu");
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); }
+			//A jejich přidání ze souboru
 			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray())
 			{
 				Food f = new Food(arr);
@@ -226,7 +219,7 @@ namespace final_project
 
 
 
-		//Show message dialog with given message type and message
+		//Zobrazí dialog se zprávou
 		public static void showMessage(MessageType type, string message)
 		{
 			MessageDialog dlg = new MessageDialog(null, DialogFlags.Modal, type, ButtonsType.Ok, @message);
@@ -235,21 +228,12 @@ namespace final_project
 			dlg.Dispose();
 		}
 
-		/*public string GetUserHash(string email) { 
-			try
-			{
-				var user = (from u in this.database.Users where u.Email == email select u).First();
-				return user.PasswordHash;
-			}
-			catch (Exception) {
-				return "User doesnt exist!";
-			}
-		}*/
-
+		//Autentizace uživatele
 		public string ValidateUser(string email, string password)		{
 			try
 			{				var user = (from u in this.database.Users where u.Email == email select u).First();
-				if (user.ValidatePassword(password))					return Token.GenerateNew(user.Id);
+				if (user.ValidatePassword(password))
+					//Pokud je uživatel autentikován, je mu vracen zašifrovaný token					return Token.GenerateNew(user.Id);
 			}
 			catch (Exception)
 			{
@@ -268,26 +252,30 @@ namespace final_project
 		}
 
 		//uid  = user id
-		//This is actually quite harder than i thought
+		//Napsat tohle bylo těžší, než jsem si myslel
 		public string GetHistory(int uid)
 		{
+			//Seženou se z DB objednávky od uživatele
 			var orders = (from o in database.Orders.ToList() where o.UserId == uid select o);
-			//List<string> orderFoodList = new List<string>();
 			Dictionary<int, List<string>> history = new Dictionary<int, List<string>>();
 			foreach (Order order in orders)
 			{
+				//Počet jídel v objednávce
 				var orderFood = (from of in database.OrderFood.ToList() where of.OrderId == order.Id select of);
 				if (orderFood.Count() == 0)
 					continue;
 				foreach (var orderF in orderFood)
 				{
+					//Přidání do slovníku
 					history[order.Id] = new List<string>();
 					history[order.Id].Add(order.OrderedAt.ToString("dd.MM.yyyy"));
+					//Opět, akorát elegantněji zapsaný tvar
 					history[order.Id].Add(string.Join(", ", orderFood.Select(food => food.foodCount.ToString() + "x " + food.Food.Name)));
 					history[order.Id].Add(order.TotalPrice.ToString());
 				}
 				//Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(orderFoodList));
 			}
+			//Vrátí slovník převedený to stringu v JSON tvaru
 			return Newtonsoft.Json.JsonConvert.SerializeObject(history, Newtonsoft.Json.Formatting.Indented);
 		}
 

@@ -35,10 +35,10 @@ namespace final_project
 			this.Destroy();
 		}
 
-		//Button pressed event
 		protected void check(object sender, EventArgs e)
 		{
 			string name = this.nameEntry.Text;
+			//Kontrola, jestli jméno není prázdné
 			if (string.IsNullOrWhiteSpace(name))
 			{
 				MessageDialog dlg = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Close, "Název nesmí být prázdný!");
@@ -47,6 +47,7 @@ namespace final_project
 				dlg.Dispose();
 				return;
 			}
+			//Kontrola platnosti
 			else if (!(new Regex(@"^(\p{L}+\s?)+$").IsMatch(name)))
 			{
 				MessageDialog dlg = new MessageDialog(this, DialogFlags.Modal, MessageType.Error, ButtonsType.Close, "Název nesmí obsahovat čísla a speciální znaky!");

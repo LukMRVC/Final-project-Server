@@ -20,12 +20,15 @@ namespace final_project
 			this.Build();
 			Values = new string[15];
 			Allergenes = new int[14];
+			//Naství všechny hodnoty preventivně na prázdný string
 			for (int i = 0; i < Values.Length; i++)
 			{
 				Values[i] = "";
 			}
 		}
 
+		//Přednastaví alergeny, aby se zobrazily již přidáné alegeny k jídlu,
+		//kdyby se jídlo potřebovalo upravit
 		public void SetAllergenes(int[] indices) {
 			foreach (Widget w in this.CheckBoxesTable) {
 				if (indices.Has(Int32.Parse(Regex.Match(w.Name, @"\d+").Value))){
@@ -34,8 +37,10 @@ namespace final_project
 			}
 		}
 
+		//Z okna vezme alergeny a a přiradí do pole
 		private void GetAllergenes() {
 			int i = 0;
+			//Projde checkboxy, jejich jména obsahují id alergenů, vezme id a převede ze stringu na int
 			foreach (Widget w in this.CheckBoxesTable) {
 				if ((w as CheckButton).Active) {
 					Allergenes[i] = Int32.Parse(Regex.Match(w.Name, @"\d+").Value);
@@ -44,6 +49,7 @@ namespace final_project
 			}
 		}
 
+		//Přetížený konstruktor
 		public AddFoodDialog(Model.Food food)
 		{
 			this.Initialize();
@@ -51,7 +57,7 @@ namespace final_project
 			this.SetAllergenes(food.GetAllergenIds());
 		}
 
-
+		//Nastaví výchozí hodnoty z hodnot jídla
 		public void setDefaultValues(Model.Food food) {
 			//path is necessary			this.Values[0] = food.Path;
 			this.EntryName.Text = food.Name;
@@ -71,6 +77,8 @@ namespace final_project
 		}
 
 
+		//Projede všechny textboxy a nastaví jejich hodnoty do pole Values
+		//Opět by to šlo udělat lípe, ale už není čas
 		protected void OnButtonOkClicked(object sender, EventArgs e)
 		{
 			Values[1] = (this.EntryName.Text.First().ToString().ToUpper() + this.EntryName.Text.Substring(1));
@@ -98,6 +106,7 @@ namespace final_project
 			this.Dispose();
 		}
 
+		//Zobrazení zprávy
 		private void ShowMessage(string message) {
 			var dlg = new MessageDialog(this, DialogFlags.Modal, MessageType.Warning, ButtonsType.Ok, message);
 			dlg.Run();
@@ -105,7 +114,9 @@ namespace final_project
 			dlg.Dispose();
 		}
 
+
 		private void Check(object sender, EventArgs e) {
+			//Kontrola povinných polí
             foreach (Widget w in this.MainTable)
             {
 				if (w is Gtk.Entry) { 
@@ -115,7 +126,7 @@ namespace final_project
                     }
 				}
             }
-
+			//A kontrola platnosti hodnot
 			foreach (Widget w in this.ExpandedTable) 
 			{
 				if (w is Gtk.Entry) 
