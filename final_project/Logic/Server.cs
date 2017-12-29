@@ -20,15 +20,19 @@ namespace final_project
 		}
 	}
 
-	public class Server 
+	public class Server
 	{
 		private MainWindow win;
 		public string databaseConnectionString;
 		public MenuDbContext database;
+		public RsaCryption cryption;
 		public bool isConnected { get; private set; }
 		public Server()		{
+			this.cryption = new RsaCryption();
 			Http.server = this;
-        	this.win = new MainWindow(this);
+			Http.cryptor = this.cryption;
+			Token.cryption = this.cryption;
+			this.win = new MainWindow(this);
 			try
 			{
 				database = new MenuDbContext();
@@ -36,47 +40,49 @@ namespace final_project
 				this.win.statbar.Push(0, @"Připojeno k databázi");
 				this.isConnected = true;
 			}
-			catch (Exception) {				connect();
+			catch (Exception)
+			{				connect();
 			}
 			win.Show();
 		}
 
-		public void CollectionChanged(object o, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
+		public void CollectionChanged(object o, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
+		{
 			Console.WriteLine("Order changed");
 		}
 
 		public void connect()
-        {
+		{
 			try
 			{
 				database.Database.Connection.ConnectionString = Properties.Settings.Default.databaseConnectionString;
 				database.Database.Initialize(true);
 				this.win.statbar.Push(0, @"Připojeno k databázi");
-            	this.isConnected = true;
+				this.isConnected = true;
 			}
 			catch (Exception)
 			{
 				this.isConnected = false;
-                this.win.statbar.Push(0, @"Nenalezeno připojení k databázi");
+				this.win.statbar.Push(0, @"Nenalezeno připojení k databázi");
 			}
 
-        }
+		}
 
-        public  void start() 
+		public void start()
 		{
 
 		}
 
-		private async void restart() 
+		private async void restart()
 		{
 			this.quit();
 			this.start();
 			this.connect();
 		}
 
-		private void quit() 
+		private void quit()
 		{
-			
+
 		}
 
 
@@ -85,13 +91,13 @@ namespace final_project
 		//to co v array je se updatne
 		//to co v array je navíc, se přidá
 
-		public void CompareAndSave(Food[] comparator) 
+		public void CompareAndSave(Food[] comparator)
 		{
 			//Last resort
 			/*database.Database.ExecuteSqlCommand("TRUNCATE TABLE menu");
 			database.Menu.AddRange(comparator);
 			database.SaveChanges();*/
-			
+
 			for (int i = 0; i < database.Menu.Count(); ++i)
 			{
 				var instance = database.Menu.OrderBy(s => s.Id).Skip(i).First();
@@ -124,22 +130,24 @@ namespace final_project
 			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 		}
 
-		public void saveMenuData() {
+		public void saveMenuData()
+		{
 
 			/* var data = System.IO.File.ReadLines(Constants.CSV_FILE_NAME).Select(line => line.Split(';')).ToArray();
 			 foreach (string[] line in data) {				database.Menu.Add(new Food { Path = line[0], Name = line[1] });
-			 }*/
+			 }*/
+
 			database.SaveChangesAsync();
 		}
 
-		public IEnumerable<Food> getMenuData() 
+		public IEnumerable<Food> getMenuData()
 		{
 			var data = (from Food in database.Menu.ToList() select Food);
 			return data;
 		}
 
 
-		public int[] GetAllergenes(int foodId) 
+		public int[] GetAllergenes(int foodId)
 		{
 			var query = this.database.Database.SqlQuery<string>("SELECT Allergen_Id FROM foodallergens WHERE Food_Id=" + foodId);
 			var list = query.ToList();
@@ -147,7 +155,7 @@ namespace final_project
 			return w;
 		}
 
-		public void AddOrder(string[] orderArr, int uid, string totalPrice) 
+		public void AddOrder(string[] orderArr, int uid, string totalPrice)
 		{
 			try
 			{				var food = new List<Food>();
@@ -156,23 +164,23 @@ namespace final_project
 					food.Add(database.Menu.Find(Int32.Parse(foodId)));
 				}
 				var order = new Order(user, food.ToArray());
-                order.TotalPrice = Decimal.Parse(totalPrice);
+				order.TotalPrice = Decimal.Parse(totalPrice);
 				database.Orders.Add(order);
 				var duplicates = new List<string>();
-				foreach (string foodId in orderArr) 
+				foreach (string foodId in orderArr)
 				{
 					if (duplicates.Contains(foodId))
-						continue;	
+						continue;
 					database.OrderFood.Add(new OrderFood { Order = order, Food = database.Menu.Find(Int32.Parse(foodId)), foodCount = orderArr.Duplicates(foodId) });
 					duplicates.Add(foodId);
 				}
 				database.SaveChanges();
-				this.win.PushToNodeView(order.Id, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable(),order.TotalPrice.ToString() , order.OrderedAt.ToString("HH:mm:ss"));
+				this.win.PushToNodeView(order.Id, database.OrderFood.Where(s => s.OrderId == order.Id).AsEnumerable(), order.TotalPrice.ToString(), order.OrderedAt.ToString("HH:mm:ss"));
 			}
-			catch (Exception ex) { Console.WriteLine(ex.ToString());}
+			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 		}
 
-		public User AddUser(string password, string email) 
+		public User AddUser(string password, string email)
 		{
 			if (CheckUserUniqueConstraint(email))			{
 				var user = new User(password, email);
@@ -180,19 +188,22 @@ namespace final_project
 				this.database.SaveChanges();
 				return user;
 			}
-			else {
+			else
+			{
 				throw new Exception("Unique constraint violation exception");
 			}
 
 		}
 
-		public void ImportData(IEnumerable<string> menuData) {
+		public void ImportData(IEnumerable<string> menuData)
+		{
 			try
 			{
-                this.database.Database.ExecuteSqlCommand("TRUNCATE TABLE foodallergens");				this.database.Database.ExecuteSqlCommand("DELETE FROM menu");
+				this.database.Database.ExecuteSqlCommand("TRUNCATE TABLE foodallergens");				this.database.Database.ExecuteSqlCommand("DELETE FROM menu");
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); }
-			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray()) {
+			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray())
+			{
 				Food f = new Food(arr);
 				this.database.Menu.Add(f);
 			}
@@ -205,9 +216,10 @@ namespace final_project
 			try
 			{				var mail = (from u in this.database.Users.ToList() where u.Email == email select u).First();
 				return false;
-				
+
 			}
-			catch (Exception) {
+			catch (Exception)
+			{
 				return true;			}
 
 		}
@@ -234,42 +246,44 @@ namespace final_project
 			}
 		}*/
 
-		public string ValidateUser(string email, string password) 
-		{
+		public string ValidateUser(string email, string password)		{
 			try
 			{				var user = (from u in this.database.Users where u.Email == email select u).First();
-				if (user.ValidatePassword(password)) 
-					return Token.GenerateNew(user.Id);
+				if (user.ValidatePassword(password))					return Token.GenerateNew(user.Id);
 			}
-			catch (Exception) {
+			catch (Exception)
+			{
 				return "Invalid password";
 			}
 			return "User doesnt exist!";
 		}
 
-		public IEnumerable<User> GetUsers() 
-		{
+		public IEnumerable<User> GetUsers()		{
 			return (from u in database.Users.ToList() select u);
 		}
 
-		public IEnumerable<Order> GetOrders() 
+		public IEnumerable<Order> GetOrders()
 		{
 			return (from o in database.Orders.ToList() select o);
 		}
 
-		//uid  = user id		//This is actually quite harder than i thought
-		public string GetHistory(int uid) {
+		//uid  = user id
+		//This is actually quite harder than i thought
+		public string GetHistory(int uid)
+		{
 			var orders = (from o in database.Orders.ToList() where o.UserId == uid select o);
 			//List<string> orderFoodList = new List<string>();
 			Dictionary<int, List<string>> history = new Dictionary<int, List<string>>();
-			foreach (Order order in orders) {
+			foreach (Order order in orders)
+			{
 				var orderFood = (from of in database.OrderFood.ToList() where of.OrderId == order.Id select of);
 				if (orderFood.Count() == 0)
 					continue;
-				foreach (var orderF in orderFood) {
+				foreach (var orderF in orderFood)
+				{
 					history[order.Id] = new List<string>();
 					history[order.Id].Add(order.OrderedAt.ToString("dd.MM.yyyy"));
-					history[order.Id].Add(string.Join(", ", orderFood.Select( food => food.foodCount.ToString() + "x " + food.Food.Name  )));
+					history[order.Id].Add(string.Join(", ", orderFood.Select(food => food.foodCount.ToString() + "x " + food.Food.Name)));
 					history[order.Id].Add(order.TotalPrice.ToString());
 				}
 				//Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(orderFoodList));

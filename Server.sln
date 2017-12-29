@@ -150,5 +150,6 @@ Global
 		$26.CommitMessageStyle = $27
 		$27.LastFilePostfix = "@:\n  "
 		$26.inheritsSet = Mono
+		version = 0.2
 	EndGlobalSection
 EndGlobal
