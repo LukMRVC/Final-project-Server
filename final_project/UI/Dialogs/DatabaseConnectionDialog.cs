@@ -11,6 +11,7 @@ namespace final_project
 		private string password;
 		private string database;
 		private string port;
+		//Toto není nezbytné, ale v době kdy jsem toto psal, jsem to nevěděl
 		private Gtk.Entry[] entryArr;
 
 		public string connectionString
@@ -31,6 +32,7 @@ namespace final_project
             this.entryArr[2] = this.databaseEntry;
 		}
 
+		//Vytvoří connectionString
 		//connectionString="server=localhost;port=3306;database=EFTest;uid=golden;password=password;charset=utf8" 
 		private void buildConnectionString()
 		{
@@ -54,6 +56,7 @@ namespace final_project
 			Properties.Settings.Default.databaseConnectionString = connString;
 			Properties.Settings.Default.Save();
 		}
+
 
 		private string formatError(string entryName)
 		{

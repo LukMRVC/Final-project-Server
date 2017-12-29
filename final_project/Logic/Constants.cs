@@ -9,6 +9,9 @@ namespace final_project
 	{
 		public const string SECRET = "8Hwt9evygMOU";
 
+		public static string[] Prefixes = { "/login/", "/signup/", "/get_key/", "/get_food/", "/get_user_history/", "/order/", "/pay/", "/braintree_token/" };
+
+		//Data z Braintree, které jsou dostal k sandboxovému účtu
 		public static class Braintree
 		{
 			public const string MERCHANT_ID = "ghv94zkc2x36bxwc";
@@ -16,7 +19,7 @@ namespace final_project
 			public const string PRIVATE_KEY = "704e435eb9199ea6f9210b786125c445";
 		}
 
-
+		//Vytvoří náhodný řetězec čísel
 		public static string GenerateRandom(int length, Random rng)
 		{
 			const string pool = "0123456789";
@@ -29,6 +32,7 @@ namespace final_project
 		public static string[] Allergenes = { "Obiloviny obsahující lepek", "Korýši", "Vejce", "Ryby", "Jádra podzemnice olejné", "Sójové boby (sója)",
 			"Mléko", "Skořápkové plody", "Celer", "Hořčice", "Sezamové semena", "Oxid siřičtý a siřičitany", "Vlčí bob", "Měkkýši"};
 
+		//Najde, jestli konkrénní instance třídy Food se nachází v poli
 		public static int IsIn(this Food instance, Food[] array)
 		{
 			for (int i = 0; i < array.Length; ++i)
@@ -39,6 +43,7 @@ namespace final_project
 			return -1;
 		}
 
+		//Najde index instance podle názvu z list
 		public static int FindFoodIndex(this List<Food> list, string name)
 		{
 			Food[] arr = list.ToArray();
@@ -50,6 +55,7 @@ namespace final_project
 			return -1;
 		}
 
+		//Najde konkrétní instanci podle názvu z listu
 		public static Food FindFood(this List<Food> list, string name)
 		{
 			Food[] arr = list.ToArray();
@@ -61,6 +67,7 @@ namespace final_project
 			throw new System.Exception("Food was not found");
 		}
 
+		//Vezme část pole
 		public static string[] SubArray(this string[] array, int index, int length)
 		{
 			string[] result = new string[length - 1];
@@ -71,6 +78,7 @@ namespace final_project
 			return result;
 		}
 
+		//Vrátí počet užitečné délky pole, protože v poli mohou být duplikáty, nebo záznamy bez hodnot
 		public static int UsefulLength(this int[] arr)
 		{
 			int length = 0;
@@ -82,6 +90,7 @@ namespace final_project
 			return length;
 		}
 
+		//Vrátí jen vybrané alergeny z pole
 		public static Allergen[] GetAllergenes(this IEnumerable<Allergen> enumerable, int[] indices)
 		{
 			Allergen[] arr = new Allergen[indices.UsefulLength()];
@@ -92,6 +101,8 @@ namespace final_project
 			return arr;
 		}
 
+		//Tato funkce je tady proto, aby se dialog pro přídání jídla dobře obnovil
+		//Pokud jídlo má alergen a checkbox má z názvu id toho alegenu, vrátí se true, aby se checkbox zaškrtnul
 		public static bool Has(this int[] arr, int number)
 		{
 			foreach (int num in arr)
@@ -102,6 +113,8 @@ namespace final_project
 			return false;
 		}
 
+		//Převede pole na JSON array
+		//Toto bylo napsáno, než jsem začal používat JSON serializer
 		public static string toJsonArray(this int[] arr)
 		{
 			string json = "[";
@@ -115,6 +128,7 @@ namespace final_project
 			return json;
 		}
 
+		//Najde duplikáty
 		public static int Duplicates(this string[] arr, string id)		{
 			int duplicates = 0;
 			foreach (string d in arr)

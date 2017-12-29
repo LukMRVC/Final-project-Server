@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "final_project", "final_project\final_project.csproj", "{5A6C242F-0731-4117-BA11-40C9CAD370AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "final_project\Server.csproj", "{5A6C242F-0731-4117-BA11-40C9CAD370AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +150,6 @@ Global
 		$26.CommitMessageStyle = $27
 		$27.LastFilePostfix = "@:\n  "
 		$26.inheritsSet = Mono
-		version = 0.2
+		version = 0.09.1
 	EndGlobalSection
 EndGlobal

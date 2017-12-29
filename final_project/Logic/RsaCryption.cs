@@ -15,52 +15,62 @@ namespace final_project
 		public RsaCryption()
 		{
 			this.csp = new RSACryptoServiceProvider(KEY_SIZE);
-            this.csp.PersistKeyInCsp = true;
+			//Klíče budou zachovány v instanci RSA
+			this.csp.PersistKeyInCsp = true;
 			this.publicKey = this.csp.ExportParameters(false);
 			this.privateKey = this.csp.ExportParameters(true);
 		}
 
-		public string GetRemKey() {
+		public string GetRemKey()
+		{
 			string rem = "";
-			using (StringWriter sw = new StringWriter()) { 
-           		ExportPublicKey(this.csp, sw, this.publicKey);
+			using (StringWriter sw = new StringWriter())
+			{
+				ExportPublicKey(this.csp, sw, this.publicKey);
 				rem = sw.ToString();
 			}
 
 			return rem;
 		}
 
-		private byte[] ConvertHexToByte(string hex) {
+		private byte[] ConvertHexToByte(string hex)
+		{
 			return Enumerable.Range(0, hex.Length)
-                     .Where(x => x % 2 == 0)
-                     .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                     .ToArray();
+					 .Where(x => x % 2 == 0)
+					 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+					 .ToArray();
 		}
 
-		private string ConvertByteToHex(byte[] b) {
+
+		private string ConvertByteToHex(byte[] b)
+		{
 			string hex = BitConverter.ToString(b);
 			return hex.Replace("-", "");
 		}
 
-		public string Encrypt(string toEncrypt) {
+		public string Encrypt(string toEncrypt)
+		{
 			var encryptedBytes = this.csp.Encrypt(System.Text.Encoding.UTF8.GetBytes(toEncrypt), true);
 
 			return ConvertByteToHex(encryptedBytes);
 		}
 
-		public string Decrypt(string toDecrypt) {
-		
+		public string Decrypt(string toDecrypt)
+		{
+
 			var bytes = this.ConvertHexToByte(toDecrypt);
 
 			byte[] decryptedBytes = this.csp.Decrypt(bytes, true);
 
 			return System.Text.Encoding.UTF8.GetString(decryptedBytes);
-			
-			
+
+
 		}
 
 		//Kod převodu C# veřejného klíče do formát PEM
+		//Následující kód byl zkopírován z následujícího zdroje:
 		//https://stackoverflow.com/questions/28406888/c-sharp-rsa-public-key-output-not-correct/28407693#28407693
+		//Aneb proč vymýšlet věci, které už někdo vymyslel
 		private static void ExportPublicKey(RSACryptoServiceProvider csp, TextWriter outputStream, RSAParameters publicKey)
 		{
 			var parameters = publicKey;

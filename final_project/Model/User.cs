@@ -9,7 +9,6 @@ namespace final_project.Model
 	public class User : Base
 	{
 
-
 		public User() {
 			this.CreatedDatetime = DateTime.Now;
 		}
@@ -35,6 +34,7 @@ namespace final_project.Model
 
 		public ICollection<Order> Order { get; set; }
 
+		//Tato vlastnot nebude zmapována
 		[NotMapped]
 		public string Password 
 		{ 

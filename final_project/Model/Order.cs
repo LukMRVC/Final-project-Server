@@ -36,6 +36,7 @@ namespace final_project.Model
 		public virtual ICollection<OrderFood> OrderFood { get; set; }
 	}
 
+	//Tabulka pro počet jídla v objednávce
 	[Table("OrdersHasFood")]
 	public class OrderFood
 	{
@@ -48,6 +49,7 @@ namespace final_project.Model
 		public virtual Food Food { get; set; }
 		public virtual Order Order { get; set; }
 
+		//Toto je ten počet
 		public int foodCount { get; set; }
 	}
 }

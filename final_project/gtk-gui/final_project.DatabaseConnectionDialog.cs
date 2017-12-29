@@ -39,6 +39,7 @@ namespace final_project
 			global::Stetic.Gui.Initialize(this);
 			// Widget final_project.DatabaseConnectionDialog
 			this.Name = "final_project.DatabaseConnectionDialog";
+			this.Title = global::Mono.Unix.Catalog.GetString("Připojení k databázi");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Internal child final_project.DatabaseConnectionDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;

@@ -333,6 +333,7 @@
   </widget>
   <widget class="Gtk.Dialog" id="final_project.DatabaseConnectionDialog" design-size="400 244">
     <property name="MemberName" />
+    <property name="Title" translatable="yes">Připojení k databázi</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
@@ -557,7 +558,7 @@
   </widget>
   <widget class="Gtk.Window" id="final_project.MenuDesigner" design-size="674 519">
     <property name="MemberName" />
-    <property name="Title" translatable="yes">MenuDesigner</property>
+    <property name="Title" translatable="yes">Návrhář</property>
     <property name="WindowPosition">CenterOnParent</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>

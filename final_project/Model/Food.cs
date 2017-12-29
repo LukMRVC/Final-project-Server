@@ -11,7 +11,7 @@ namespace final_project.Model
 	public class Food : Base
 	{
 
-		//Ensures the M:N relationship between tables Food nad Order
+		//Nastavení na hashset zajistí správnou M:N vazbu
 		public Food() {
 			this.Order = new HashSet<Order>();
             this.Allergen = new HashSet<Allergen>();
@@ -33,6 +33,8 @@ namespace final_project.Model
             this.OrderFood = new HashSet<OrderFood>();
 		}
 
+		//Nastaví hodnoty z pole, které je v uričtém pořádí 
+		//Jo, sám už tohle raději ani nechci vidět :) 
 		public void SetValues(string[] values) 
 		{
 			int integer;
@@ -79,6 +81,7 @@ namespace final_project.Model
 			}
 		}
 
+		//Převede všechny vlastnosti na string a hodí do pole
 		public string[] toStringArray() 
 		{
 			string[] arr = new string[this.GetType().GetProperties().Length];
@@ -91,6 +94,8 @@ namespace final_project.Model
 			return arr;
 		}
 
+		//Nastaví hodnoty z jiné instance
+		//Možná se na to dívá lépe, ale pořád nic moc a myslím, že přes sebereflekci by to šlo udělat lépe
 		public void SetValues(Food instance) {
 			this.Name = instance.Name;
 			this.Category = instance.Category;
@@ -145,6 +150,10 @@ namespace final_project.Model
 
 		public virtual ICollection<OrderFood> OrderFood { get; set; }
 
+		/*               					        */
+		/*	Tohle už ani komentovat nebudu			*/
+		/*											*/
+		 
 		public override string ToString()
 		{
 			return string.Format("[Food: Name={0}, Category={1}, Path={2}, Price={3}, Gram={4}, Composition={5}, EnergyKj={6}, EnergyKcal={7}, Protein={8}, TotalFat={9}, SaturatedFat={10}, Carbohydrates={11}, Sugar={12}, Salt={13}, Fiber={14}, Order={15}, Allergen={16}]", Name, Category, Path, Price, Gram, Composition, EnergyKj, EnergyKcal, Protein, TotalFat, SaturatedFat, Carbohydrates, Sugar, Salt, Fiber, Order, Allergen);

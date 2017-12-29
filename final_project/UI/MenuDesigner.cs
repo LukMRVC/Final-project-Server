@@ -10,11 +10,13 @@ namespace final_project
     {
 		//treeview store/model
 		private Gtk.TreeStore foodTreeStore;
+		//Hodnoty
 		private Dictionary<Gtk.TreePath, string> treeModelValues;
-		//values from CSV will be stored here
+		//Pro CSV hodnoty z importu
 		private Dictionary<string, string[]> rebuildTreeValues;
 		private Server server;
 		private List<Food> food;
+		//
 		private List<Food> distinct;
 
 		//DB data constructor
@@ -26,38 +28,20 @@ namespace final_project
 			this.buildTreeView();
 			this.server = serv;
 			var alg = this.server.database.Allergenes.ToList();
+			//Nastavení alergenů k jídlům, protože lokální list jídel nemůže kvůli konfiluktům brát přímo vazby z Entity Frameworku
 			foreach (var f in menuData) 
 			{
 				f.SetAllergenes(alg.GetAllergenes(this.server.GetAllergenes(f.Id)));
 				food.Add(f);
 			}
+			//Převede každé jídlo do CSV stringu, rozdělí do pole a všechno je potom převedeno na slovník, kde klíčem cesta komponenty Treeview
 			rebuildTreeValues = menuData.Select(o => o.toCsvString()).Select(s => s.Split(';')).ToDictionary(s => s[0], s => s.SubArray(1, s.Length));
+			//Vytvoří treeview z aktuálních dat
             this.rebuildTree();
 			appendEventHandlers();		
 		}
 
-		//CSV constructor
-		/*public MenuDesigner(IEnumerable<string> menuData, Server serv) :
-		                base(Gtk.WindowType.Toplevel)
-		        {
-			this.Build();
-			this.initiliaze(serv);
-			this.buildTreeView();
-			this.server = serv;
-			var alg = server.database.Database.SqlQuery<Allergen>("SELECT * FROM allergenes");
-			foreach (string[] arr in menuData.Select(line => line.Split(';')).ToArray()) {
-				Food f = new Food(arr);
-				if (!string.IsNullOrWhiteSpace(arr[arr.Length - 2]))
-				{					var indices = arr[arr.Length - 2].Split(',').Select(Int32.Parse).ToArray();
-					f.SetAllergenes(alg.GetAllergenes(indices));
-				}
-				food.Add(f);
-			}
-			rebuildTreeValues = menuData.Select(line => line.Split(';')).ToDictionary(line => line[0], line => line.SubArray(1, line.Length));
-			rebuildTree();
-			appendEventHandlers();   		}*/
 
-		//Plain Constructor
 		public MenuDesigner(Server serv) : base(Gtk.WindowType.Toplevel) {
 			this.Build();
 			this.initiliaze(serv);
@@ -75,6 +59,7 @@ namespace final_project
 		}
 
 		private void buildTreeView() { 
+			//Vytvoří komponenty treeview
             this.hpaned1.Position = 475;
 
 			this.treeview.AppendColumn(@"Jídlo", new CellRendererText(), "text", 0);
@@ -87,24 +72,28 @@ namespace final_project
 
 		}
 
-
+		//Přídání eventu na kliknutí řádku v treeview
 		private void appendEventHandlers()
 		{
-		// appends new page to notebook with the same label as row that was clicked	
+
 		this.treeview.RowActivated += (sender, e) =>
 			{
+				//Třída TreeIter je důležitá pro upravení hodnot řádku
 				Gtk.TreeIter iterator;
+				//Získa TreeIter z cesty řádku, na který bylo kliknuto
 				foodTreeStore.GetIterFromString(out iterator, e.Path.ToString());
-				//checks if valid row was clicked
+				//Kontola, jestli řádek na který bylo kliknuto je řádek, který se může upravovat, což jsou jen řádky s jídlem
 				if (foodTreeStore.GetValue(iterator, 2) != null)
 				{
-					
+					//Název jídla
 					string label = foodTreeStore.GetValue(iterator, 0).ToString();
+					//Najde index v listu jídla a podle toho je třída předána do dialogu, který přídává nebo upraví jídlo
 					int result = food.FindFoodIndex(label);
 					var dlg = new AddFoodDialog(food[result]);
 					//dlg.SetAllergenes(food[result].GetAllergenIds());
 					if (dlg.Run() == (int)ResponseType.Ok) 
 					{
+						//Upraví data
 						foodTreeStore.SetValues(iterator, dlg.Values.ToArray().SubArray(1, 5));
 						food[result].SetValues(dlg.Values.ToArray());
 						//Clear all relations with allergens
@@ -112,9 +101,10 @@ namespace final_project
 						//aId = allergen Id
 						foreach (int aId in dlg.Allergenes) 
 						{
-							//dlg.Allergenes is full of 0
+							//Pole alergenů jsou ve výchozí hodnotě 0, opět aby se dali kontrolovat
 							if (aId == 0)
 								continue;
+							//Vezme se alergen přímo z databáze, aby se nevytvářel v DB nový záznam, ale aby vznikla vazba
 							var allergen = (from a in this.server.database.Allergenes.ToList() where a.Id == aId select a).First();
 							food[result].SetAllergen(allergen);
 						}
@@ -123,29 +113,35 @@ namespace final_project
 			};
 		}
 
-		//Upon closing this window, values and all information that was needed will be stored 
-		//in a CSV file
+		//Při zavírání tohohle okna se všechna data uloží do CSV souboru a do DB
 		protected void OnDeleteEvent(object o, DeleteEventArgs args)
 		{
 			Gtk.TreeIter iter;
 			foodTreeStore.GetIterFirst(out iter);
-            getTreeValues(iter);
+            //Získání dat z Treeview
+			getTreeValues(iter);
+			//Následující řádek udělá průnik mezi dvěma listy, to z toho důvodu, aby list food obsahoval
+			//jen aktuální jídla a nezůstávalo něco, co už bylo smazané
 			food = food.Intersect(distinct).ToList();
 			try
 			{
+				//Převede pomocí Linq list do csv stringu
 				String csv = String.Join(
 					Environment.NewLine,
 					food.Select(d =>  d.toCsvString() + d.GetAllergenIdsString() + ";")
 				);
+				//A zapíše se do souboru
 				System.IO.File.WriteAllText(Constants.CSV_FILE_NAME, csv);
 				
 			}
 			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 			this.Destroy();
+			//Porovnání a uložení do databáze, více popsáno u konktrétní metody
 			this.server.CompareAndSave(food.ToArray());
 			args.RetVal = true;
 		}
 
+		//Rekurzivní fuknce na procházení treeview, který má strukturu stromu
 		private void getTreeValues(TreeIter iter) {
 			TreeIter childIter;
 			do
@@ -169,8 +165,11 @@ namespace final_project
 
 		}
 
+		//Doplnění aktuálních dat do treeview při vytváření okna návrháře
 		private void rebuildTree() {
+			//Druhá část cesty treeview
 			int pathIndex;
+			//Hloubka hodnot, abych věděl, kolikrát má cyklus iterovat
 			int depth = 1;
 			try
 			{				depth = rebuildTreeValues.Keys.OrderByDescending(s => s.Length).First().Length;
@@ -183,60 +182,43 @@ namespace final_project
 				pathIndex = 0;
 				foreach (string pathString in rebuildTreeValues.Keys)
 				{
+					//Celkem zbytečné, dalo by se to udělat i jinak, ale lenost tentokrát vyhrála
+					//Jedná se o kontrolu vnoření, pokud i = 0, tak ještě nebylo vnořeno a nepotřebuji TreeIter
 					if (i == 0)
 					{
 						if ((int)Char.GetNumericValue(pathString[i]) == pathIndex && pathString.Length == i+1)
 						{
+							//Index 4 je hodnota, zda se jedná o kategorii nebo konkrétní jídlo
 							if (rebuildTreeValues[pathString][4] == "True")
 							{
+								//Přidá se pouze název kategorie
 								foodTreeStore.AppendValues(rebuildTreeValues[pathString][0]);
 							}
 							else {
+								//Přidají se hodnoty
 								foodTreeStore.AppendValues(rebuildTreeValues[pathString]);
 							}
 							++pathIndex;
 						}
 					}
+					// Zde již TreeIter budu potřebovat
 					else
 					{
+						
 						if (pathString.Length == i + 1) 
 						{
 							TreeIter iter;
 							foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
+							//Opět kontrola kategorie
 							if (rebuildTreeValues[pathString][4] == "True")
 							{
 								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString][0]);
 							}
 							else {
+
 								foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString].SubArray(0, 5));
 							}
 						}
-
-					/*	//Exception would be thrown otherwise
-						if (pathString.Length > i && pathString.Length == i+1) {
-							// this is because path 0:1 and 1:0 are different.
-							if ( firstPos != (int)Char.GetNumericValue(pathString[i - 2]) ) {
-								pathIndex = 0;
-
-							}
-							//Gets parent TreeIter and appends new Node to it
-							if ((int)Char.GetNumericValue(pathString[i]) == pathIndex)
-							{
-								TreeIter iter;
-								foodTreeStore.GetIterFromString(out iter, pathString.Substring(0, i-1) );
-								if (rebuildTreeValues[pathString][4] == "True")
-								{
-										foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString][0]);
-								}
-								else {
-										foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString].SubArray(0, 4));
-								}
-								//foodTreeStore.AppendValues(iter, rebuildTreeValues[pathString]);
-								++pathIndex;
-								firstPos = (int)Char.GetNumericValue(pathString[i-2]);
-
-							}
-						}*/
 					}
 				}
 			}
@@ -250,6 +232,7 @@ namespace final_project
 			Gtk.TreeIter? node = GetSelectedRow();
 			if (node == null)
 				return;
+			//Pokud je vybráno jídlo, nemůže se přidat podkategorie, ta se může připojit jen ke kategorii
 			if (foodTreeStore.GetValue(node.Value, 2) != null)
 				return;
 			CategoryDialog dlg = new CategoryDialog(this, true);
@@ -271,9 +254,11 @@ namespace final_project
 
 		protected void OnBtnDeleteRowClicked(object sender, EventArgs e)
 		{
+			
 			var dialog = new MessageDialog(this, DialogFlags.Modal, MessageType.Question, ButtonsType.YesNo, "Jste si jistí že chcete smazat vybraný řádek?");
 			if (dialog.Run() == (int)ResponseType.Yes) {				TreeIter? iter = GetSelectedRow();
 				TreeIter node;
+				//Pokud nebyl vrácen null, tak se přiřadí hodnota a smažou se řádky
 				if (iter.HasValue)
 				{
 					node = iter.Value;
@@ -284,11 +269,13 @@ namespace final_project
 			dialog.Dispose();
 		}
 
+		//Vybere kliknutý řádek a vrátí TreeIter nebo null
 		private TreeIter? GetSelectedRow() 
 		{
 			Gtk.TreePath path;
 			Gtk.TreeIter node;
 			Gtk.TreeViewColumn column;
+			//Get kurzor do dvou parametrů zadá TreePath a sloupec na kterém se nachází kurzor v kliku
 			this.treeview.GetCursor(out path, out column);
 			if (path == null)
 			{
@@ -298,6 +285,7 @@ namespace final_project
 				message.Dispose();
 				return null;
 			}
+			//A z TreePath získám TreeIter
             this.foodTreeStore.GetIter(out node, path);
 			return node;
 		}
@@ -309,13 +297,16 @@ namespace final_project
 			if (!iter.HasValue)
 				return;
 			else {
+				//Pokud byl vracen TreeIter, přiřadí se jeho hodnota
 				node = iter.Value;
 				if (foodTreeStore.GetValue(node, 2) != null)
 					return;
+				//Zobrazí se dialog na nové jídlo
 				var dlg = new AddFoodDialog();
 
 				if (dlg.Run() == (int)ResponseType.Ok)
 				{
+					//Jídlo se vytvoří i jako třída Food a přidá se do listu a zobrazí se na treeview
 					Food fd = new Food();
 					fd.SetValues(dlg.Values);
 					var alg =  this.server.database.Allergenes.AsEnumerable();

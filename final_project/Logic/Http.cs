@@ -3,16 +3,17 @@ using Braintree;
 using System.Linq;
 using System.Net;
 using Gtk;
-using System.Security.Cryptography;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 namespace final_project
 {
-
+	//Třída Http se stará o zpracování požadavků
 	public static class Http
 	{
 
+		//Nastavení Braintree
 		private static BraintreeGateway gateway = new BraintreeGateway
 		{
 			Environment = Braintree.Environment.SANDBOX,
@@ -59,21 +60,17 @@ namespace final_project
 		private static HttpListener listener;
 		private static int StatusCode;
 		public static RsaCryption cryptor { get; set; }
-		//starts HTTPListener on port 8088, responses are handled asynchronously in a static method)
+
+		//Spustí naslouchání
 		public static void startListening()
 		{
 			try
 			{
 				listener = new HttpListener();
-				listener.Prefixes.Add("http://localhost:8088/");
-				listener.Prefixes.Add("http://localhost:8088/login/");
-				listener.Prefixes.Add("http://localhost:8088/get_key/");
-				listener.Prefixes.Add("http://localhost:8088/signup/");
-				listener.Prefixes.Add("http://localhost:8088/get_food/");
-				listener.Prefixes.Add("http://localhost:8088/get_user_history/");
-				listener.Prefixes.Add("http://localhost:8088/order/");
-				listener.Prefixes.Add("http://localhost:8088/pay/");
-				listener.Prefixes.Add("http://localhost:8088/braintree_token/");
+				foreach (string prefix in Constants.Prefixes) {
+					listener.Prefixes.Add("http://localhost:8088" + prefix);
+				}
+			
 				listener.Start();
 			}
 			catch (PlatformNotSupportedException ex)
@@ -83,12 +80,11 @@ namespace final_project
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); }
 			stop = false;
-
-			//cryption = new Cryption();
+			//Nastaví callback na pro asynchonní naslouchání
 			IAsyncResult result = listener.BeginGetContext(ContextCallback, listener);
-
 		}
 
+		//Zastaví naslouchání
 		public static void stopListening()
 		{
 			stop = true;
@@ -97,18 +93,23 @@ namespace final_project
 		}
 
 
-		//static method for handling requests
+		//Callback na zpracování požadavků
 		public static void ContextCallback(IAsyncResult result)
 		{
+			var context = listener.EndGetContext(result);
 			if (stop && listener == null)
 			{
 				return;
 			}
-			var context = listener.EndGetContext(result);
+			//Znovu zpustí naslouchání
 			listener.BeginGetContext(ContextCallback, listener);
+			//Instance požadavku
 			HttpListenerRequest request = context.Request;
+			//Odpověď
 			HttpListenerResponse response = context.Response;
-			response.ContentType = "application/json; charset=utf-8";
+
+			response.ContentType = "text/plain; charset=utf-8";
+
 			string responseString = HandleMethod(request);
 			response.StatusCode = StatusCode;
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
@@ -168,13 +169,16 @@ namespace final_project
 		public static string HandleSignUp(Stream input)
 		{
 			Dictionary<string, string> postText;
+			//Požadavek se přečte ze streamu
 			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8))
 			{
 				string val = reader.ReadToEnd();
+				//A JSON se rozparsuje na slovník
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
 			}
 			try
 			{
+				//Poté se přidá nový uživatel, jehož data musíme rozšifrovat, a do braintree se přidá nový zákazník
 				var user = server.AddUser(Decrypt(postText["password"]), Decrypt(postText["email"]));
 				CustomerRequest customer = new CustomerRequest
 				{
@@ -197,13 +201,15 @@ namespace final_project
 
 		public static string HandleLogin(Stream input)		{
 			Dictionary<string, string> postText;
+			//Opět přečtení JSONu a rozparsování na slonvík
 			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8))			{
 				string val = reader.ReadToEnd();
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string>>(val);
 			}
-			//Try to login with existing token
+			//Zkoušení přihlášení pomocí tokenu
 			try
-			{				if (Token.IsValid(postText["token"]))
+			{
+				//Pokud ještě nevypršela platnost tokenu, přihlášení pomocí něj				if (Token.IsValid(postText["token"]))
 				{
 					StatusCode = 202;
 					return Token.GenerateNew(Token.GetUserId(postText["token"]));
@@ -213,11 +219,11 @@ namespace final_project
 					return "Token expired";
 				}
 			}
-			//login with credentials
+			//Přihlášení s údajy
 			catch (Exception)			{
-				//string hash = server.GetUserHash(postText["email"]);
 				try
 				{
+					//Server uživatele autentizuje a rovnou vygeneruje nový, zašifrovaný token
 					string token = server.ValidateUser(Decrypt(postText["email"]), Decrypt(postText["password"]));
 					if (!string.IsNullOrWhiteSpace(token))
 					{
@@ -243,11 +249,13 @@ namespace final_project
 			Dictionary<string, string[]> postText;
 			using (var reader = new StreamReader(input, System.Text.Encoding.UTF8))
 			{
+				//Opět rozparsování JSON
 				string val = reader.ReadToEnd();
 				postText = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(val);
 			}
 			if (Token.IsValid(postText["token"][0]))
 			{
+				//Na novém vlákně se přidá objednávka pomocí pole id jídel
 				System.Threading.Tasks.Task.Run(() => server.AddOrder(postText["food"], Token.GetUserId(postText["token"][0]), postText["totalprice"][0]));
 				StatusCode = 201;
 				return "Vaše objednávka byla zpracována.";
@@ -279,7 +287,6 @@ namespace final_project
 					Options = new TransactionOptionsRequest
 					{						SubmitForSettlement = true
 					}
-					//Token.GetUserId(headers.GetValues("Authorization")[0]).ToString(),
 				};
 				Result<Transaction> result = gateway.Transaction.Sale(request);
 				if (result.IsSuccess())
@@ -295,6 +302,7 @@ namespace final_project
 
 		}
 
+		//Vrátí veřejný RSA klíč ve formátu PEM
 		public static string HandleGetKey()
 		{
 			StatusCode = 200;
@@ -302,7 +310,7 @@ namespace final_project
 			//return cryption.GetPublicKeyString();
 		}
 
-
+		//Vrátí seznam jídel
 		public static string HandleGetFood(System.Collections.Specialized.NameValueCollection headers)
 		{
 			var token = headers.GetValues("Authorization")[0];
@@ -321,6 +329,7 @@ namespace final_project
 			}
 		}
 
+		//Vrátí braintree token, který se vygenerován k jednorázově platbě a inicialici uživatelského rozhraní u klienta
 		public static string HandleGetBraintreeToken(System.Collections.Specialized.NameValueCollection headers)
 		{
 			var token = headers.GetValues("Authorization")[0];
@@ -337,6 +346,7 @@ namespace final_project
 			}
 		}
 
+		
 		public static string HandleGetHistory(System.Collections.Specialized.NameValueCollection headers)
 		{
 			var token = headers.GetValues("Authorization")[0];
@@ -355,7 +365,7 @@ namespace final_project
 			return "Invalid User Token";
 		}
 
-
+		//Převede opět data třídy Food to JSONu
 		private static string dataToJson(IEnumerable<Model.Food> data)
 		{
 			string json = "{";
@@ -385,15 +395,23 @@ namespace final_project
 
 		public static RsaCryption cryption { get; set; }
 
+		//Vytvoří nový token
+		//Není můj kód
+		//https://stackoverflow.com/questions/14643735/how-to-generate-a-unique-token-which-expires-after-24-hours
 		public static string GenerateNew(int UserId)
 		{
+			//Vezme aktuální čas a převede na pole bytů
 			byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+			//Vygeneruje globálně jedinečný identifikátor a převede na byty
 			byte[] key = Guid.NewGuid().ToByteArray();
 			//44 token length + userId
+			//Token vznikne kombinací času, globálně unikatního id, náhodných čísel a id uživatele
 			string token = Convert.ToBase64String(time.Concat(key).ToArray()) + Constants.GenerateRandom(12, new System.Random()) + UserId;
+			//Nakonec je zašifrován
 			return cryption.Encrypt(token);
 		}
 
+		//Ověření platnosti
 		public static bool IsValid(string token)
 		{
 			string decrypted = cryption.Decrypt(token);
@@ -407,9 +425,11 @@ namespace final_project
 			return true;
 		}
 
+		//Ověření platnosti z hlavičky
+		//To kvůli rozdílům v POST request, kde je token posílín v těle a GET request, kde je posílán jako hlavička
+		//A hlavička obsahuje text "Basic " a poté následuje token
 		public static bool IsValidFromHeader(string token)
 		{
-			//Take substring to validate
 			string decrypted = cryption.Decrypt(token.Substring(6));
 			string sub = decrypted.Substring(0, 24);
 			byte[] data = Convert.FromBase64String(sub);
@@ -421,6 +441,7 @@ namespace final_project
 			return true;
 		}
 
+		//Vezme id uživatele z tokenu
 		public static int GetUserId(string token)
 		{
 			string sub = "";
