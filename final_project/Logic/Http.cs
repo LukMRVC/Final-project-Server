@@ -57,7 +57,7 @@ namespace final_project
 
 		public static Server server { get; set; }
 		private static bool stop;
-		private static HttpListener listener;
+		private static HttpListener listener = null;
 		private static int StatusCode;
 		public static RsaCryption cryptor { get; set; }
 
@@ -66,11 +66,14 @@ namespace final_project
 		{
 			try
 			{
-				listener = new HttpListener();
-				foreach (string prefix in Constants.Prefixes) {
-					listener.Prefixes.Add("http://localhost:8088" + prefix);
+				if (listener == null)
+				{
+					listener = new HttpListener();
+					foreach (string prefix in Constants.Prefixes)
+					{
+						listener.Prefixes.Add("http://localhost:8088" + prefix);
+					}
 				}
-			
 				listener.Start();
 			}
 			catch (PlatformNotSupportedException ex)
@@ -88,19 +91,19 @@ namespace final_project
 		public static void stopListening()
 		{
 			stop = true;
-			listener.Close();
-			listener = null;
+
 		}
 
 
 		//Callback na zpracování požadavků
 		public static void ContextCallback(IAsyncResult result)
 		{
-			var context = listener.EndGetContext(result);
-			if (stop && listener == null)
-			{
-				return;
+			
+			if (stop) { 
+				listener.Stop();
 			}
+			var watch = System.Diagnostics.Stopwatch.StartNew();
+			var context = listener.EndGetContext(result);
 			//Znovu zpustí naslouchání
 			listener.BeginGetContext(ContextCallback, listener);
 			//Instance požadavku
@@ -117,6 +120,8 @@ namespace final_project
 			System.IO.Stream output = response.OutputStream;
 			output.Write(buffer, 0, buffer.Length);
 			output.Close();
+			watch.Stop();
+			Console.WriteLine("Elapsed time: " + watch.ElapsedMilliseconds);
 		}
 
 		public static string HandleMethod(HttpListenerRequest request)
@@ -139,6 +144,9 @@ namespace final_project
 						case "/get_key/":
 							responseText = HandleGetKey();
 							break;
+						default:
+							StatusCode = 404;
+							return "Error: Not found";
 					}
 					break;
 				case "POST":
@@ -156,6 +164,9 @@ namespace final_project
 						case "/order/":
 							responseText = HandleOrder(request.InputStream);
 							break;
+						default:
+							StatusCode = 404;	
+							return "Error: Not found";
 					}
 					break;
 				default:
